@@ -4,20 +4,21 @@
 
 { config, lib, pkgs, ... }:
 
+let
+  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  ## region boot
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  ## endregion boot
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -39,20 +40,13 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
   # allow apps to request elevated permission
-  security.polkit.enable = true; 
+  security.polkit.enable = true;
   security.pam.services.login.enableGnomeKeyring = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-  
+
   # Enable Greeter
   #services.greetd = {
   #  enable = true;
@@ -67,6 +61,9 @@
   # Desktop Portal
   xdg.portal.enable = true;
 
+  # Fontconfig
+  fonts.fontconfig.enable = true;
+
   # Enable sound.
   # services.pulseaudio.enable = true;
   # OR
@@ -79,11 +76,10 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
-  # Keyring 
+  # Keyring
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+ # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.tom = {
     shell = pkgs.fish;
     isNormalUser = true;
@@ -100,10 +96,11 @@
 
   programs.fish = {
     enable = true;
- 
+
     shellAliases = {
       ll = "ls -l";
       gs = "git status";
+      vi = "nvim";
     };
   };
 
@@ -122,19 +119,31 @@
     extraCompatPackages = [ pkgs.proton-ge-bin ];
   };
 
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    defaultEditor = true;
+  };
+
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
-    # -- Essentials --
 
+    #region Essentials
     # Framework (comment/remove this section if not using a Framework Computer)
     framework-tool       # swiss army knife
     fwupd                # update drivers/bios
 
     # Editor
-    vim                  # general purpose text editor             
-    zed-editor           # open source rust-based code editor
+    vim                  # default general purpose text editor
+    ripgrep              # search
+    fd                   # find files
+
+    # Code
+    claude-code          # anthropic claude cli
+    nodejs               # big scriptin
 
     # Fonts
     papirus-icon-theme   # nice icon set
@@ -143,17 +152,19 @@
     wl-clipboard         # clipboard utilities
     brightnessctl        # control brightness
     evremap              # remap hardware input (ex. caps -> ctrl)
- 
+
     # Data Transfer & Requests
     wget                 # download things
-    curl                 # test APIs, debug HTTP, pipe stuff 
- 
+    curl                 # test APIs, debug HTTP, pipe stuff
+
     # Version Control
-    gh                   # github cli thats faster to work with than raw git 
- 
-    # -- Desktop Environment --
-    
-    # terminal 
+    gh                   # github cli thats faster to work with than raw git
+
+    #endregion Essentials
+
+    #region Desktop Environment
+
+    # terminal
     foot                 # a swanky wayland term
 
     # system monitor
@@ -164,14 +175,14 @@
     # legacy app support
     xwayland-satellite   # (required as of 2025 for a few apps, like bitwarden)
 
-    # network 
+    # network
     networkmanagerapplet # frontend for networkmanaager
 
     # app launcher/switcher
     rofi-wayland         # it works, its fast
- 
+
     # screen lock
-    swaylock             # Super + Alt + L
+    swaylock             # lock screen: Super + Alt + L
     swayidle             # auto-lock after idle
 
     # screen background
@@ -182,7 +193,7 @@
     slurp                # region selector for screenshots
 
     # passwords
-    bitwarden            # an open source password manager 
+    bitwarden            # an open source password manager
 
     # project management
     obsidian             # take notes; requires unfree nix option
@@ -193,13 +204,15 @@
     godot_4              # game engine
     blender              # 3D modeling
     gimp                 # image editor
-   
+
     # social media
     discord              # a garbage piece of software that we tolerate
 
     # music
     spotify              # play sounds
     youtube-music        # play videos, that make sounds
+    #endregion Desktop Environment
+
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -246,4 +259,3 @@
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }
-
