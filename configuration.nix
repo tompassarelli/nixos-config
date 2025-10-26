@@ -4,10 +4,6 @@
 
 { config, lib, pkgs, ... }:
 
-let
-  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
-in
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -129,6 +125,8 @@ in
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   nixpkgs.config.allowUnfree = true;
+  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
 
     #region Essentials
@@ -142,6 +140,7 @@ in
     fd                   # find files
 
     # Code
+    unstable.zed-editor  # open source editor
     claude-code          # anthropic claude cli
     nodejs               # big scriptin
 
@@ -165,7 +164,7 @@ in
     #region Desktop Environment
 
     # terminal
-    foot                 # a swanky wayland term
+    kitty                # gpu accelerated term with tabs
 
     # system monitor
     fastfetch            # print your system config in the terminal
