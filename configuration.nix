@@ -129,7 +129,8 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
 
-    #region Essentials
+    #region Core/CLI
+
     # Framework (comment/remove this section if not using a Framework Computer)
     framework-tool       # swiss army knife
     fwupd                # update drivers/bios
@@ -138,6 +139,9 @@
     vim                  # default general purpose text editor
     ripgrep              # search
     fd                   # find files
+
+    # convert images
+    imagemagick          # work with images
 
     # Code
     unstable.zed-editor  # open source editor
@@ -159,12 +163,9 @@
     # Version Control
     gh                   # github cli thats faster to work with than raw git
 
-    #endregion Essentials
+    #endregion Core/CLI
 
     #region Desktop Environment
-
-    # terminal
-    kitty                # gpu accelerated term with tabs
 
     # system monitor
     fastfetch            # print your system config in the terminal
