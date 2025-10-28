@@ -13,13 +13,19 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  # Pick only one of the below networking options.
+  # Define network hostname
+  # networking.hostName = "nixos";
+
+  # Choose network manager
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+  # power monitor
+  services.upower.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -43,17 +49,6 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable Greeter
-  #services.greetd = {
-  #  enable = true;
-  #  settings = {
-  #    default_session = {
-  #      command = "{$pkgs.greetd.tuigreet}/bin/tuigreet --cmd niri-session";
-  #      user = "greeter";
-  #    };
-  #  };
-  #};
-
   # Desktop Portal
   xdg.portal.enable = true;
 
@@ -75,7 +70,8 @@
   # Keyring
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
- # Define a user account. Don't forget to set a password with ‘passwd’.
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.tom = {
     shell = pkgs.fish;
     isNormalUser = true;
@@ -87,12 +83,12 @@
     ];
   };
 
+  # Define what programs we want
   programs.niri.enable = true;
   programs.firefox.enable = true;
 
   programs.fish = {
     enable = true;
-
     shellAliases = {
       ll = "ls -l";
       gs = "git status";
@@ -122,8 +118,7 @@
     defaultEditor = true;
   };
 
-  # List packages installed in system profile.
-  # You can use https://search.nixos.org/ to find more packages (and options).
+  # You can use https://search.nixos.org/ to find more pkgs (and options).
   nixpkgs.config.allowUnfree = true;
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -135,13 +130,14 @@
     framework-tool       # swiss army knife
     fwupd                # update drivers/bios
 
-    # Editor
+    # Editor / Search
     vim                  # default general purpose text editor
     ripgrep              # search
     fd                   # find files
 
-    # convert images
+    # Convert images
     imagemagick          # work with images
+    ghostscript          # for adobe
 
     # Code
     unstable.zed-editor  # open source editor
@@ -177,6 +173,9 @@
 
     # network
     networkmanagerapplet # frontend for networkmanaager
+    
+    # web browser
+    ungoogled-chromium   # when firefox doesn't work
 
     # app launcher/switcher
     rofi-wayland         # it works, its fast
@@ -199,6 +198,7 @@
     obsidian             # take notes; requires unfree nix option
     todoist-electron     # todo/calendar; requires unfree nix  option
     protonmail-desktop   # email
+    zoom-us              # video conference
 
     # game dev
     godot_4              # game engine
