@@ -97,9 +97,9 @@
     defaultEditor = true;
   };
 
+  # Packages
   # You can use https://search.nixos.org/ to find more pkgs (and options).
   nixpkgs.config.allowUnfree = true;
-  
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
 
@@ -113,6 +113,7 @@
     vim                  # default general purpose text editor
     ripgrep              # search
     fd                   # find files
+    unzip                # relax and decompress
 
     # Convert images
     imagemagick          # work with images
@@ -145,7 +146,6 @@
     # system monitor
     fastfetch            # print your system config in the terminal
     htop                 # power, cpu, etc usage
-    mako                 # notifications
 
     # legacy app support
     xwayland-satellite   # (required as of 2025 for a few apps, like bitwarden)
@@ -153,11 +153,10 @@
     # network
     networkmanagerapplet # frontend for networkmanaager
     
-    # web browser
-    ungoogled-chromium   # when firefox doesn't work
-
     # app launcher/switcher
     rofi-wayland         # it works, its fast
+
+    # file manager
 
     # screen lock
     swaylock             # lock screen: Super + Alt + L

@@ -2,9 +2,9 @@
 
 {
   home.stateVersion = "25.05";
-  
   nixpkgs.config.allowUnfree = true;
   
+  # terminal
   programs.kitty = {
     enable = true;
     settings = {
@@ -13,6 +13,7 @@
     };
   };
 
+  # shell
   programs.fish = {
     enable = true;
     shellAliases = {
@@ -20,8 +21,17 @@
       gs = "git status";
       vi = "nvim";
     };
+    functions = {
+      fish_prompt = {
+        body = ''
+          set -l pwd (pwd)
+          echo -n (set_color brblue)"$pwd"(set_color normal)" > "
+        '';
+      };
+    };
   };
 
+  # version control
   programs.git = {
     enable = true;
     userName = "tompassarelli";
@@ -32,12 +42,38 @@
     };
   };
 
+  # file manager (tui)
+  programs.yazi = {
+    enable = true;
+    settings = {
+      opener = {
+        edit = [
+          { run = "nvim \"$@\""; block = true; for = "unix"; }
+        ];
+      };
+    };
+  };
+
+  # notifications
+  services.mako = {
+    enable = true;
+    settings = {
+      default-timeout = 3000; # 2 seconds
+    };
+  };
+
+  # niri window manager config
+  xdg.configFile."niri/config.kdl".source = ./dotfiles/niri/config.kdl;
+
   home.packages = with pkgs; [
     # Personal productivity
     obsidian
     todoist-electron
     protonmail-desktop
     bitwarden
+
+    # File management (gui)
+    nemo
 
     # Creative tools
     godot_4
