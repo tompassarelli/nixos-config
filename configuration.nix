@@ -77,34 +77,13 @@
     isNormalUser = true;
     home = "/home/tom";
     description = "Tom Passarelli";
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      tree
-    ];
+    extraGroups = [ "wheel" "networkmanager" ]; # Enable 'sudo' for the user.
   };
 
   # Define what programs we want
   programs.niri.enable = true;
   programs.firefox.enable = true;
-
-  programs.fish = {
-    enable = true;
-    shellAliases = {
-      ll = "ls -l";
-      gs = "git status";
-      vi = "nvim";
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    config = {
-      user.name = "tompassarelli";
-      user.email = "tom.passarelli@protonmail.com";
-      init.defaultBranch = "main";
-      pull.rebase = "true";
-    };
-  };
+  programs.fish.enable = true;
 
   programs.steam = {
     enable = true;
@@ -191,26 +170,6 @@
     grim                 # primary screenshot tool
     slurp                # region selector for screenshots
 
-    # passwords
-    bitwarden            # an open source password manager
-
-    # project management
-    obsidian             # take notes; requires unfree nix option
-    todoist-electron     # todo/calendar; requires unfree nix  option
-    protonmail-desktop   # email
-    zoom-us              # video conference
-
-    # game dev
-    godot_4              # game engine
-    blender              # 3D modeling
-    gimp                 # image editor
-
-    # social media
-    discord              # a garbage piece of software that we tolerate
-
-    # music
-    spotify              # play sounds
-    youtube-music        # play videos, that make sounds
     #endregion Desktop Environment
 
   ];

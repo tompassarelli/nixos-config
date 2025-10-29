@@ -20,6 +20,7 @@
         home-manager.nixosModules.home-manager
         {
           home-manager.users.tom = import ./home.nix;
+          home-manager.backupFileExtension = "backup";
         }
         
         # unstable overlay
