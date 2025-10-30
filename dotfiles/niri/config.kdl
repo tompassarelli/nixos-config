@@ -268,11 +268,11 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-// spawn-at-startup "waybar"
+spawn-at-startup "waybar"
 spawn-at-startup "gnome-keyring-daemon --start --components=secrets"
 
-// Start waybar script that shows only in overview
-spawn-at-startup "python3 ~/.config/waybar/overview-waybar.py"
+// Start waybar overview listener script 
+spawn-at-startup "/home/tom/.config/waybar/overview-waybar.py"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -398,7 +398,7 @@ binds {
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
     // or do a four-finger swipe up on a touchpad.
-    Mod+O repeat=false { toggle-overview; }
+    Mod+A repeat=false { toggle-overview; }
 
     Mod+Q repeat=false { close-window; }
 
