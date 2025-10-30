@@ -46,8 +46,13 @@
     };
   };
 
-  # rofi launcher - just use the working config file
-  xdg.configFile."rofi/config.rasi".source = ./dotfiles/config.rasi;
+  # dotfiles (all with instant updates without rebuild)
+  xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/config.rasi";
+  xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/niri/config.kdl";
+  xdg.configFile."waybar/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/config";
+  xdg.configFile."waybar/style.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/style.css";
+  xdg.configFile."waybar/overview-waybar.py".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/overview-waybar.py";
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/nvim";
 
   # version control
   programs.git = {
@@ -79,20 +84,6 @@
       default-timeout = 0; # Don't auto-dismiss notifications
     };
   };
-
-  # niri window manager config
-  xdg.configFile."niri/config.kdl".source = ./dotfiles/niri/config.kdl;
-
-  # waybar config
-  xdg.configFile."waybar/config".source = ./dotfiles/waybar/config;
-  xdg.configFile."waybar/style.css".source = ./dotfiles/waybar/style.css;
-  xdg.configFile."waybar/overview-waybar.py" = {
-    source = ./dotfiles/waybar/overview-waybar.py;
-    executable = true;
-  };
-
-  # neovim config
-  xdg.configFile."nvim/init.lua".source = ./dotfiles/nvim/init.lua;
 
   home.packages = with pkgs; [
     # Personal productivity
