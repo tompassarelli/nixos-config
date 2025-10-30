@@ -101,7 +101,7 @@
       config = ''
         ;; Define aliases
         (defalias
-          escctrl (tap-hold 200 200 esc lctl)
+          escctrl (tap-hold 100 100 esc lctl)
         )
 
         ;; Source layer 
@@ -178,6 +178,7 @@
     claude-code          # anthropic claude cli
     nodejs               # big scriptin
     python3              # for waybar overview script
+    ungoogled-chromium   # fallback
 
     # Icons & Themes
     papirus-icon-theme   # nice icon set
@@ -210,6 +211,7 @@
 
     # file manager
     nautilus             # gtk file manager (needed for file dialogs)
+    gnome-themes-extra   # includes Adwaita-dark theme
 
     # screen lock
     swaylock             # lock screen: Super + Alt + L

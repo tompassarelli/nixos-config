@@ -31,6 +31,24 @@
     };
   };
 
+  # GTK dark theme for nautilus and other GTK apps
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  # rofi launcher - just use the working config file
+  xdg.configFile."rofi/config.rasi".source = ./dotfiles/config.rasi;
+
   # version control
   programs.git = {
     enable = true;
