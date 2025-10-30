@@ -58,7 +58,7 @@
   services.mako = {
     enable = true;
     settings = {
-      default-timeout = 3000; # 2 seconds
+      default-timeout = 0; # Don't auto-dismiss notifications
     };
   };
 
@@ -71,9 +71,6 @@
     todoist-electron
     protonmail-desktop
     bitwarden
-
-    # File management (gui)
-    nemo
 
     # Creative tools
     godot_4

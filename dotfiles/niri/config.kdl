@@ -367,8 +367,11 @@ binds {
     Super+Space hotkey-overlay-title="App Launcher" { spawn "rofi" "-show" "drun"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     
-    // Show notification history
-    Mod+N hotkey-overlay-title="Show Notification History" { spawn "makoctl" "restore"; }
+    // Dismiss all notifications
+    Super+N hotkey-overlay-title="Dismiss Notifications" { spawn "makoctl" "dismiss" "--all"; }
+    
+    // Restore dismissed notifications
+    Super+Shift+N hotkey-overlay-title="Restore Notifications" { spawn "makoctl" "restore"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.

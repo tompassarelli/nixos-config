@@ -1,5 +1,4 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
+# Edit this configuration file to define what should be installed on your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, ... }:
@@ -51,6 +50,12 @@
 
   # Desktop Portal
   xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ 
+    pkgs.xdg-desktop-portal-gtk  # for GTK apps, Electron apps (Discord, Obsidian, etc.)
+    pkgs.xdg-desktop-portal-wlr  # for screen sharing on wlroots compositors
+    pkgs.kdePackages.xdg-desktop-portal-kde  # for Qt apps (KDE apps, VLC, Qt Creator, etc.)
+  ];
+  xdg.portal.config.common.default = [ "wlr" "gtk" ];
 
   # Fontconfig
   fonts.fontconfig.enable = true;
@@ -115,6 +120,10 @@
     fd                   # find files
     unzip                # relax and decompress
 
+    # Data Transfer & Requests
+    wget                 # download things
+    curl                 # test APIs, debug HTTP, pipe stuff
+
     # Convert images
     imagemagick          # work with images
     ghostscript          # for adobe
@@ -131,10 +140,6 @@
     wl-clipboard         # clipboard utilities
     brightnessctl        # control brightness
     evremap              # remap hardware input (ex. caps -> ctrl)
-
-    # Data Transfer & Requests
-    wget                 # download things
-    curl                 # test APIs, debug HTTP, pipe stuff
 
     # Version Control
     gh                   # github cli thats faster to work with than raw git
@@ -157,6 +162,7 @@
     rofi-wayland         # it works, its fast
 
     # file manager
+    nautilus             # gtk file manager (needed for file dialogs)
 
     # screen lock
     swaylock             # lock screen: Super + Alt + L
