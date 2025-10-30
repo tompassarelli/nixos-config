@@ -179,6 +179,14 @@
     nodejs               # big scriptin
     python3              # for waybar overview script
     ungoogled-chromium   # fallback
+    
+    # Rust development
+    rustc                # rust compiler
+    cargo                # rust package manager
+    rust-analyzer        # rust language server
+    clippy               # rust linter
+    rustfmt              # rust formatter
+    pkg-config           # helps find system libraries during compilation
 
     # Icons & Themes
     papirus-icon-theme   # nice icon set
@@ -190,6 +198,7 @@
 
     # Version Control
     gh                   # github cli thats faster to work with than raw git
+    home-manager         # standalone home-manager CLI
 
     #endregion Core/CLI
 

@@ -91,6 +91,9 @@
     executable = true;
   };
 
+  # neovim config
+  xdg.configFile."nvim/init.lua".source = ./dotfiles/nvim/init.lua;
+
   home.packages = with pkgs; [
     # Personal productivity
     obsidian
