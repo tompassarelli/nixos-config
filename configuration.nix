@@ -132,9 +132,11 @@
     unstable.zed-editor  # open source editor
     claude-code          # anthropic claude cli
     nodejs               # big scriptin
+    python3              # for waybar overview script
 
-    # Fonts
+    # Icons & Themes
     papirus-icon-theme   # nice icon set
+    adwaita-icon-theme   # default GNOME icons (needed for nautilus)
 
     # System Input
     wl-clipboard         # clipboard utilities
@@ -160,6 +162,7 @@
     
     # app launcher/switcher
     rofi-wayland         # it works, its fast
+    waybar               # status bar
 
     # file manager
     nautilus             # gtk file manager (needed for file dialogs)

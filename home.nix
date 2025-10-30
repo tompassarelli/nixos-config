@@ -65,6 +65,14 @@
   # niri window manager config
   xdg.configFile."niri/config.kdl".source = ./dotfiles/niri/config.kdl;
 
+  # waybar config
+  xdg.configFile."waybar/config".source = ./dotfiles/waybar/config;
+  xdg.configFile."waybar/style.css".source = ./dotfiles/waybar/style.css;
+  xdg.configFile."waybar/overview-waybar.py" = {
+    source = ./dotfiles/waybar/overview-waybar.py;
+    executable = true;
+  };
+
   home.packages = with pkgs; [
     # Personal productivity
     obsidian

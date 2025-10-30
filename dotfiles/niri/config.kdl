@@ -271,6 +271,9 @@ layout {
 // spawn-at-startup "waybar"
 spawn-at-startup "gnome-keyring-daemon --start --components=secrets"
 
+// Start waybar script that shows only in overview
+spawn-at-startup "python3 ~/.config/waybar/overview-waybar.py"
+
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
@@ -548,6 +551,12 @@ binds {
     Mod+Comma  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
     Mod+Period { expel-window-from-column; }
+
+    // Rename current workspace with rofi input
+    Mod+Shift+W { spawn-sh "name=$(echo '' | rofi -dmenu -p 'Name workspace:') && [ -n \"$name\" ] && niri msg action set-workspace-name \"$name\""; }
+    
+    // Clear workspace name (back to number)
+    Mod+Shift+Ctrl+W { unset-workspace-name; }
 
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
