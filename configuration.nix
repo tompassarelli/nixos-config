@@ -76,10 +76,49 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-  # Evremap keyboard remapping
-  services.evremap = {
+  # Kanata keyboard remapping (replaces evremap)
+  boot.kernelModules = [ "uinput" ];  # Load uinput module early
+  hardware.uinput.enable = true;     # Required for kanata to access uinput
+  
+  # Proper udev rules for uinput access
+  services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+  '';
+  users.groups.uinput = {};
+  
+  # Create dedicated kanata user with proper permissions
+  users.users.kanata = {
+    isSystemUser = true;
+    group = "kanata";
+    extraGroups = [ "input" "uinput" ];
+  };
+  users.groups.kanata = {};
+
+  services.kanata = {
     enable = true;
-    settings = builtins.fromTOML (builtins.readFile ./dotfiles/evremap.toml);
+    keyboards.main = {
+      devices = [ "/dev/input/event0" ];  # AT Translated Set 2 keyboard
+      config = ''
+        ;; Define aliases
+        (defalias
+          escctrl (tap-hold 200 200 esc lctl)
+        )
+
+        ;; Source layer 
+        (defsrc caps lalt)
+
+        ;; Base layer
+        (deflayer base
+          @escctrl lmet
+        )
+      '';
+    };
+  };
+
+  # Use dedicated user instead of DynamicUser (better security than root)
+  systemd.services.kanata-main.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    User = "kanata";
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -147,7 +186,6 @@
     # System Input
     wl-clipboard         # clipboard utilities
     brightnessctl        # control brightness
-    evremap              # remap hardware input (ex. caps -> ctrl)
 
     # Version Control
     gh                   # github cli thats faster to work with than raw git
