@@ -76,6 +76,12 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
+  # Evremap keyboard remapping
+  services.evremap = {
+    enable = true;
+    settings = builtins.fromTOML (builtins.readFile ./dotfiles/evremap.toml);
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.tom = {
     shell = pkgs.fish;

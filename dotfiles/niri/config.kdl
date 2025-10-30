@@ -1,6 +1,4 @@
-// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
+// This config is in the KDL format: https://kdl.dev "/-" comments out the following node. Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction
 
 // Input device configuration.
@@ -410,6 +408,12 @@ binds {
     Mod+J     { focus-window-down; }
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
+
+    // > implies quanity of focus-action-direction
+    // <<[2] [3]>>
+    // enables shifting 2+ columns at a time
+    Mod+Alt+2 { spawn-sh "niri msg action focus-column-left && niri msg action focus-column-left"; }
+    Mod+Alt+3 { spawn-sh "niri msg action focus-column-right && niri msg action focus-column-right"; }
 
     Mod+Ctrl+Left  { move-column-left; }
     Mod+Ctrl+Down  { move-window-down; }
