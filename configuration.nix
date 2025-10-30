@@ -198,7 +198,6 @@
 
     # Version Control
     gh                   # github cli thats faster to work with than raw git
-    home-manager         # standalone home-manager CLI
 
     #endregion Core/CLI
 
