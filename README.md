@@ -1,1 +1,1 @@
-a madscience experiment
+a mad science experiment
