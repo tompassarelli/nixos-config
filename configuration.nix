@@ -20,7 +20,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Define network hostname
-  # networking.hostName = "nixos";
+  networking.hostName = "whiterabbit";
 
   # Choose network manager
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

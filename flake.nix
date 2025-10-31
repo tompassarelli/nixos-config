@@ -12,7 +12,7 @@
   };
   
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.whiterabbit = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         ./hardware-configuration.nix
