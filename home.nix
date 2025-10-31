@@ -91,6 +91,74 @@
     };
   };
 
+  # swaybg wallpaper service
+  systemd.user.services.swaybg = {
+    Unit = {
+      Description = "Wayland wallpaper tool";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.swaybg}/bin/swaybg -m fill -i %h/code/nixos-config/wallpaper.jpg";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+  };
+
+  # waybar status bar service
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Highly customizable Wayland bar";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+  };
+
+  # waybar overview script service
+  systemd.user.services.waybar-overview = {
+    Unit = {
+      Description = "Waybar overview listener script";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "waybar.service" ];
+      Requires = [ "waybar.service" ];
+    };
+    Service = {
+      ExecStart = "%h/.config/waybar/overview-waybar.py";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+  };
+
+  # swayidle idle management service
+  systemd.user.services.swayidle = {
+    Unit = {
+      Description = "Idle manager for Wayland";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.swayidle}/bin/swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f'";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+  };
+
   home.packages = with pkgs; [
     # Personal productivity
     obsidian

@@ -265,15 +265,13 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "waybar"
+// waybar now managed by systemd user service
 spawn-at-startup "gnome-keyring-daemon --start --components=secrets"
 
-// Start waybar overview listener script 
-spawn-at-startup "/home/tom/.config/waybar/overview-waybar.py"
+// waybar overview script now managed by systemd user service
 
 // Wallpaper
-spawn-at-startup "swaybg -i /home/tom/code/nixos-config/wallpaper.jpg"
+// swaybg now managed by systemd user service
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
