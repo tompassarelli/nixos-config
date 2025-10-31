@@ -29,15 +29,15 @@
         '';
       };
     };
+    interactiveShellInit = ''
+      # Bind Ctrl+L to accept autosuggestion
+      bind \cl accept-autosuggestion
+    '';
   };
 
-  # GTK dark theme for nautilus and other GTK apps
+  # GTK theming handled by Stylix
   gtk = {
     enable = true;
-    theme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra;
-    };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };
@@ -50,7 +50,7 @@
   xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/config.rasi";
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/niri/config.kdl";
   xdg.configFile."waybar/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/config";
-  xdg.configFile."waybar/style.css".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/style.css";
+  # waybar/style.css removed - let Stylix generate themed CSS
   xdg.configFile."waybar/overview-waybar.py".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/overview-waybar.py";
   xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/nvim";
 
@@ -82,6 +82,12 @@
     enable = true;
     settings = {
       default-timeout = 0; # Don't auto-dismiss notifications
+      icons = 0; # Hide app icons
+      
+      # Claude Code notifications auto-dismiss after 2 seconds
+      "app-name=kitty" = {
+        default-timeout = 2000;
+      };
     };
   };
 

@@ -3,6 +3,9 @@
 
 { config, lib, pkgs, ... }:
 
+let
+  username = "tom";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -98,10 +101,11 @@
     enable = true;
     keyboards.main = {
       devices = [ "/dev/input/event0" ];  # AT Translated Set 2 keyboard
+      extraDefCfg = "process-unmapped-keys yes"; # req for tap-hold-press, or need a set of explicit passthrough keys 
       config = ''
         ;; Define aliases
         (defalias
-          escctrl (tap-hold 100 100 esc lctl)
+          escctrl (tap-hold-press 200 200 esc lctl)
         )
 
         ;; Source layer 
@@ -122,12 +126,23 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tom = {
+  users.users.${username} = {
     shell = pkgs.fish;
     isNormalUser = true;
-    home = "/home/tom";
+    home = "/home/${username}";
     description = "Tom Passarelli";
     extraGroups = [ "wheel" "networkmanager" ]; # Enable 'sudo' for the user.
+  };
+
+  # Create user directories on boot
+  systemd.tmpfiles.rules = [
+    "d /home/${username}/Pictures/Screenshots 0755 ${username} users -"
+  ];
+
+  # System-wide theming with Stylix
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
   };
 
   # Define what programs we want

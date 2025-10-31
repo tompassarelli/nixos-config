@@ -272,6 +272,9 @@ spawn-at-startup "gnome-keyring-daemon --start --components=secrets"
 // Start waybar overview listener script 
 spawn-at-startup "/home/tom/.config/waybar/overview-waybar.py"
 
+// Wallpaper
+spawn-at-startup "swaybg -i /home/tom/code/nixos-config/wallpaper.jpg"
+
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
