@@ -6,12 +6,12 @@
 
   imports = [
     ./modules/home/dotfiles.nix
+    ./modules/home/wayland-services.nix
     ./modules/home/shell.nix
     ./modules/home/terminal.nix
     ./modules/home/git.nix
     ./modules/home/gtk.nix
     ./modules/home/yazi.nix
     ./modules/home/mako.nix
-    ./modules/home/wayland-services.nix
   ];
 }

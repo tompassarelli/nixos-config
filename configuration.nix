@@ -161,6 +161,7 @@ in
     defaultEditor = true;
   };
 
+
   # Packages
   # You can use https://search.nixos.org/ to find more pkgs (and options).
   nixpkgs.config.allowUnfree = true;

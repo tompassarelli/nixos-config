@@ -1,3 +1,6 @@
+-- Apply stylix colors first
+require('stylix-colors').setup()
+
 -- Enable folding
 vim.opt.foldmethod = "expr"
 
