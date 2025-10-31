@@ -1,0 +1,13 @@
+list_placeholder = "Search..."
+runner_placeholder = "Run..."
+
+[search]
+delay = 0
+
+[applications]
+context_aware = true
+use_generic = true
+
+[runner]
+includes_binaries = true
+includes_executables = true

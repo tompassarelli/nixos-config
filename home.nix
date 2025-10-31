@@ -17,7 +17,11 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      ll = "ls -l";
+      ls = "eza";
+      ll = "eza -l";
+      la = "eza -la";
+      lt = "eza --tree";
+      ps = "procs";
       gs = "git status";
       vi = "nvim";
       cd = "z";  # use zoxide for cd
@@ -78,6 +82,12 @@
   xdg.configFile."waybar/overview-waybar.py".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/overview-waybar.py";
   xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/nvim";
 
+  # walker config
+  xdg.configFile."walker/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/walker/config.toml";
+
+  # tealdeer config
+  xdg.configFile."tealdeer/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/tealdeer/config.toml";
+
   # version control
   programs.git = {
     enable = true;
@@ -87,6 +97,11 @@
       init.defaultBranch = "main";
       pull.rebase = true;
       core.editor = "nvim";
+      core.pager = "delta";
+      interactive.diffFilter = "delta --color-only";
+      delta.navigate = true;
+      merge.conflictstyle = "diff3";
+      diff.colorMoved = "default";
     };
   };
 
@@ -184,6 +199,25 @@
     };
   };
 
+  # walker service (runs in background for fast launch)
+  systemd.user.services.walker = {
+    Unit = {
+      Description = "Walker application launcher service";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.walker}/bin/walker --gapplication-service";
+      Restart = "on-failure";
+      Type = "dbus";
+      BusName = "me.halfmexican.walker";
+    };
+    Install = {
+      WantedBy = [ "niri.service" ];
+    };
+  };
+
   home.packages = with pkgs; [
     # Personal productivity
     obsidian
@@ -211,5 +245,11 @@
 
     # User utilities
     tree
+    dust             # disk usage analyzer (better than ncdu for overview)
+    walker           # modern wayland app launcher
+    eza              # modern ls replacement
+    procs            # modern ps replacement
+    tealdeer         # tldr for quick command examples
+    delta            # beautiful git diffs
   ];
 }

@@ -373,6 +373,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Terminal" { spawn "kitty"; }
     Super+Space hotkey-overlay-title="App Launcher" { spawn "rofi" "-show" "drun"; }
+    Super+Shift+Space hotkey-overlay-title="Walker Launcher" { spawn "walker"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     
     // Dismiss all notifications
