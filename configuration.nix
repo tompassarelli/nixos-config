@@ -4,7 +4,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  username = "tom";
+  username = "tom"; # set to your username
 in
 {
   imports =

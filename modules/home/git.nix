@@ -8,13 +8,17 @@
     enable = true;
     userName = "tompassarelli";
     userEmail = "tom.passarelli@protonmail.com";
+    delta = {
+      enable = true;
+      options = {
+        navigate = true;
+        color-only = true;
+        #syntax-theme = "DarkNeon"; # handled by stylix?
+      };
+    };
     extraConfig = {
       init.defaultBranch = "main";
       core.editor = "nvim";
-      core.pager = "delta";
-      interactive.diffFilter = "delta --color-only";
-      delta.navigate = true;
-      delta.syntax-theme = "Catppuccin-mocha";
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
     };
