@@ -5,10 +5,10 @@
   nixpkgs.config.allowUnfree = true;
 
   imports = [
+    ./modules/home/dotfiles.nix
     ./modules/home/shell.nix
     ./modules/home/terminal.nix
     ./modules/home/git.nix
-    ./modules/home/dotfiles.nix
     ./modules/home/gtk.nix
     ./modules/home/yazi.nix
     ./modules/home/mako.nix
