@@ -10,6 +10,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      #./modules/bluetooth.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -157,8 +158,6 @@ in
 
   programs.neovim = {
     enable = true;
-    viAlias = true;
-    vimAlias = true;
     defaultEditor = true;
   };
 
@@ -167,8 +166,6 @@ in
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
-
-    #region Core/CLI
 
     # Framework (comment/remove this section if not using a Framework Computer)
     framework-tool       # swiss army knife
@@ -195,7 +192,7 @@ in
     python3              # for waybar overview script
     ungoogled-chromium   # fallback
     
-    # Rust development
+    # Rust
     rustc                # rust compiler
     cargo                # rust package manager
     rust-analyzer        # rust language server
@@ -206,35 +203,31 @@ in
     # Icons & Themes
     papirus-icon-theme   # nice icon set
     adwaita-icon-theme   # default GNOME icons (needed for nautilus)
+    gnome-themes-extra   # includes Adwaita-dark theme
 
     # System Input
     wl-clipboard         # clipboard utilities
     brightnessctl        # control brightness
 
     # Version Control
-    gh                   # github cli thats faster to work with than raw git
+    gh                   # github cli
 
-    #endregion Core/CLI
-
-    #region Desktop Environment
-
-    # system monitor
+    # System Monitor
     fastfetch            # print your system config in the terminal
     btop                 # power, cpu, etc usage
 
-    # legacy app support
+    # Legacy app support
     xwayland-satellite   # (required as of 2025 for a few apps, like bitwarden)
 
-    # network
+    # Network
     networkmanagerapplet # frontend for networkmanaager
     
-    # app launcher/switcher
+    # App Launcher / Command Palette
     rofi-wayland         # it works, its fast
     waybar               # status bar
 
-    # file manager
+    # File Manager
     nautilus             # gtk file manager (needed for file dialogs)
-    gnome-themes-extra   # includes Adwaita-dark theme
 
     # screen lock
     swaylock             # lock screen: Super + Alt + L
@@ -246,8 +239,6 @@ in
     # screenshots
     grim                 # primary screenshot tool
     slurp                # region selector for screenshots
-
-    #endregion Desktop Environment
 
   ];
 
@@ -270,28 +261,7 @@ in
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "25.05"; # Did you read the comment?
-
+  # more info: ./documentation/systemStateVersion
+  # ALERT: DO NOT EDIT (exceptional cases apply)
+  system.stateVersion = "25.05"; # READ THE COMMENT ABOVE
 }

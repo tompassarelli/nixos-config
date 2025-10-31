@@ -17,14 +17,15 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      ls = "eza";
-      ll = "eza -l";
-      la = "eza -la";
-      lt = "eza --tree";
-      ps = "procs";
-      gs = "git status";
-      vi = "nvim";
+      # modern utils
       cd = "z";  # use zoxide for cd
+      du = "dust";
+      ls = "eza";
+      ps = "procs";
+      vim = "nvim"; # keep vi as fallback
+      # shorthands
+      gs = "git status";
+      gd = "git diff";
     };
     functions = {
       fish_prompt = {
@@ -229,6 +230,7 @@
     godot_4
     blender
     gimp
+    obs-studio          # screen recording/streaming
 
     # Social/Communication
     discord
@@ -251,5 +253,8 @@
     procs            # modern ps replacement
     tealdeer         # tldr for quick command examples
     delta            # beautiful git diffs
+
+    # System utilities
+    pavucontrol      # audio control GUI
   ];
 }
