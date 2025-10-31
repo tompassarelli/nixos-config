@@ -10,6 +10,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/wayland-services.nix
       #./modules/bluetooth.nix
     ];
 
@@ -239,6 +240,43 @@ in
     # screenshots
     grim                 # primary screenshot tool
     slurp                # region selector for screenshots
+
+    # Personal productivity
+    obsidian
+    todoist-electron
+    protonmail-desktop
+    bitwarden
+
+    # Creative tools
+    godot_4
+    blender
+    gimp
+    obs-studio          # screen recording/streaming
+
+    # Social/Communication
+    discord
+    zoom-us
+
+    # Music
+    spotify
+    youtube-music
+
+    # Media viewers
+    imv              # image viewer
+    mpv              # video player
+    zathura          # PDF viewer
+
+    # User utilities
+    tree
+    dust             # disk usage analyzer (better than ncdu for overview)
+    walker           # modern wayland app launcher
+    eza              # modern ls replacement
+    procs            # modern ps replacement
+    tealdeer         # tldr for quick command examples
+    delta            # beautiful git diffs
+
+    # System utilities
+    pavucontrol      # audio control GUI
 
   ];
 
