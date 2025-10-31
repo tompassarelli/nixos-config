@@ -20,6 +20,7 @@
       ll = "ls -l";
       gs = "git status";
       vi = "nvim";
+      cd = "z";  # use zoxide for cd
     };
     functions = {
       fish_prompt = {
@@ -32,7 +33,30 @@
     interactiveShellInit = ''
       # Bind Ctrl+L to accept autosuggestion
       bind \cl accept-autosuggestion
+      
+      # Initialize zoxide
+      zoxide init fish | source
+      
+      # Initialize atuin
+      atuin init fish | source
     '';
+  };
+
+  # zoxide smart directory jumper
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  # atuin shell history
+  programs.atuin = {
+    enable = true;
+    enableFishIntegration = true;
+    settings = {
+      auto_sync = true;
+      sync_frequency = "5m";
+      search_mode = "fuzzy";
+    };
   };
 
   # GTK theming handled by Stylix
@@ -62,6 +86,7 @@
     extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;
+      core.editor = "nvim";
     };
   };
 
@@ -178,6 +203,11 @@
     # Music
     spotify
     youtube-music
+
+    # Media viewers
+    imv              # image viewer
+    mpv              # video player
+    zathura          # PDF viewer
 
     # User utilities
     tree

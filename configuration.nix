@@ -220,7 +220,7 @@ in
 
     # system monitor
     fastfetch            # print your system config in the terminal
-    htop                 # power, cpu, etc usage
+    btop                 # power, cpu, etc usage
 
     # legacy app support
     xwayland-satellite   # (required as of 2025 for a few apps, like bitwarden)
