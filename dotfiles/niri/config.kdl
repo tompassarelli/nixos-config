@@ -73,19 +73,11 @@ input {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
-/-output "eDP-1" {
-    // Uncomment this line to disable this output.
-    // off
+output "eDP-1" {
+    // Framework 13 2.8K display (2880x1920)
+    mode "2880x1920@120.000"
 
-    // Resolution and, optionally, refresh rate of the output.
-    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
-    // If the refresh rate is omitted, niri will pick the highest refresh rate
-    // for the resolution.
-    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
-    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "1920x1080@120.030"
-
-    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    // 2x scaling for comfortable readability (logical size: 1440x960)
     scale 2
 
     // Transform allows to rotate the output counter-clockwise, valid values are:
@@ -101,7 +93,7 @@ input {
     // so to put another output directly adjacent to it on the right, set its x to 1920.
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
-    position x=1280 y=0
+    // position x=1280 y=0
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -350,9 +342,14 @@ window-rule {
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-    geometry-corner-radius 12
+window-rule {
+    geometry-corner-radius 10
     clip-to-geometry true
+}
+
+// Global Transparency (see-through / frosted glass)
+window-rule {
+  opacity 0.92
 }
 
 binds {
