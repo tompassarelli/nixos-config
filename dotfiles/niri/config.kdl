@@ -1,7 +1,7 @@
 // This config is in the KDL format: https://kdl.dev "/-" comments out the following node. Check the wiki for a full description of the configuration:
 // https://yalter.github.io/niri/Configuration:-Introduction
 
-// Input device configuration.
+// Input device configuration. 
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
 input {
@@ -397,6 +397,11 @@ binds {
     // but you need to manually put each argument in separate "" quotes.
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    
+    // Nightlight temperature control 
+    Mod+XF86MonBrightnessDown allow-when-locked=true { spawn "/home/tom/code/nixos-config/dotfiles/wl-gammarelay/temperature-control" "down"; }
+    Mod+XF86MonBrightnessUp allow-when-locked=true { spawn "/home/tom/code/nixos-config/dotfiles/wl-gammarelay/temperature-control" "up"; }
+
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,

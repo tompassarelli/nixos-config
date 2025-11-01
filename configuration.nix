@@ -181,6 +181,9 @@ in
     framework-tool       # swiss army knife
     fwupd                # update drivers/bios
 
+    # Night light
+    wl-gammarelay-rs     # live gamma control for wayland
+
     # Editor / Search
     vim                  # default general purpose text editor
     ripgrep              # search

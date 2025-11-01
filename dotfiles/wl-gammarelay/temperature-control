@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Temperature control using wl-gammarelay (instant, no flicker!)
+# Usage: temp-wl-relay [up|down]
+
+case "$1" in
+    "up")
+        # Increase temperature by 250K
+        busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateTemperature n +250
+        ;;
+    "down")
+        # Decrease temperature by 250K  
+        busctl --user -- call rs.wl-gammarelay / rs.wl.gammarelay UpdateTemperature n -250
+        ;;
+    *)
+        echo "Usage: $0 [up|down]"
+        exit 1
+        ;;
+esac
