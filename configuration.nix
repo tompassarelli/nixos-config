@@ -50,7 +50,7 @@ in
   security.pam.services.login.enableGnomeKeyring = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   # Desktop Portal
   xdg.portal.enable = true;
@@ -165,7 +165,16 @@ in
   # Packages
   # You can use https://search.nixos.org/ to find more pkgs (and options).
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    builders-use-substitutes = true;
+    extra-substituters = [
+      "https://anyrun.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "anyrun.cachix.org-1:pqBobmOjI7nKlsUMV25u9QHa9btJK65/C8vnO3p346s="
+    ];
+  };
   environment.systemPackages = with pkgs; [
 
     # Framework (comment/remove this section if not using a Framework Computer)

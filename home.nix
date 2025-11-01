@@ -1,10 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   home.stateVersion = "25.05";
   nixpkgs.config.allowUnfree = true;
 
   imports = [
+    ./modules/home/anyrun-flake.nix
     ./modules/home/dotfiles.nix
     ./modules/home/wayland-services.nix
     ./modules/home/shell.nix

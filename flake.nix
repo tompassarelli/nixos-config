@@ -9,9 +9,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix.url = "github:danth/stylix/release-25.05";
+    anyrun.url = "github:anyrun-org/anyrun";
   };
   
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, anyrun }: {
     nixosConfigurations.whiterabbit = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -23,6 +24,9 @@
         {
           home-manager.users.tom = import ./home.nix;
           home-manager.backupFileExtension = "backup";
+          home-manager.extraSpecialArgs = { 
+            inputs = { inherit anyrun; };
+          };
         }
         
         # unstable overlay
