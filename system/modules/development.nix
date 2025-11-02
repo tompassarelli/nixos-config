@@ -5,8 +5,8 @@
   environment.systemPackages = with pkgs; [
     # Editor / Search
     vim                  # default general purpose text editor
-    #unstable.zed-editor  # open source editor
-    claude-code          # anthropic claude cli
+    #unstable.zed-editor # open source editor
+    unstable.claude-code # anthropic claude cli
     ripgrep              # search
     fd                   # find files
     unzip                # relax and decompress
@@ -21,7 +21,7 @@
 
     # Web
     nodejs               # for webjoyers
-    #ungoogled-chromium   # fallback
+    #ungoogled-chromium  # fallback
 
     # Python
     python3              # i'm a snake
