@@ -23,11 +23,11 @@
     xwayland-satellite   # (required as of 2025 for a few apps, like bitwarden)
 
     # User utilities
-    tree
+    tree                 # display a file tree
     dust                 # disk usage analyzer
-    walker               # modern wayland app launcher
     eza                  # modern ls replacement
     procs                # modern ps replacement
     tealdeer             # tldr for quick command examples
+    pomatez              # pomodoro
   ];
 }

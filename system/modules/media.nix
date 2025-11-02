@@ -17,8 +17,6 @@
     zathura              # PDF viewer
 
     # Wayland desktop tools
-    rofi-wayland         # it works, its fast
-    waybar               # status bar
     nautilus             # gtk file manager (needed for file dialogs)
     swaylock             # lock screen: Super + Alt + L
     swayidle             # auto-lock after idle

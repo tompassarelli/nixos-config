@@ -33,6 +33,9 @@
     ./modules/media.nix
     ./modules/password.nix
     ./modules/mail.nix
+    ./modules/rofi-wayland.nix
+    ./modules/waybar.nix
+    ./modules/walker.nix
     
     # Hardware-specific (comment out if not using Framework)
     ./modules/framework.nix
