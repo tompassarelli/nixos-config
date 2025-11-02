@@ -1,17 +1,19 @@
 # Edit this configuration file to define what should be installed on your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
-
-let
-  username = "tom"; # set to your username
-in
+{ config, lib, pkgs, username, chosenTheme, ... }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      #./modules/bluetooth.nix
-    ];
+  imports = [
+    # Hardware configuration
+    ./hardware-configuration.nix
+    
+    # System modules
+    ./modules/boot.nix
+    ./modules/desktop.nix
+    ./modules/kanata.nix
+    ./modules/users.nix
+    ./modules/rust.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -186,6 +188,8 @@ in
 
     # Editor / Search
     vim                  # default general purpose text editor
+    #unstable.zed-editor  # open source editor
+    claude-code          # anthropic claude cli
     ripgrep              # search
     fd                   # find files
     unzip                # relax and decompress
@@ -198,12 +202,12 @@ in
     imagemagick          # work with images
     ghostscript          # for adobe
 
-    # Code
-    unstable.zed-editor  # open source editor
-    claude-code          # anthropic claude cli
-    nodejs               # big scriptin
-    python3              # for waybar overview script
-    ungoogled-chromium   # fallback
+    # Web
+    nodejs               # for webjoyers
+    #ungoogled-chromium   # fallback
+
+    # Python
+    python3              # i'm a snake
     
     # Rust
     rustc                # rust compiler
@@ -214,7 +218,7 @@ in
     pkg-config           # helps find system libraries during compilation
 
     # Icons & Themes
-    papirus-icon-theme   # nice icon set
+    #papirus-icon-theme   # nice icon set
     adwaita-icon-theme   # default GNOME icons (needed for nautilus)
     gnome-themes-extra   # includes Adwaita-dark theme
 
@@ -254,41 +258,41 @@ in
     slurp                # region selector for screenshots
 
     # Personal productivity
-    obsidian
-    todoist-electron
-    protonmail-desktop
-    bitwarden
+    obsidian             # link notes
+    todoist-electron     # do things
+    protonmail-desktop   # encrypted mail
+    bitwarden            # password manager
 
     # Creative tools
-    godot_4
-    blender
-    gimp
-    obs-studio          # screen recording/streaming
+    godot_4              # game engine and visual editor
+    blender              # release your inner sculpter
+    gimp                 # image editing for slaves
+    obs-studio           # screen recording/streaming
 
     # Social/Communication
-    discord
-    zoom-us
+    discord              # as stable as its name implies
+    zoom-us              # meetings
 
     # Music
-    spotify
-    youtube-music
+    spotify              # enjoyable sounds
+    youtube-music        # also enjoyable sounds
 
     # Media viewers
-    imv              # image viewer
-    mpv              # video player
-    zathura          # PDF viewer
+    imv                  # img viewer
+    mpv                  # video player
+    zathura              # PDF viewer
 
     # User utilities
     tree
-    dust             # disk usage analyzer (better than ncdu for overview)
-    walker           # modern wayland app launcher
-    eza              # modern ls replacement
-    procs            # modern ps replacement
-    tealdeer         # tldr for quick command examples
-    delta            # beautiful git diffs
+    dust                 # disk usage analyzer
+    walker               # modern wayland app launcher
+    eza                  # modern ls replacement
+    procs                # modern ps replacement
+    tealdeer             # tldr for quick command examples
+    delta                # beautiful git diffs
 
     # System utilities
-    pavucontrol      # audio control GUI
+    pavucontrol          # audio control GUI
 
   ];
 
@@ -311,7 +315,24 @@ in
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # more info: ./documentation/systemStateVersion
-  # ALERT: DO NOT EDIT (exceptional cases apply)
+  #region warning
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+  # to actually do that.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
+  #endregion warning
   system.stateVersion = "25.05"; # READ THE COMMENT ABOVE
 }

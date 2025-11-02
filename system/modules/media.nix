@@ -1,0 +1,32 @@
+{ config, lib, pkgs, ... }:
+
+{
+  # Media applications and entertainment
+  environment.systemPackages = with pkgs; [
+    # Social/Communication
+    discord              # as stable as its name implies
+    zoom-us              # meetings
+
+    # Music
+    spotify              # enjoyable sounds
+    youtube-music        # also enjoyable sounds
+
+    # Media viewers
+    imv                  # img viewer
+    mpv                  # video player
+    zathura              # PDF viewer
+
+    # Wayland desktop tools
+    rofi-wayland         # it works, its fast
+    waybar               # status bar
+    nautilus             # gtk file manager (needed for file dialogs)
+    swaylock             # lock screen: Super + Alt + L
+    swayidle             # auto-lock after idle
+    swaybg               # wallpaper setter
+    grim                 # primary screenshot tool
+    slurp                # region selector for screenshots
+
+    # System utilities
+    pavucontrol          # audio control GUI
+  ];
+}

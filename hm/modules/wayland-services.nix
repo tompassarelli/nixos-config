@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, chosenTheme, ... }:
 
 {
   # Wayland desktop services
@@ -13,7 +13,7 @@
       Requisite = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.swaybg}/bin/swaybg -m fill -i %h/code/nixos-config/wallpaper.jpg";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.swaybg}/bin/swaybg -i $(${pkgs.fd}/bin/fd -t f . $HOME/.config/themes/${chosenTheme}/wallpapers/ | ${pkgs.coreutils}/bin/shuf -n 1) --mode fill'";
       Restart = "on-failure";
     };
     Install = {

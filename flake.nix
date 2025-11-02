@@ -13,18 +13,29 @@
   };
   
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, anyrun }: {
-    nixosConfigurations.whiterabbit = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+    # Reusable system builder function
+    lib.mkSystem = {
+      hostname,
+      username,
+      chosenTheme,
+      system ? "x86_64-linux"  # For ARM: use "aarch64-linux"
+    }: nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { 
+        inherit username chosenTheme;
+      };
       modules = [
-        ./hardware-configuration.nix
-        ./configuration.nix
+        ./system/hardware-configuration.nix
+        ./system/configuration.nix
         
         stylix.nixosModules.stylix
         home-manager.nixosModules.home-manager
         {
-          home-manager.users.tom = import ./home.nix;
+          networking.hostName = hostname;
+          home-manager.users.${username} = import ./hm/hm.nix;
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = { 
+            inherit username chosenTheme;
             inputs = { inherit anyrun; };
           };
         }
@@ -34,13 +45,24 @@
           nixpkgs.overlays = [
             (final: prev: {
               unstable = import nixpkgs-unstable {
-                system = "x86_64-linux";
+                inherit system;
                 config.allowUnfree = true;
               };
             })
           ];
         }
       ];
+    };
+
+    # Example system configurations
+    nixosConfigurations = {
+      whiterabbit = self.lib.mkSystem {
+        hostname = "whiterabbit";
+        username = "tom";
+        chosenTheme = "tokyo-night-dark";
+        # system = "aarch64-linux";  # Uncomment for ARM systems
+        # as of 11/02/2025 many default modules will not work on ARM
+      };
     };
   };
 }
