@@ -28,6 +28,6 @@
     eza                  # modern ls replacement
     procs                # modern ps replacement
     tealdeer             # tldr for quick command examples
-    pomatez              # pomodoro
+    pomodoro-gtk         # pomodoro
   ];
 }
