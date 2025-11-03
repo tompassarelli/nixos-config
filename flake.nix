@@ -79,7 +79,11 @@
             development.enable = true;
 
             # Applications
-            web-browser.enable = true;
+            web-browser = {
+              enable = true;
+              firefox.enable = true;
+              chromium.enable = true;
+            };
             steam.enable = true;
             neovim.enable = true;
             productivity.enable = true;
