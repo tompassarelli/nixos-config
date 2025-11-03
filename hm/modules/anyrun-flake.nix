@@ -1,13 +1,21 @@
-{ inputs, pkgs, modulesPath, ... }:
+{ config, lib, inputs, pkgs, modulesPath, ... }:
 
+let
+  cfg = config.myConfig.anyrun;
+in
 {
+  options.myConfig.anyrun = {
+    enable = lib.mkEnableOption "Anyrun application launcher";
+  };
+
   # Disable home-manager's built-in anyrun module to avoid conflicts
   disabledModules = ["${modulesPath}/programs/anyrun.nix"];
-  
+
   # Import the anyrun flake's home-manager module
   imports = [ inputs.anyrun.homeManagerModules.default ];
 
-  programs.anyrun = {
+  config = lib.mkIf cfg.enable {
+    programs.anyrun = {
     enable = true;
     config = {
       x = { fraction = 0.5; };
@@ -38,6 +46,7 @@
         { key = "j"; ctrl = true; action = "down"; }
         { key = "k"; ctrl = true; action = "up"; }
       ];
+    };
     };
   };
 }

@@ -1,11 +1,16 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.shell;
+in
 {
-  # Shell environment configuration
-  # Requires home-manager for programs.fish, programs.zoxide, programs.atuin
-  
-  # Shell
-  programs.fish = {
+  options.myConfig.shell = {
+    enable = lib.mkEnableOption "Shell environment configuration";
+  };
+
+  config = lib.mkIf cfg.enable {
+    # Shell
+    programs.fish = {
     enable = true;
     shellAliases = {
       # modern utils
@@ -44,14 +49,15 @@
     enableFishIntegration = true;
   };
 
-  # atuin shell history
-  programs.atuin = {
-    enable = true;
-    enableFishIntegration = true;
-    settings = {
-      auto_sync = true;
-      sync_frequency = "5m";
-      search_mode = "fuzzy";
+    # atuin shell history
+    programs.atuin = {
+      enable = true;
+      enableFishIntegration = true;
+      settings = {
+        auto_sync = true;
+        sync_frequency = "5m";
+        search_mode = "fuzzy";
+      };
     };
   };
 }

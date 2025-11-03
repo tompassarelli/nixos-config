@@ -1,8 +1,16 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.waybar;
+in
 {
-  # Waybar status bar for Wayland
-  environment.systemPackages = with pkgs; [
-    waybar               # status bar
-  ];
+  options.myConfig.waybar = {
+    enable = lib.mkEnableOption "Waybar status bar for Wayland";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      waybar               # status bar
+    ];
+  };
 }

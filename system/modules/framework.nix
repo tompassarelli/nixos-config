@@ -1,10 +1,17 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.framework;
+in
 {
-  # Framework Computer specific tools
-  # Comment/remove this section if not using a Framework Computer
-  environment.systemPackages = with pkgs; [
-    framework-tool       # swiss army knife
-    fwupd                # update drivers/bios
-  ];
+  options.myConfig.framework = {
+    enable = lib.mkEnableOption "Framework Computer specific tools";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      framework-tool       # swiss army knife
+      fwupd                # update drivers/bios
+    ];
+  };
 }

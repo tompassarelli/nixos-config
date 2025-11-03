@@ -1,11 +1,16 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.dotfiles;
+in
 {
-  # Dotfiles management
-  # Requires home-manager for xdg.configFile
+  options.myConfig.dotfiles = {
+    enable = lib.mkEnableOption "Dotfiles management";
+  };
 
-  # Rofi
-  xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/config.rasi";
+  config = lib.mkIf cfg.enable {
+    # Rofi
+    xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/config.rasi";
    
   # Niri
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/niri/config.kdl";
@@ -131,6 +136,7 @@
   # Tealdear (tldr)
   xdg.configFile."tealdeer/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/tealdeer/config.toml";
 
-  # Themes directory
-  xdg.configFile."themes".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/themes";
+    # Themes directory
+    xdg.configFile."themes".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/themes";
+  };
 }

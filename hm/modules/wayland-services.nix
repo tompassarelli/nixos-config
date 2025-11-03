@@ -1,11 +1,16 @@
 { config, lib, pkgs, chosenTheme, ... }:
 
+let
+  cfg = config.myConfig.wayland-services;
+in
 {
-  # Wayland desktop services
-  # All the systemd user services for the Wayland desktop environment
-  
-  # swaybg wallpaper service
-  systemd.user.services.swaybg = {
+  options.myConfig.wayland-services = {
+    enable = lib.mkEnableOption "Wayland desktop services";
+  };
+
+  config = lib.mkIf cfg.enable {
+    # swaybg wallpaper service
+    systemd.user.services.swaybg = {
     Unit = {
       Description = "Wayland wallpaper tool";
       PartOf = [ "graphical-session.target" ];
@@ -105,8 +110,9 @@
       Type = "dbus";
       BusName = "rs.wl-gammarelay";
     };
-    Install = {
-      WantedBy = [ "niri.service" ];
+      Install = {
+        WantedBy = [ "niri.service" ];
+      };
     };
   };
 }

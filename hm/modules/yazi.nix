@@ -1,16 +1,22 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.yazi;
+in
 {
-  # Yazi file manager configuration
-  # Requires home-manager for programs.yazi
-  
-  programs.yazi = {
-    enable = true;
-    settings = {
-      opener = {
-        edit = [
-          { run = "nvim \"$@\""; block = true; for = "unix"; }
-        ];
+  options.myConfig.yazi = {
+    enable = lib.mkEnableOption "Yazi file manager";
+  };
+
+  config = lib.mkIf cfg.enable {
+    programs.yazi = {
+      enable = true;
+      settings = {
+        opener = {
+          edit = [
+            { run = "nvim \"$@\""; block = true; for = "unix"; }
+          ];
+        };
       };
     };
   };

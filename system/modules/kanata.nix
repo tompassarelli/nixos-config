@@ -1,11 +1,16 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.kanata;
+in
 {
-  # Kanata keyboard remapping configuration
-  # Replaces evremap with better uinput support
+  options.myConfig.kanata = {
+    enable = lib.mkEnableOption "Kanata keyboard remapping";
+  };
 
-  # Hardware support for kanata
-  hardware.uinput.enable = true;     # Required for kanata to access uinput
+  config = lib.mkIf cfg.enable {
+    # Hardware support for kanata
+    hardware.uinput.enable = true;     # Required for kanata to access uinput
   
   # Proper udev rules for uinput access
   services.udev.extraRules = ''
@@ -44,9 +49,10 @@
     };
   };
 
-  # Use dedicated user instead of DynamicUser (better security than root)
-  systemd.services.kanata-main.serviceConfig = {
-    DynamicUser = lib.mkForce false;
-    User = "kanata";
+    # Use dedicated user instead of DynamicUser (better security than root)
+    systemd.services.kanata-main.serviceConfig = {
+      DynamicUser = lib.mkForce false;
+      User = "kanata";
+    };
   };
 }

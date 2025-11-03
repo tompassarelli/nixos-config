@@ -1,11 +1,16 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.desktop;
+in
 {
-  # Desktop environment configuration
-  # Wayland desktop services and portal setup
+  options.myConfig.desktop = {
+    enable = lib.mkEnableOption "desktop environment configuration";
+  };
 
-  # Desktop Portal for app integration
-  xdg.portal.enable = true;
+  config = lib.mkIf cfg.enable {
+    # Desktop Portal for app integration
+    xdg.portal.enable = true;
   xdg.portal.extraPortals = [ 
     pkgs.xdg-desktop-portal-gtk  # for GTK apps, Electron apps (Discord, Obsidian, etc.)
     pkgs.xdg-desktop-portal-wlr  # for screen sharing on wlroots compositors
@@ -37,6 +42,7 @@
   services.gnome.gnome-keyring.enable = true;
   programs.seahorse.enable = true;
 
-  # Enable niri compositor
-  programs.niri.enable = true;
+    # Enable niri compositor
+    programs.niri.enable = true;
+  };
 }

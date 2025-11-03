@@ -1,8 +1,15 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.development;
+in
 {
-  # Development tools and programming utilities
-  environment.systemPackages = with pkgs; [
+  options.myConfig.development = {
+    enable = lib.mkEnableOption "development tools and programming utilities";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
     # Editor / Search
     vim                  # default general purpose text editor
     #unstable.zed-editor # open source editor
@@ -29,5 +36,6 @@
     # Version Control
     gh                   # github cli
     delta                # beautiful git diffs
-  ];
+    ];
+  };
 }

@@ -1,14 +1,22 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.boot;
+in
 {
-  # Boot configuration
-  # Use the systemd-boot EFI boot loader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  options.myConfig.boot = {
+    enable = lib.mkEnableOption "boot configuration";
+  };
 
-  # Use latest kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  config = lib.mkIf cfg.enable {
+    # Use the systemd-boot EFI boot loader
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
 
-  # Kernel modules for hardware support
-  boot.kernelModules = [ "uinput" ];  # Load uinput module early for kanata
+    # Use latest kernel
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
+    # Kernel modules for hardware support
+    boot.kernelModules = [ "uinput" ];  # Load uinput module early for kanata
+  };
 }

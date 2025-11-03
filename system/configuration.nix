@@ -3,6 +3,42 @@
 
 { config, lib, pkgs, ... }:
 {
+  # Module configuration flags
+  myConfig = {
+    # Core system modules
+    boot.enable = true;
+    desktop.enable = true;
+    kanata.enable = true;
+    users.enable = true;
+    networking.enable = true;
+    styling.enable = true;
+    timezone.enable = true;
+    nix-settings.enable = true;
+    ssh.enable = true;
+
+    # Development and tools
+    rust.enable = true;
+    development.enable = true;
+    utilities.enable = true;
+
+    # Applications
+    firefox.enable = true;
+    fish.enable = true;
+    steam.enable = true;
+    neovim.enable = true;
+    productivity.enable = true;
+    creative.enable = true;
+    media.enable = true;
+    password.enable = true;
+    mail.enable = true;
+    rofi-wayland.enable = true;
+    waybar.enable = true;
+    walker.enable = true;
+
+    # Hardware-specific (set to false if not using Framework)
+    framework.enable = true;
+  };
+
   imports = [
     # Hardware configuration
     ./hardware-configuration.nix
@@ -40,6 +76,7 @@
     # Hardware-specific (comment out if not using Framework)
     ./modules/framework.nix
   ];
+
 
   # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
   # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how

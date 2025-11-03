@@ -1,8 +1,15 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.media;
+in
 {
-  # Media applications and entertainment
-  environment.systemPackages = with pkgs; [
+  options.myConfig.media = {
+    enable = lib.mkEnableOption "media applications and entertainment";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
     # Social/Communication
     discord              # as stable as its name implies
     zoom-us              # meetings
@@ -26,5 +33,6 @@
 
     # System utilities
     pavucontrol          # audio control GUI
-  ];
+    ];
+  };
 }

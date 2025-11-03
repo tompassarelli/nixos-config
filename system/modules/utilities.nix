@@ -1,8 +1,15 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.utilities;
+in
 {
-  # System utilities and modern CLI tools
-  environment.systemPackages = with pkgs; [
+  options.myConfig.utilities = {
+    enable = lib.mkEnableOption "system utilities and modern CLI tools";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
     # Night light
     wl-gammarelay-rs     # live gamma control for wayland
 
@@ -29,5 +36,6 @@
     procs                # modern ps replacement
     tealdeer             # tldr for quick command examples
     pomodoro-gtk         # pomodoro
-  ];
+    ];
+  };
 }

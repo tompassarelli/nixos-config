@@ -1,8 +1,16 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.myConfig.walker;
+in
 {
-  # Walker modern wayland app launcher
-  environment.systemPackages = with pkgs; [
-    walker               # modern wayland app launcher
-  ];
+  options.myConfig.walker = {
+    enable = lib.mkEnableOption "Walker modern wayland app launcher";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      walker               # modern wayland app launcher
+    ];
+  };
 }
