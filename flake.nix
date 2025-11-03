@@ -62,7 +62,7 @@
             wl-gammarelay.enable = true;
 
             # Applications
-            browser.enable = true;
+            web-browser.enable = true;
             steam.enable = true;
             neovim.enable = true;
             productivity.enable = true;
@@ -100,7 +100,7 @@
             ./modules/development
             ./modules/utilities
             ./modules/wl-gammarelay
-            ./modules/browser
+            ./modules/web-browser
             ./modules/steam
             ./modules/neovim
             ./modules/productivity

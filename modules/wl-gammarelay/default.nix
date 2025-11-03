@@ -20,7 +20,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Temperature control script
       xdg.configFile."wl-gammarelay/temperature-control".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/modules/wl-gammarelay/dotfiles/temperature-control";
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/wl-gammarelay/temperature-control";
 
       # wl-gammarelay systemd service
       systemd.user.services.wl-gammarelay = {

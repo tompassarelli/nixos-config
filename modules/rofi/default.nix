@@ -20,7 +20,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Rofi configuration file
       xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/modules/rofi/dotfiles/config.rasi";
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/rofi/config.rasi";
     };
   };
 }

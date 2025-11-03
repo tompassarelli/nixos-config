@@ -22,7 +22,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Neovim configuration file
       xdg.configFile."nvim/init.lua".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/modules/neovim/dotfiles/init.lua";
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/neovim/init.lua";
 
       # Generate stylix colors for neovim (based on stylix neovim.nix)
       xdg.configFile."nvim/lua/stylix-colors.lua".text = with config.lib.stylix.colors; ''

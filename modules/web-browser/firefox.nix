@@ -1,14 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.myConfig.browser;
-in
+{ config, lib, ... }:
 {
-  config = lib.mkIf (cfg.enable && cfg.firefox.enable) {
+  config = lib.mkIf config.myConfig.web-browser.firefox.enable {
     programs.firefox.enable = true;
 
     # Set as default browser if specified
-    xdg.mime.defaultApplications = lib.mkIf (cfg.default == "firefox") {
+    xdg.mime.defaultApplications = lib.mkIf (config.myConfig.web-browser.default == "firefox") {
       "text/html" = "firefox.desktop";
       "x-scheme-handler/http" = "firefox.desktop";
       "x-scheme-handler/https" = "firefox.desktop";

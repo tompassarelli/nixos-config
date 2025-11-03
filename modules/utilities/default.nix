@@ -42,7 +42,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Tealdeer (tldr) configuration
       xdg.configFile."tealdeer/config.toml".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/modules/utilities/dotfiles/config.toml";
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/tealdeer/config.toml";
     };
   };
 }

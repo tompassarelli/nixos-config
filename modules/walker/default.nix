@@ -20,7 +20,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Walker configuration file
       xdg.configFile."walker/config.toml".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/modules/walker/dotfiles/config.toml";
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/walker/config.toml";
 
       # Walker systemd service (runs in background for fast launch)
       systemd.user.services.walker = {

@@ -1,17 +1,13 @@
 { config, lib, pkgs, ... }:
-
-let
-  cfg = config.myConfig.browser;
-in
 {
-  config = lib.mkIf (cfg.enable && cfg.chromium.enable) {
+  config = lib.mkIf config.myConfig.web-browser.chromium.enable {
     # Install ungoogled-chromium
     environment.systemPackages = with pkgs; [
       ungoogled-chromium
     ];
 
     # Set as default browser if specified
-    xdg.mime.defaultApplications = lib.mkIf (cfg.default == "chromium") {
+    xdg.mime.defaultApplications = lib.mkIf (config.myConfig.web-browser.default == "chromium") {
       "text/html" = "chromium-browser.desktop";
       "x-scheme-handler/http" = "chromium-browser.desktop";
       "x-scheme-handler/https" = "chromium-browser.desktop";

@@ -18,7 +18,7 @@ in
     home-manager.users.${username} = { config, ... }: {
       # Dotfiles: Main config (self-contained in module)
       xdg.configFile."waybar/config".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/modules/waybar/dotfiles/config";
+        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/config";
 
       # Dotfiles: Stylix-generated CSS (dynamic colors from theme)
       # Note: config.lib.stylix.colors comes from home-manager's stylix integration
@@ -81,11 +81,11 @@ in
 
       # Dotfiles: Custom styles (self-contained in module)
       xdg.configFile."waybar/style.css".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/modules/waybar/dotfiles/style.css";
+        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/style.css";
 
       # Dotfiles: Overview script (self-contained in module)
       xdg.configFile."waybar/overview-waybar.py".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/modules/waybar/dotfiles/overview-waybar.py";
+        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/waybar/overview-waybar.py";
 
       # Systemd service: Main waybar daemon
       systemd.user.services.waybar = {
