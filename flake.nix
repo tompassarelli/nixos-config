@@ -59,6 +59,7 @@
             rust.enable = true;
             development.enable = true;
             utilities.enable = true;
+            wl-gammarelay.enable = true;
 
             # Applications
             browser.enable = true;
@@ -98,6 +99,7 @@
             ./modules/rust
             ./modules/development
             ./modules/utilities
+            ./modules/wl-gammarelay
             ./modules/browser
             ./modules/steam
             ./modules/neovim

@@ -12,9 +12,6 @@ in
     # ============ SYSTEM-LEVEL CONFIGURATION ============
 
     environment.systemPackages = with pkgs; [
-    # Night light
-    wl-gammarelay-rs     # live gamma control for wayland
-
     # Icons & Themes
     #papirus-icon-theme   # nice icon set
     adwaita-icon-theme   # default GNOME icons (needed for nautilus)

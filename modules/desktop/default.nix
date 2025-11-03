@@ -89,25 +89,6 @@ in
             WantedBy = [ "niri.service" ];
           };
         };
-
-        # wl-gammarelay service for temperature control
-        wl-gammarelay = {
-          Unit = {
-            Description = "Gamma control for Wayland";
-            PartOf = [ "graphical-session.target" ];
-            After = [ "graphical-session.target" ];
-            Requisite = [ "graphical-session.target" ];
-          };
-          Service = {
-            ExecStart = "${pkgs.wl-gammarelay-rs}/bin/wl-gammarelay-rs";
-            Restart = "on-failure";
-            Type = "dbus";
-            BusName = "rs.wl-gammarelay";
-          };
-          Install = {
-            WantedBy = [ "niri.service" ];
-          };
-        };
       };
     };
   };
