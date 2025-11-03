@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  config = lib.mkIf config.myConfig.desktop.xdg-portal.enable {
+  config = lib.mkIf config.myConfig.theming.enable {
     # Desktop Portal for app integration
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [

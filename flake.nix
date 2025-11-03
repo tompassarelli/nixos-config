@@ -37,9 +37,11 @@
 
           # Module enable flags - single source of truth
           myConfig = {
+            # Hardware-specific (set to false if not using Framework)
+            framework.enable = true;
+
             # Core system modules
             boot.enable = true;
-            desktop.enable = true;
             terminal.enable = true;
             shell.enable = true;
             git.enable = true;
@@ -55,11 +57,26 @@
             nix-settings.enable = true;
             ssh.enable = true;
 
+            # Desktop environment
+            audio.enable = true;
+            niri.enable = true;
+            input.enable = true;
+            power.enable = true;
+            security.enable = true;
+            theming.enable = true;
+
+            # CLI utilities
+            tree.enable = true;
+            dust.enable = true;
+            eza.enable = true;
+            procs.enable = true;
+            tealdeer.enable = true;
+            fastfetch.enable = true;
+            btop.enable = true;
+
             # Development and tools
             rust.enable = true;
             development.enable = true;
-            utilities.enable = true;
-            wl-gammarelay.enable = true;
 
             # Applications
             web-browser.enable = true;
@@ -73,15 +90,11 @@
             rofi-wayland.enable = true;
             walker.enable = true;
             waybar.enable = true;
-
-            # Hardware-specific (set to false if not using Framework)
-            framework.enable = true;
           };
 
           # Import all modules
           imports = [
             ./modules/boot
-            ./modules/desktop
             ./modules/terminal
             ./modules/shell
             ./modules/git
@@ -96,10 +109,21 @@
             ./modules/timezone
             ./modules/nix-settings
             ./modules/ssh
+            ./modules/audio
+            ./modules/niri
+            ./modules/input
+            ./modules/power
+            ./modules/security
+            ./modules/theming
+            ./modules/tree
+            ./modules/dust
+            ./modules/eza
+            ./modules/procs
+            ./modules/tealdeer
+            ./modules/fastfetch
+            ./modules/btop
             ./modules/rust
             ./modules/development
-            ./modules/utilities
-            ./modules/wl-gammarelay
             ./modules/web-browser
             ./modules/steam
             ./modules/neovim

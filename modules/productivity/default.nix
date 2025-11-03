@@ -12,6 +12,7 @@ in
     environment.systemPackages = with pkgs; [
       obsidian             # link notes
       todoist-electron     # do things
+      pomodoro-gtk         # pomodoro timer
     ];
   };
 }

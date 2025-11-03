@@ -1,6 +1,6 @@
 { config, lib, ... }:
 {
-  config = lib.mkIf config.myConfig.desktop.fonts.enable {
+  config = lib.mkIf config.myConfig.theming.enable {
     # Font configuration
     fonts.fontconfig.enable = true;
   };

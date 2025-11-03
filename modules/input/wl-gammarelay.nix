@@ -1,21 +1,9 @@
 { config, lib, pkgs, username, ... }:
-
-let
-  cfg = config.myConfig.wl-gammarelay;
-in
 {
-  options.myConfig.wl-gammarelay = {
-    enable = lib.mkEnableOption "wl-gammarelay gamma control for Wayland";
-  };
-
-  config = lib.mkIf cfg.enable {
-    # ============ SYSTEM-LEVEL CONFIGURATION ============
-
+  config = lib.mkIf config.myConfig.input.enable {
     environment.systemPackages = with pkgs; [
       wl-gammarelay-rs  # live gamma control for wayland
     ];
-
-    # ============ HOME-MANAGER CONFIGURATION ============
 
     home-manager.users.${username} = { config, ... }: {
       # Temperature control script

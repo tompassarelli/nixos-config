@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  config = lib.mkIf config.myConfig.desktop.security.enable {
+  config = lib.mkIf config.myConfig.security.enable {
     # Security and authentication
     security.polkit.enable = true;
     security.pam.services.login.enableGnomeKeyring = true;
