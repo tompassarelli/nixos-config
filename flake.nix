@@ -21,22 +21,109 @@
       system ? "x86_64-linux"  # For ARM: use "aarch64-linux"
     }: nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = { 
+      specialArgs = {
         inherit username chosenTheme;
+        inputs = { inherit anyrun; };
       };
       modules = [
-        ./system/hardware-configuration.nix
-        ./system/configuration.nix
-        
+        ./hardware-configuration.nix
+
         stylix.nixosModules.stylix
         home-manager.nixosModules.home-manager
+
+        # ============ CONFIGURATION ============
         {
           networking.hostName = hostname;
-          home-manager.users.${username} = import ./hm/hm.nix;
+
+          # Module enable flags - single source of truth
+          myConfig = {
+            # Core system modules
+            boot.enable = true;
+            desktop.enable = true;
+            terminal.enable = true;
+            shell.enable = true;
+            git.enable = true;
+            yazi.enable = true;
+            mako.enable = true;
+            gtk.enable = true;
+            anyrun.enable = true;
+            kanata.enable = true;
+            users.enable = true;
+            networking.enable = true;
+            styling.enable = true;
+            timezone.enable = true;
+            nix-settings.enable = true;
+            ssh.enable = true;
+
+            # Development and tools
+            rust.enable = true;
+            development.enable = true;
+            utilities.enable = true;
+
+            # Applications
+            browser.enable = true;  # Firefox enabled and set as default by module defaults
+            steam.enable = true;
+            neovim.enable = true;
+            productivity.enable = true;
+            creative.enable = true;
+            media.enable = true;
+            password.enable = true;
+            mail.enable = true;
+            rofi-wayland.enable = true;
+            walker.enable = true;
+            waybar.enable = true;
+
+            # Hardware-specific (set to false if not using Framework)
+            framework.enable = true;
+          };
+
+          # Import all modules
+          imports = [
+            ./modules/boot
+            ./modules/desktop
+            ./modules/terminal
+            ./modules/shell
+            ./modules/git
+            ./modules/yazi
+            ./modules/mako
+            ./modules/gtk
+            ./modules/anyrun
+            ./modules/kanata
+            ./modules/users
+            ./modules/networking
+            ./modules/styling
+            ./modules/timezone
+            ./modules/nix-settings
+            ./modules/ssh
+            ./modules/rust
+            ./modules/development
+            ./modules/utilities
+            ./modules/browser
+            ./modules/steam
+            ./modules/neovim
+            ./modules/productivity
+            ./modules/creative
+            ./modules/media
+            ./modules/password
+            ./modules/mail
+            ./modules/rofi
+            ./modules/walker
+            ./modules/waybar
+            ./modules/framework
+          ];
+
+          # System state version
+          system.stateVersion = "25.05";
+
+          # Home-manager configuration
           home-manager.backupFileExtension = "backup";
-          home-manager.extraSpecialArgs = { 
+          home-manager.extraSpecialArgs = {
             inherit username chosenTheme;
             inputs = { inherit anyrun; };
+          };
+          home-manager.users.${username} = {
+            home.stateVersion = "25.05";
+            nixpkgs.config.allowUnfree = true;
           };
         }
         
