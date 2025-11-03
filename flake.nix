@@ -61,7 +61,7 @@
             utilities.enable = true;
 
             # Applications
-            browser.enable = true;  # Firefox enabled and set as default by module defaults
+            browser.enable = true;
             steam.enable = true;
             neovim.enable = true;
             productivity.enable = true;
