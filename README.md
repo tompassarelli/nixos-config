@@ -1,3 +1,5 @@
+My nixos config :)
+
 ## References
 
 Inspiration and reference configurations from the NixOS community:
