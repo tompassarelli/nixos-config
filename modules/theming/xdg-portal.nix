@@ -4,10 +4,10 @@
     # Desktop Portal for app integration
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [
-      pkgs.xdg-desktop-portal-gtk  # for GTK apps, Electron apps (Discord, Obsidian, etc.)
-      pkgs.xdg-desktop-portal-wlr  # for screen sharing on wlroots compositors
+      pkgs.xdg-desktop-portal-gtk    # for GTK apps, Electron apps (Discord, Obsidian, etc.)
+      pkgs.xdg-desktop-portal-gnome  # for Niri (Smithay-based, needs GNOME portal for screenshots/color picker)
       pkgs.kdePackages.xdg-desktop-portal-kde  # for Qt apps (KDE apps, VLC, Qt Creator, etc.)
     ];
-    xdg.portal.config.common.default = [ "wlr" "gtk" ];
+    xdg.portal.config.common.default = [ "gnome" "gtk" ];
   };
 }
