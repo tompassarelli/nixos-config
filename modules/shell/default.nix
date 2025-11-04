@@ -66,7 +66,8 @@ in
 
           format = lib.concatStrings [
             "$directory"
-            "$git_branch"
+            # "$git_branch"
+            # "$git_status"
             "$character"
           ];
 

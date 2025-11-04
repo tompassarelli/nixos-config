@@ -322,7 +322,13 @@ window-rule {
     open-floating true
 }
 
-// Open rofi as floating window
+// Open anyrun as floating window
+window-rule {
+    match app-id="anyrun"
+    open-floating true
+}
+
+// Open rofi as floating window (backup launcher)
 window-rule {
     match app-id="rofi"
     open-floating true
@@ -369,7 +375,7 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Terminal" { spawn "kitty"; }
-    Super+Space hotkey-overlay-title="App Launcher" { spawn "rofi" "-show" "drun"; }
+    Super+Space hotkey-overlay-title="App Launcher" { spawn "anyrun"; }
     Super+Shift+Space hotkey-overlay-title="Walker Launcher" { spawn "walker"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     
@@ -567,8 +573,8 @@ binds {
     // Expel the bottom window from the focused column to the right.
     Mod+Period { expel-window-from-column; }
 
-    // Rename current workspace with rofi input
-    Mod+Shift+W { spawn-sh "name=$(echo '' | rofi -dmenu -p 'Name workspace:') && [ -n \"$name\" ] && niri msg action set-workspace-name \"$name\""; }
+    // Rename current workspace with anyrun input (using stdin plugin exclusively)
+    Mod+Shift+W { spawn "anyrun-rename-workspace"; }
     
     // Clear workspace name (back to number)
     Mod+Shift+Ctrl+W { unset-workspace-name; }

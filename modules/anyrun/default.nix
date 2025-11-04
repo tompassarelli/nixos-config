@@ -1,4 +1,4 @@
-{ config, lib, inputs, pkgs, username, modulesPath, ... }:
+{ config, lib, inputs, pkgs, username, ... }:
 
 let
   cfg = config.myConfig.anyrun;
@@ -10,7 +10,16 @@ in
 
   config = lib.mkIf cfg.enable {
     # ============ SYSTEM-LEVEL CONFIGURATION ============
-    # (None needed - anyrun is installed via home-manager)
+
+    # Helper script for workspace renaming with custom anyrun plugin
+    environment.systemPackages = let
+      renamePlugin = inputs.anyrun-rename-workspace.packages.${pkgs.system}.default;
+    in [
+      (pkgs.writeShellScriptBin "anyrun-rename-workspace" ''
+        name=$(echo "" | anyrun --plugins ${renamePlugin}/lib/libanyrun_rename_workspace.so)
+        [ -n "$name" ] && niri msg action set-workspace-name "$name"
+      '')
+    ];
 
     # ============ HOME-MANAGER CONFIGURATION ============
 
@@ -34,7 +43,7 @@ in
           layer = "overlay";
           hidePluginInfo = false;
           closeOnClick = false;
-          showResultsImmediately = false;
+          showResultsImmediately = true;
           maxEntries = null;
 
           plugins = [
@@ -55,6 +64,15 @@ in
             { key = "k"; ctrl = true; action = "up"; }
           ];
         };
+
+        # Stdin plugin config - allow arbitrary text input for dmenu-like usage
+        extraConfigFiles."stdin.ron".text = ''
+          Config(
+            allow_invalid: true,
+            max_entries: 5,
+            preserve_order: false,
+          )
+        '';
       };
     };
   };

@@ -16,6 +16,7 @@ in
       clippy               # rust linter
       rustfmt              # rust formatter
       pkg-config           # helps find system libraries during compilation
+      gcc                  # C compiler (needed for building Rust dependencies)
     ];
   };
 }
