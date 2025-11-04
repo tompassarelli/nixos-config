@@ -33,6 +33,25 @@ in
 
       # Auto-detect polarity from base16 scheme variant field
       polarity = variant;
+
+      # Font configuration
+      fonts = {
+        monospace = {
+          package = pkgs.iosevka-bin;
+          name = "Iosevka";
+        };
+        sansSerif = {
+          package = pkgs.dejavu_fonts;
+          name = "DejaVu Sans";
+        };
+        serif = {
+          package = pkgs.dejavu_fonts;
+          name = "DejaVu Serif";
+        };
+        sizes = {
+          terminal = 14;
+        };
+      };
     };
 
     # ============ HOME-MANAGER CONFIGURATION ============

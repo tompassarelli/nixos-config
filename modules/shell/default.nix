@@ -40,9 +40,6 @@ in
           };
         };
         interactiveShellInit = ''
-          # Bind Ctrl+L to accept autosuggestion
-          bind \cl accept-autosuggestion
-
           # Initialize zoxide
           zoxide init fish | source
 
