@@ -17,6 +17,11 @@ in
       extraGroups = [ "wheel" "networkmanager" ]; # Enable 'sudo' for the user
     };
 
+    # Sudo configuration - extend timeout to 30 minutes
+    security.sudo.extraConfig = ''
+      Defaults timestamp_timeout=30
+    '';
+
     # Create user directories on boot
     systemd.tmpfiles.rules = [
       "d /home/${username}/Pictures/Screenshots 0755 ${username} users -"

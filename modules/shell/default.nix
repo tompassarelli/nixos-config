@@ -57,54 +57,26 @@ in
         };
       };
 
-      # starship prompt
+      # starship prompt - minimal, git-focused
       programs.starship = {
         enable = true;
         enableFishIntegration = true;
         settings = {
-          # No newline before prompt - creates false impression of scrollable content
           add_newline = false;
 
-          # Configure the prompt format
           format = lib.concatStrings [
             "$directory"
             "$git_branch"
-            "$git_status"
             "$character"
           ];
 
-          # Directory configuration
           directory = {
-            style = "bold cyan";
-            truncation_length = 0;  # Show full path
-            truncate_to_repo = false;  # Don't truncate to repo root
+            truncation_length = 0;
+            truncate_to_repo = false;
           };
 
-          # Git branch
-          git_branch = {
-            symbol = " ";
-            style = "bold purple";
-          };
-
-          # Git status
-          git_status = {
-            style = "bold red";
-          };
-
-          # Character (prompt symbol)
-          character = {
-            success_symbol = "[>](bold green)";
-            error_symbol = "[>](bold red)";
-          };
-
-          # Disable username and hostname
-          username = {
-            disabled = true;
-          };
-
-          hostname = {
-            disabled = true;
-          };
+          username.disabled = true;
+          hostname.disabled = true;
         };
       };
     };
