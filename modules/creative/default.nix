@@ -14,6 +14,7 @@ in
       blender              # release your inner sculpter
       gimp                 # image editing for slaves
       obs-studio           # screen recording/streaming
+      eyedropper           # modern wayland color picker
     ];
   };
 }
