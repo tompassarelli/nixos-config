@@ -37,8 +37,8 @@ in
       # Font configuration
       fonts = {
         monospace = {
-          package = pkgs.iosevka-bin;
-          name = "Iosevka";
+          package = pkgs.nerd-fonts.commit-mono;
+          name = "CommitMono Nerd Font";
         };
         sansSerif = {
           package = pkgs.dejavu_fonts;

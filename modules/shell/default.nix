@@ -31,14 +31,6 @@ in
           gs = "git status";
           gd = "git diff";
         };
-        functions = {
-          fish_prompt = {
-            body = ''
-              set -l pwd (pwd)
-              echo -n (set_color brblue)"$pwd"(set_color normal)" > "
-            '';
-          };
-        };
         interactiveShellInit = ''
           # Initialize zoxide
           zoxide init fish | source
@@ -62,6 +54,57 @@ in
           auto_sync = true;
           sync_frequency = "5m";
           search_mode = "fuzzy";
+        };
+      };
+
+      # starship prompt
+      programs.starship = {
+        enable = true;
+        enableFishIntegration = true;
+        settings = {
+          # No newline before prompt - creates false impression of scrollable content
+          add_newline = false;
+
+          # Configure the prompt format
+          format = lib.concatStrings [
+            "$directory"
+            "$git_branch"
+            "$git_status"
+            "$character"
+          ];
+
+          # Directory configuration
+          directory = {
+            style = "bold cyan";
+            truncation_length = 0;  # Show full path
+            truncate_to_repo = false;  # Don't truncate to repo root
+          };
+
+          # Git branch
+          git_branch = {
+            symbol = " ";
+            style = "bold purple";
+          };
+
+          # Git status
+          git_status = {
+            style = "bold red";
+          };
+
+          # Character (prompt symbol)
+          character = {
+            success_symbol = "[>](bold green)";
+            error_symbol = "[>](bold red)";
+          };
+
+          # Disable username and hostname
+          username = {
+            disabled = true;
+          };
+
+          hostname = {
+            disabled = true;
+          };
         };
       };
     };
