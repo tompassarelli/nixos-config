@@ -82,8 +82,8 @@
             # Applications
             web-browser = {
               enable = true;
-              firefox.enable = true;
-              chromium.enable = true;
+              fennec.enable = true;
+              chromium.enable = false;
             };
             steam.enable = true;
             neovim.enable = true;
