@@ -13,6 +13,12 @@ in
 
     environment.systemPackages = with pkgs; [
       walker  # modern wayland app launcher
+
+      # Helper script for workspace renaming with walker dmenu mode
+      (pkgs.writeShellScriptBin "walker-rename-workspace" ''
+        name=$(echo "" | walker --dmenu --forceprint)
+        [ -n "$name" ] && niri msg action set-workspace-name "$name"
+      '')
     ];
 
     # ============ HOME-MANAGER CONFIGURATION ============
@@ -34,7 +40,7 @@ in
           ExecStart = "${pkgs.walker}/bin/walker --gapplication-service";
           Restart = "on-failure";
           Type = "dbus";
-          BusName = "me.halfmexican.walker";
+          BusName = "dev.benz.walker";
         };
         Install = {
           WantedBy = [ "niri.service" ];

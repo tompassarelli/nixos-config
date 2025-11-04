@@ -50,8 +50,13 @@
             yazi.enable = true;
             mako.enable = true;
             gtk.enable = true;
-            anyrun.enable = true;
-            kanata.enable = true;
+            anyrun.enable = false;
+            kanata = {
+              enable = true;
+              capsLockEscCtrl = true;
+              leftAltAsSuper = true;
+              wideMod = true;
+            };
             users.enable = true;
             networking.enable = true;
             styling.enable = true;

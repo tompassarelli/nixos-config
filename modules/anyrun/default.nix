@@ -41,9 +41,9 @@ in
           hideIcons = false;
           ignoreExclusiveZones = false;
           layer = "overlay";
-          hidePluginInfo = false;
+          hidePluginInfo = true;
           closeOnClick = false;
-          showResultsImmediately = true;
+          showResultsImmediately = false;
           maxEntries = null;
 
           plugins = [

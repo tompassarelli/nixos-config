@@ -6,6 +6,9 @@ in
 {
   options.myConfig.kanata = {
     enable = lib.mkEnableOption "Kanata keyboard remapping";
+    capsLockEscCtrl = lib.mkEnableOption "Caps Lock as Tap=Esc, Hold=Ctrl";
+    leftAltAsSuper = lib.mkEnableOption "Left Alt becomes Super/Meta key";
+    wideMod = lib.mkEnableOption "QWERTY Wide Mod - shift right hand keys over by one for better ergonomics";
   };
 
   config = lib.mkIf cfg.enable {
@@ -32,19 +35,40 @@ in
     keyboards.main = {
       devices = [ "/dev/input/event0" ];  # AT Translated Set 2 keyboard
       extraDefCfg = "process-unmapped-keys yes"; # req for tap-hold-press, or need a set of explicit passthrough keys 
-      config = ''
-        ;; Define aliases
-        (defalias
-          escctrl (tap-hold-press 200 200 esc lctl)
-        )
+      config = let
+        # Build lists of keys based on enabled options
+        srcKeys = lib.concatStringsSep " " (
+          (lib.optional cfg.capsLockEscCtrl "caps") ++
+          (lib.optional cfg.leftAltAsSuper "lalt") ++
+          (lib.optionals cfg.wideMod [
+            "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
+            "tab" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "[" "]" "\\"
+            "a" "s" "d" "f" "g" "h" "j" "k" "l" ";" "'" "ret"
+            "lsft" "z" "x" "c" "v" "b" "n" "m" "," "." "/" "rsft"
+            "lctl" "lmet" "spc" "ralt" "rmet" "cmp" "rctl"
+          ])
+        );
 
-        ;; Source layer 
-        (defsrc caps lalt)
+        baseKeys = lib.concatStringsSep " " (
+          (lib.optional cfg.capsLockEscCtrl "@escctrl") ++
+          (lib.optional cfg.leftAltAsSuper "lmet") ++
+          (lib.optionals cfg.wideMod [
+            "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
+            "tab" "q" "w" "e" "r" "t" "[" "y" "u" "i" "o" "p" "'" "\\"
+            "a" "s" "d" "f" "g" "]" "h" "j" "k" "l" ";" "ret"
+            "lsft" "z" "x" "c" "v" "b" "/" "n" "m" "," "." "rsft"
+            "lctl" "lmet" "spc" "ralt" "rmet" "cmp" "rctl"
+          ])
+        );
+      in ''
+        ;; Define aliases
+        ${lib.optionalString cfg.capsLockEscCtrl "(defalias escctrl (tap-hold-press 200 200 esc lctl))"}
+
+        ;; Source layer
+        (defsrc ${srcKeys})
 
         ;; Base layer
-        (deflayer base
-          @escctrl lmet
-        )
+        (deflayer base ${baseKeys})
       '';
     };
   };
