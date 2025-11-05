@@ -18,6 +18,7 @@
   all: initial;
   padding: 2px 6px;
   margin-right: 3px;
+  color: @base05;
 }
 
 #battery,
