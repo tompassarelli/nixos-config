@@ -14,7 +14,7 @@ in
     environment.systemPackages = with pkgs; [
       # Helper script for workspace renaming with walker dmenu mode
       (pkgs.writeShellScriptBin "walker-rename-workspace" ''
-        name=$(echo "" | walker --dmenu --forceprint)
+        name=$(echo "" | walker --dmenu)
         [ -n "$name" ] && niri msg action set-workspace-name "$name"
       '')
     ];
@@ -33,12 +33,14 @@ in
         # Configure dmenu for workspace renaming and applications launcher
         config = {
           providers = {
-            default = ["desktopapplications" "runner" "calc" "windows"];
+            default = ["desktopapplications" "calc" "windows"];
             empty = ["desktopapplications"];
           };
 
           keybinds = {
             quick_activate = ["alt a" "alt s" "alt d" "alt f" "alt j" "alt k" "alt l" "alt semicolon"];
+            next = ["Down" "ctrl j"];
+            previous = ["Up" "ctrl k"];
           };
 
           builtins.applications = {
