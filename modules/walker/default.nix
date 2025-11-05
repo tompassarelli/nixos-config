@@ -32,6 +32,8 @@ in
 
         # Configure dmenu for workspace renaming and applications launcher
         config = {
+          hide_quick_activation = true;
+
           providers = {
             default = ["desktopapplications" "calc" "windows"];
             empty = ["desktopapplications"];
