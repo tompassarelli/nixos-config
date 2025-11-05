@@ -9,12 +9,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix.url = "github:danth/stylix/release-25.05";
-    anyrun.url = "github:anyrun-org/anyrun";
-    anyrun-rename-workspace.url = "github:tompassarelli/anyrun-rename-workspace";
     nur.url = "github:nix-community/NUR";
   };
   
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, anyrun, anyrun-rename-workspace, nur }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur }: {
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
@@ -25,7 +23,7 @@
       inherit system;
       specialArgs = {
         inherit username chosenTheme;
-        inputs = { inherit anyrun anyrun-rename-workspace nur; };
+        inputs = { inherit nur; };
       };
       modules = [
         ./hardware-configuration.nix
@@ -50,7 +48,6 @@
             yazi.enable = true;
             mako.enable = true;
             gtk.enable = true;
-            anyrun.enable = false;
             kanata = {
               enable = true;
               capsLockEscCtrl = true;
@@ -113,7 +110,6 @@
             ./modules/yazi
             ./modules/mako
             ./modules/gtk
-            ./modules/anyrun
             ./modules/kanata
             ./modules/users
             ./modules/networking
@@ -158,7 +154,7 @@
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
             inherit username chosenTheme;
-            inputs = { inherit anyrun anyrun-rename-workspace nur; };
+            inputs = { inherit nur; };
           };
           home-manager.users.${username} = {
             home.stateVersion = "25.05";
