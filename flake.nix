@@ -1,6 +1,6 @@
 {
   description = "NixOS Configuration - Modular and Shareable";
-  
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -187,7 +187,7 @@
         username = "tom";
         chosenTheme = "tokyo-night-dark";
         # system = "aarch64-linux";  # Uncomment for ARM systems
-        # as of 11/02/2025 many default modules will not work on ARM
+        # many default modules will not work on ARM, vaporware!
       };
     };
   };

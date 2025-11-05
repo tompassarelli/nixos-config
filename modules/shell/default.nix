@@ -30,9 +30,9 @@ in
           v = "nvim";
           # shorthands
           gits = "git status";
-          gitsc = "git status --cached";
           gitd = "git diff";
-          gita = "git add .";
+          gitdc = "git diff --cached";
+          gita = "git add -v . && git status";
           rebuild = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
@@ -43,7 +43,7 @@ in
           atuin init fish | source
 
           # Git commit with message (no quotes needed)
-          function gitm
+          function gitc
             git commit -m "$argv"
           end
 
