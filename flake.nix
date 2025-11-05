@@ -84,6 +84,7 @@
             # Development and tools
             rust.enable = true;
             development.enable = true;
+            claude.enable = true;
 
             # Applications
             web-browser = {
@@ -147,6 +148,7 @@
             ./modules/walker
             ./modules/waybar
             ./modules/framework
+            ./modules/claude
           ];
 
           # System state version

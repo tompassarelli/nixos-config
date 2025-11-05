@@ -27,9 +27,11 @@ in
           ls = "eza";
           ps = "procs";
           vim = "nvim"; # keep vi as fallback
+          v = "nvim";
           # shorthands
           gs = "git status";
           gd = "git diff";
+          switch = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
           # Initialize zoxide
