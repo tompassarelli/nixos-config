@@ -1,4 +1,4 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, username, inputs, ... }:
 
 let
   cfg = config.myConfig.walker;
@@ -12,8 +12,6 @@ in
     # ============ SYSTEM-LEVEL CONFIGURATION ============
 
     environment.systemPackages = with pkgs; [
-      walker  # modern wayland app launcher
-
       # Helper script for workspace renaming with walker dmenu mode
       (pkgs.writeShellScriptBin "walker-rename-workspace" ''
         name=$(echo "" | walker --dmenu --forceprint)
@@ -24,26 +22,55 @@ in
     # ============ HOME-MANAGER CONFIGURATION ============
 
     home-manager.users.${username} = { config, ... }: {
-      # Walker configuration file
-      xdg.configFile."walker/config.toml".source = config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nixos-config/dotfiles/walker/config.toml";
+      # Import walker home-manager module
+      imports = [ inputs.walker.homeManagerModules.default ];
 
-      # Walker systemd service (runs in background for fast launch)
-      systemd.user.services.walker = {
-        Unit = {
-          Description = "Walker application launcher service";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
-          Requisite = [ "graphical-session.target" ];
-        };
-        Service = {
-          ExecStart = "${pkgs.walker}/bin/walker --gapplication-service";
-          Restart = "on-failure";
-          Type = "dbus";
-          BusName = "dev.benz.walker";
-        };
-        Install = {
-          WantedBy = [ "niri.service" ];
+      # Enable walker and elephant with runAsService
+      programs.walker = {
+        enable = true;
+        runAsService = true;
+
+        # Configure dmenu for workspace renaming and applications launcher
+        config = {
+          providers = {
+            default = ["desktopapplications" "runner" "calc" "windows"];
+            empty = ["desktopapplications"];
+          };
+
+          keybinds = {
+            quick_activate = ["alt a" "alt s" "alt d" "alt f" "alt j" "alt k" "alt l" "alt semicolon"];
+          };
+
+          builtins.applications = {
+            actions = {
+              start = {
+                activation_mode = {
+                  type = "key";
+                  key = "Return";
+                };
+              };
+            };
+          };
+
+          builtins.windows = {
+            actions = {
+              activate = {
+                activation_mode = {
+                  type = "key";
+                  key = "Return";
+                };
+              };
+            };
+          };
+
+          builtins.dmenu = {
+            hidden = false;
+            weight = 5;
+            name = "dmenu";
+            placeholder = "Rename Workspace";
+            switcher_only = false;
+            show_icon_when_single = true;
+          };
         };
       };
     };

@@ -10,9 +10,16 @@
     };
     stylix.url = "github:danth/stylix/release-25.05";
     nur.url = "github:nix-community/NUR";
+
+    # Walker and elephant
+    elephant.url = "github:abenz1267/elephant";
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.elephant.follows = "elephant";
+    };
   };
   
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur, elephant, walker }: {
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
@@ -23,7 +30,7 @@
       inherit system;
       specialArgs = {
         inherit username chosenTheme;
-        inputs = { inherit nur; };
+        inputs = { inherit nur walker elephant; };
       };
       modules = [
         ./hardware-configuration.nix
@@ -154,7 +161,7 @@
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
             inherit username chosenTheme;
-            inputs = { inherit nur; };
+            inputs = { inherit nur walker elephant; };
           };
           home-manager.users.${username} = {
             home.stateVersion = "25.05";
