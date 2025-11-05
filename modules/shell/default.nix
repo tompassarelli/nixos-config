@@ -29,9 +29,11 @@ in
           vim = "nvim"; # keep vi as fallback
           v = "nvim";
           # shorthands
-          gs = "git status";
-          gd = "git diff";
-          switch = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
+          gits = "git status";
+          gitsc = "git status --cached";
+          gitd = "git diff";
+          gita = "git add .";
+          rebuild = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
           # Initialize zoxide
@@ -39,6 +41,22 @@ in
 
           # Initialize atuin
           atuin init fish | source
+
+          # Git commit with message (no quotes needed)
+          function gitm
+            git commit -m "$argv"
+          end
+
+          # Copy file contents to clipboard
+          function wlc
+            if test -f "$argv[1]"
+              cat "$argv[1]" | wl-copy
+              echo "Copied $argv[1] to clipboard"
+            else
+              echo "Error: File not found: $argv[1]"
+              return 1
+            end
+          end
         '';
       };
 
