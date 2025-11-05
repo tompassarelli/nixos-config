@@ -42,9 +42,9 @@ in
           # Initialize atuin
           atuin init fish | source
 
-          # Git commit with message (no quotes needed)
+          # Git commit with neovim in insert mode
           function gitc
-            git commit -m "$argv"
+            GIT_EDITOR="nvim -c 'startinsert'" git commit
           end
 
           # Copy file contents to clipboard
