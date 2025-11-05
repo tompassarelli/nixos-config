@@ -55,14 +55,12 @@ in
           };
 
           builtins.windows = {
-            actions = {
-              activate = {
-                activation_mode = {
-                  type = "key";
-                  key = "Return";
-                };
-              };
-            };
+            actions = [
+              {
+                bind = "Return";
+                default = true;
+              }
+            ];
           };
 
           builtins.dmenu = {
