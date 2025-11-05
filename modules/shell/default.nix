@@ -33,6 +33,7 @@ in
           gitd = "git diff";
           gitdc = "git diff --cached";
           gita = "git add -v . && git status";
+          gitp = "git push";
           rebuild = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
@@ -56,6 +57,38 @@ in
               echo "Error: File not found: $argv[1]"
               return 1
             end
+          end
+
+          # Move most recent screenshot to current directory
+          function movess
+            set -l files ~/Pictures/Screenshots/*.png
+            if test (count $files) -eq 0
+              echo "No screenshots found"
+              return 1
+            end
+            set -l newest $files[1]
+            for file in $files
+              test $file -nt $newest; and set newest $file
+            end
+            set -l ext (string match -r '\.[^.]+$' $newest)
+            set -l name (basename $newest)
+            mv $newest ./screenshot$ext
+            echo "Moved: $name → ./screenshot$ext"
+          end
+
+          # Record screen demo with area selection
+          function makedemo
+            wf-recorder -g (slurp) -f demo.mp4
+          end
+
+          # Convert demo.mp4 to demo.gif
+          function makegif
+            if not test -f demo.mp4
+              echo "Error: demo.mp4 not found"
+              return 1
+            end
+            ffmpeg -i demo.mp4 -vf "fps=15,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" demo.gif
+            echo "Created: demo.gif"
           end
         '';
       };

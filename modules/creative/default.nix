@@ -14,6 +14,9 @@ in
       blender              # release your inner sculpter
       gimp                 # image editing for slaves
       obs-studio           # screen recording/streaming
+      wf-recorder          # wayland screen recorder
+      slurp                # wayland region selector
+      ffmpeg               # video processing
       eyedropper           # modern wayland color picker
     ];
   };
