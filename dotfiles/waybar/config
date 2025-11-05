@@ -6,8 +6,8 @@
     "spacing": 4,
     "start_hidden": true,
     
-    "modules-left": ["niri/workspaces"],
-    "modules-center": ["clock"],
+    "modules-left": ["clock"],
+    "modules-center": ["niri/workspaces"],
     "modules-right": ["pulseaudio", "network", "battery", "tray"],
     
     "niri/workspaces": {
@@ -15,47 +15,38 @@
     },
     
     "clock": {
+        "format": "{:%H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
     
     "battery": {
         "states": {
-            "warning": 30,
+            "warning": 35,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        "format-icons": ["", "", "", "", ""]
+        "format": "🔋 {capacity}%",
+        "format-charging": "⚡ {capacity}%",
+        "format-plugged": "🔌 {capacity}%",
+        "format-alt": "{time}"
     },
-    
+
     "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
+        "format-wifi": "📡 {essid} ({signalStrength}%)",
+        "format-ethernet": "🌐 {ipaddr}/{cidr}",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "🔗 {ifname} (No IP)",
+        "format-disconnected": "❌ Disconnected",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
-    
+
     "pulseaudio": {
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
+        "format": "🔊 {volume}% 🎤 {format_source}",
+        "format-bluetooth": "🎧 {volume}% 🎤 {format_source}",
+        "format-bluetooth-muted": "🎧 🔇 🎤 {format_source}",
+        "format-muted": "🔇 🎤 {format_source}",
+        "format-source": "{volume}%",
+        "format-source-muted": "🔇",
         "on-click": "pavucontrol"
     },
     

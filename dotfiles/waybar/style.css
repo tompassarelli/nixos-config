@@ -1,2 +1,10 @@
 @import "stylix.css";
 
+.modules-left {
+  margin-left: 12px;
+}
+
+.modules-right {
+  margin-right: 12px;
+}
+
