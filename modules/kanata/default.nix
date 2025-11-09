@@ -42,9 +42,9 @@ in
           (lib.optional cfg.leftAltAsSuper "lalt") ++
           (lib.optionals cfg.wideMod [
             "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
-            "tab" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "[" "]" "\\"
-            "a" "s" "d" "f" "g" "h" "j" "k" "l" ";" "'" "ret"
-            "lsft" "z" "x" "c" "v" "b" "n" "m" "," "." "/" "rsft"
+            "tab" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "[" "]" "ret"
+            "a" "s" "d" "f" "g" "h" "j" "k" "l" ";" "'" "\\"
+            "lsft" "102d" "z" "x" "c" "v" "b" "n" "m" "," "." "/" "rsft"
             "lctl" "lmet" "spc" "ralt" "rmet" "cmp" "rctl"
           ])
         );
@@ -54,15 +54,17 @@ in
           (lib.optional cfg.leftAltAsSuper "lmet") ++
           (lib.optionals cfg.wideMod [
             "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
-            "tab" "q" "w" "e" "r" "t" "[" "y" "u" "i" "o" "p" "'" "\\"
-            "a" "s" "d" "f" "g" "]" "h" "j" "k" "l" ";" "ret"
-            "lsft" "z" "x" "c" "v" "b" "/" "n" "m" "," "." "rsft"
-            "lctl" "lmet" "spc" "ralt" "rmet" "cmp" "rctl"
+            "tab" "q" "w" "e" "r" "t" "[" "y" "u" "i" "o" "p" "\\" "ret"
+            "a" "s" "d" "f" "g" "]" "h" "j" "k" "l" ";" "'"
+            "lsft" "@slashshift" "z" "x" "c" "v" "b" "/" "n" "m" "," "." "rsft"
+            "lctl" "lmet" "spc" "@enteralt" "rmet" "cmp" "rctl"
           ])
         );
       in ''
         ;; Define aliases
         ${lib.optionalString cfg.capsLockEscCtrl "(defalias escctrl (tap-hold-press 200 200 esc lctl))"}
+        (defalias slashshift (one-shot-press 2000 lsft))
+        (defalias enteralt (tap-hold-press 200 200 ret ralt))
 
         ;; Source layer
         (defsrc ${srcKeys})

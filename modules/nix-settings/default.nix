@@ -15,6 +15,10 @@ in
       experimental-features = [ "nix-command" "flakes" ];
       builders-use-substitutes = true;
 
+      # Parallel build settings (maximize CPU usage)
+      max-jobs = "auto";  # Auto-detect based on CPU count
+      cores = 0;          # Cores per job (0 = use all available)
+
       # Walker binary caches (avoids building from source)
       extra-substituters = [
         "https://walker.cachix.org"

@@ -1,4 +1,4 @@
-// This config is in the KDL format: https://kdl.dev "/-" comments out the following node. Check the wiki for a full description of the configuration:
+// This config is in the KDL format: https://kdl.dev "/-" comments out the following node. Check the wiki for a full description of the configurationo
 // https://yalter.github.io/niri/Configuration:-Introduction
 
 // Input device configuration. 
@@ -349,7 +349,7 @@ window-rule {
 
 // Global Transparency (see-through / frosted glass)
 window-rule {
-  opacity 0.93
+  opacity 0.95
 }
 
 binds {

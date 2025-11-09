@@ -14,7 +14,7 @@ in
       shell = pkgs.fish;
       isNormalUser = true;
       home = "/home/${username}";
-      extraGroups = [ "wheel" "networkmanager" ]; # Enable 'sudo' for the user
+      extraGroups = [ "wheel" "networkmanager" "plugdev" ]; # Enable 'sudo' for the user
     };
 
     # Sudo configuration - extend timeout to 30 minutes
@@ -24,6 +24,7 @@ in
 
     # Create user directories on boot
     systemd.tmpfiles.rules = [
+      "d /home/${username}/Documents 0755 ${username} users -"
       "d /home/${username}/Pictures/Screenshots 0755 ${username} users -"
     ];
   };

@@ -17,9 +17,15 @@
       url = "github:abenz1267/walker";
       inputs.elephant.follows = "elephant";
     };
+
+    # Doom Emacs
+    nix-doom-emacs-unstraightened = {
+      url = "path:/home/tom/code/nix-doom-emacs-unstraightened";
+      inputs.nixpkgs.follows = "";
+    };
   };
   
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur, elephant, walker }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur, elephant, walker, nix-doom-emacs-unstraightened }: {
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
@@ -30,7 +36,7 @@
       inherit system;
       specialArgs = {
         inherit username chosenTheme;
-        inputs = { inherit nur walker elephant; };
+        inputs = { inherit nur walker elephant nix-doom-emacs-unstraightened; };
       };
       modules = [
         ./hardware-configuration.nix
@@ -70,6 +76,7 @@
 
             # Desktop environment
             audio.enable = true;
+            bluetooth.enable = true;
             niri.enable = true;
             input.enable = true;
             power.enable = true;
@@ -94,10 +101,11 @@
             web-browser = {
               enable = true;
               fennec.enable = true;
-              chromium.enable = false;
+              chrome.enable = true;
             };
             steam.enable = true;
             neovim.enable = true;
+            doom-emacs.enable = true;
             productivity.enable = true;
             creative.enable = true;
             media.enable = true;
@@ -106,6 +114,8 @@
             rofi-wayland.enable = true;
             walker.enable = true;
             waybar.enable = true;
+            theme-switcher.enable = true;
+            via.enable = true;
           };
 
           # Import all modules
@@ -125,6 +135,7 @@
             ./modules/nix-settings
             ./modules/ssh
             ./modules/audio
+            ./modules/bluetooth
             ./modules/niri
             ./modules/input
             ./modules/power
@@ -142,6 +153,7 @@
             ./modules/web-browser
             ./modules/steam
             ./modules/neovim
+            ./modules/doom-emacs
             ./modules/productivity
             ./modules/creative
             ./modules/media
@@ -152,6 +164,8 @@
             ./modules/waybar
             ./modules/framework
             ./modules/claude
+            ./modules/theme-switcher
+            ./modules/via
           ];
 
           # System state version
@@ -161,7 +175,7 @@
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
             inherit username chosenTheme;
-            inputs = { inherit nur walker elephant; };
+            inputs = { inherit nur walker elephant nix-doom-emacs-unstraightened; };
           };
           home-manager.users.${username} = {
             home.stateVersion = "25.05";
@@ -188,7 +202,9 @@
       whiterabbit = self.lib.mkSystem {
         hostname = "whiterabbit";
         username = "tom";
-        chosenTheme = "tokyo-night-dark";
+        # Theme options: uncomment one
+        #chosenTheme = "tokyo-night-dark";
+        chosenTheme = "tokyo-night-dark";  # Light variant
         # system = "aarch64-linux";  # Uncomment for ARM systems
         # many default modules will not work on ARM, vaporware!
       };
