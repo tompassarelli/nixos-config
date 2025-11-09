@@ -23,6 +23,12 @@ in
         extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
       };
 
+      # Enable Emacs daemon for instant startup with emacsclient
+      services.emacs = {
+        enable = true;
+        # package is automatically set to Doom Emacs by programs.doom-emacs
+      };
+
       # Enable git, ripgrep, fd for Doom (if not already enabled)
       programs.git.enable = true;
       programs.ripgrep.enable = true;

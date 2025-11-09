@@ -28,6 +28,8 @@ in
           ps = "procs";
           vim = "nvim"; # keep vi as fallback
           v = "nvim";
+          # emacs client (connect to daemon for fast startup)
+          e = "emacsclient -c -a emacs";  # -c = new frame, -a emacs = fallback to emacs if daemon not running
           # shorthands
           gits = "git status";
           gitd = "git diff";
