@@ -414,33 +414,32 @@ binds {
     Mod+Up    { focus-window-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
+    //hotkey-overlay-title="focus column left 2x"
+    Mod+Ctrl+H { spawn-sh "niri msg action focus-column-left && niri msg action focus-column-left"; }
     Mod+J     { focus-window-or-workspace-down; }
     Mod+K     { focus-window-or-workspace-up; }
     Mod+L     { focus-column-right; }
+    //hotkey-overlay-title="focus column right 2x"
+    Mod+Ctrl+L { spawn-sh "niri msg action focus-column-right && niri msg action focus-column-right"; }
 
-    // > implies quanity of focus-action-direction
-    // <<[2] [3]>>
-    // enables shifting 2+ columns at a time
-    Mod+Alt+2 { spawn-sh "niri msg action focus-column-left && niri msg action focus-column-left"; }
-    Mod+Alt+3 { spawn-sh "niri msg action focus-column-right && niri msg action focus-column-right"; }
 
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Down  { move-window-down; }
-    Mod+Ctrl+Up    { move-window-up; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+H     { move-column-left; }
-    Mod+Ctrl+J     { move-window-down; }
-    Mod+Ctrl+K     { move-window-up; }
-    Mod+Ctrl+L     { move-column-right; }
+    Mod+Shift+Left  { move-column-left; }
+    Mod+Shift+Down  { move-window-down; }
+    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+H     { move-column-left; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+    Mod+Shift+L     { move-column-right; }
 
-    Mod+Shift+Left  { focus-monitor-left; }
-    Mod+Shift+Down  { focus-monitor-down; }
-    Mod+Shift+Up    { focus-monitor-up; }
-    Mod+Shift+Right { focus-monitor-right; }
-    Mod+Shift+H     { focus-monitor-left; }
-    Mod+Shift+J     { focus-monitor-down; }
-    Mod+Shift+K     { focus-monitor-up; }
-    Mod+Shift+L     { focus-monitor-right; }
+    //Mod+Shift+Left  { focus-monitor-left; }
+    //Mod+Shift+Down  { focus-monitor-down; }
+    //Mod+Shift+Up    { focus-monitor-up; }
+    //Mod+Shift+Right { focus-monitor-right; }
+    //Mod+Shift+H     { focus-monitor-left; }
+    //Mod+Shift+J     { focus-monitor-down; }
+    //Mod+Shift+K     { focus-monitor-up; }
+    //Mod+Shift+L     { focus-monitor-right; }
 
     // Alternative commands that move across workspaces when reaching
     // the first or last window in a column.

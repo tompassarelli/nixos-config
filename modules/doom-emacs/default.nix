@@ -29,6 +29,11 @@ in
         # package is automatically set to Doom Emacs by programs.doom-emacs
       };
 
+      # Point DOOMDIR to source location so "open private config" works
+      home.sessionVariables = {
+        DOOMDIR = "${config.home.homeDirectory}/code/nixos-config/dotfiles/doom";
+      };
+
       # Enable git, ripgrep, fd for Doom (if not already enabled)
       programs.git.enable = true;
       programs.ripgrep.enable = true;

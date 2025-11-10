@@ -100,7 +100,7 @@
             theming.enable = true;
             theme-switcher.enable = true;
 
-            # idk my bff jill
+            # Softwares
             git.enable = true;
             rust.enable = true;
             development.enable = true;

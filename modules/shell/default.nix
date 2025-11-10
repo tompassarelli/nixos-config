@@ -39,6 +39,9 @@ in
           rebuild = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
+          # Change to default directory
+          cd ~/code/nixos-config
+
           # Initialize zoxide
           zoxide init fish | source
 

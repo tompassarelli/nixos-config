@@ -9,6 +9,7 @@ in
     capsLockEscCtrl = lib.mkEnableOption "Caps Lock as Tap=Esc, Hold=Ctrl";
     leftAltAsSuper = lib.mkEnableOption "Left Alt becomes Super/Meta key";
     wideMod = lib.mkEnableOption "QWERTY Wide Mod - shift right hand keys over by one for better ergonomics";
+    spacebarAsMeh = lib.mkEnableOption "Spacebar as Tap=Space, Hold=Meh (Ctrl+Shift+Alt)";
   };
 
   config = lib.mkIf cfg.enable {
@@ -40,6 +41,7 @@ in
         srcKeys = lib.concatStringsSep " " (
           (lib.optional cfg.capsLockEscCtrl "caps") ++
           (lib.optional cfg.leftAltAsSuper "lalt") ++
+          (lib.optional (cfg.spacebarAsMeh && !cfg.wideMod) "spc") ++
           (lib.optionals cfg.wideMod [
             "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
             "tab" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "[" "]" "ret"
@@ -52,17 +54,19 @@ in
         baseKeys = lib.concatStringsSep " " (
           (lib.optional cfg.capsLockEscCtrl "@escctrl") ++
           (lib.optional cfg.leftAltAsSuper "lmet") ++
+          (lib.optional (cfg.spacebarAsMeh && !cfg.wideMod) "@mehtap") ++
           (lib.optionals cfg.wideMod [
             "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
             "tab" "q" "w" "e" "r" "t" "[" "y" "u" "i" "o" "p" "\\" "ret"
             "a" "s" "d" "f" "g" "]" "h" "j" "k" "l" ";" "'"
             "lsft" "@slashshift" "z" "x" "c" "v" "b" "/" "n" "m" "," "." "rsft"
-            "lctl" "lmet" "spc" "@enteralt" "rmet" "cmp" "rctl"
+            "lctl" "lmet" (if cfg.spacebarAsMeh then "@mehtap" else "spc") "@enteralt" "rmet" "cmp" "rctl"
           ])
         );
       in ''
         ;; Define aliases
         ${lib.optionalString cfg.capsLockEscCtrl "(defalias escctrl (tap-hold-press 200 200 esc lctl))"}
+        ${lib.optionalString cfg.spacebarAsMeh "(defalias mehtap (tap-hold-press 200 200 spc (multi lctl lsft lalt)))"}
         (defalias slashshift (one-shot-press 2000 lsft))
         (defalias enteralt (tap-hold-press 200 200 ret ralt))
 
