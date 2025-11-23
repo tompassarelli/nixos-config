@@ -37,44 +37,58 @@ in
       devices = [ "/dev/input/event0" ];  # AT Translated Set 2 keyboard
       extraDefCfg = "process-unmapped-keys yes"; # req for tap-hold-press, or need a set of explicit passthrough keys 
       config = let
-        # Build lists of keys based on enabled options
-        srcKeys = lib.concatStringsSep " " (
-          (lib.optional cfg.capsLockEscCtrl "caps") ++
-          (lib.optional cfg.leftAltAsSuper "lalt") ++
-          (lib.optional (cfg.spacebarAsMeh && !cfg.wideMod) "spc") ++
-          (lib.optionals cfg.wideMod [
-            "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
-            "tab" "q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "[" "]" "ret"
-            "a" "s" "d" "f" "g" "h" "j" "k" "l" ";" "'" "\\"
-            "lsft" "102d" "z" "x" "c" "v" "b" "n" "m" "," "." "/" "rsft"
-            "lctl" "lmet" "spc" "ralt" "rmet" "cmp" "rctl"
-          ])
-        );
+        # Always define full keyboard for layer switching (ISO layout)
+        srcKeys = ''
+          grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+          tab  q    w    e    r    t    y    u    i    o    p    [    ]
+          caps a    s    d    f    g    h    j    k    l    ;    '    \    ret
+          lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+          lctl lalt lmet           spc            rmet ralt cmp  rctl
+        '';
 
-        baseKeys = lib.concatStringsSep " " (
-          (lib.optional cfg.capsLockEscCtrl "@escctrl") ++
-          (lib.optional cfg.leftAltAsSuper "lmet") ++
-          (lib.optional (cfg.spacebarAsMeh && !cfg.wideMod) "@mehtap") ++
-          (lib.optionals cfg.wideMod [
-            "grv" "1" "2" "3" "4" "5" "6" "7" "8" "9" "0" "-" "=" "bspc"
-            "tab" "q" "w" "e" "r" "t" "[" "y" "u" "i" "o" "p" "\\" "ret"
-            "a" "s" "d" "f" "g" "]" "h" "j" "k" "l" ";" "'"
-            "lsft" "@slashshift" "z" "x" "c" "v" "b" "/" "n" "m" "," "." "rsft"
-            "lctl" "lmet" (if cfg.spacebarAsMeh then "@mehtap" else "spc") "@enteralt" "rmet" "cmp" "rctl"
-          ])
-        );
+        # Base layer keys (QWERTY OR wideMod)
+        baseKeys = if cfg.wideMod then ''
+          grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+          tab  q    w    e    r    t    [    y    u    i    o    p    \
+          ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    ]    h    j    k    l    ;    '    ret
+          lsft @slashshift z x    c    v    b    /    n    m    ,    .    rsft
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      ${if cfg.spacebarAsMeh then "@mehtap" else "spc"}     @enteralt ralt cmp  @topyceia
+        ''
+        else ''
+          grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+          tab  q    w    e    r    t    y    u    i    o    p    [    ]
+          ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    h    j    k    l    ;    '    \    ret
+          lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      ${if cfg.spacebarAsMeh then "@mehtap" else "spc"}     rmet ralt cmp  @topyceia
+        '';
+
+        # Pyciea layer keys
+        pycieaKeys = ''
+          grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+          tab  b    l    d    w    j    [    '    f    o    u    q    ;
+          ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} n    r    t    s    g    ]    y    h    a    e    i    @commactrl    ret
+          lsft @zshift    x    m    c    v    -    \    k    p    .    /    rsft
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      ${if cfg.spacebarAsMeh then "@mehtap" else "spc"}     rmet ralt cmp  @tobase
+        '';
       in ''
         ;; Define aliases
         ${lib.optionalString cfg.capsLockEscCtrl "(defalias escctrl (tap-hold-press 200 200 esc lctl))"}
         ${lib.optionalString cfg.spacebarAsMeh "(defalias mehtap (tap-hold-press 200 200 spc (multi lctl lsft lalt)))"}
         (defalias slashshift (one-shot-press 2000 lsft))
+        (defalias zshift (tap-hold-press 200 200 z lsft))
         (defalias enteralt (tap-hold-press 200 200 ret ralt))
+        (defalias commactrl (tap-hold-press 200 200 , lctl))
+        (defalias topyceia (tap-dance 300 (rctl (layer-switch pyciea))))
+        (defalias tobase (tap-dance 300 (rctl (layer-switch base))))
 
         ;; Source layer
         (defsrc ${srcKeys})
 
         ;; Base layer
         (deflayer base ${baseKeys})
+
+        ;; Pyciea layer
+        (deflayer pyciea ${pycieaKeys})
       '';
     };
   };

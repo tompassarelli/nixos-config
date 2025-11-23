@@ -23,6 +23,9 @@ in
     mpv                  # video player
     zathura              # PDF viewer
 
+    # Gaming
+    lutris               # retro game frontend and gaming platform
+
     # Wayland desktop tools
     nautilus             # gtk file manager (needed for file dialogs)
     swaylock             # lock screen: Super + Alt + L

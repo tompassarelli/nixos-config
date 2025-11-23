@@ -14,6 +14,9 @@ in
     # Network utilities
     environment.systemPackages = with pkgs; [
       networkmanagerapplet # frontend for networkmanager
+      remmina              # remote desktop client (RDP, VNC, SSH)
+      protonvpn-gui        # Proton VPN GUI client
+      protonvpn-cli        # Proton VPN CLI client
     ];
   };
 }

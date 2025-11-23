@@ -10,11 +10,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      rustc                # rust compiler
-      cargo                # rust package manager
-      rust-analyzer        # rust language server
-      clippy               # rust linter
-      rustfmt              # rust formatter
+      unstable.rustc       # rust compiler (from unstable for latest version)
+      unstable.cargo       # rust package manager (from unstable)
+      unstable.rust-analyzer  # rust language server (from unstable)
+      unstable.clippy      # rust linter (from unstable)
+      unstable.rustfmt     # rust formatter (from unstable)
       pkg-config           # helps find system libraries during compilation
       gcc                  # C compiler (needed for building Rust dependencies)
     ];
