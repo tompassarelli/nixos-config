@@ -2,6 +2,69 @@ my nixos config..
 
 its M O D U L A R
 
+# Project Organization
+
+## Structure
+```
+├── flake.nix              # Main entry: inputs, system builder, enable flags
+├── modules/               # Feature modules
+│   ├── simple-module/     # Single feature: just default.nix
+│   └── web-browser/       # Multi-variant: default.nix + sub-modules
+└── dotfiles/              # App configs (symlinked for live editing)
+```
+
+## Module Patterns
+
+**Simple modules** (e.g., `git/`, `btop/`): Single `default.nix` with one feature
+**Complex modules** (e.g., `web-browser/`): `default.nix` defines options/imports, sub-modules implement variants
+
+### web-browser/ - Best Practice Example
+- `default.nix`: Declares `myConfig.web-browser.*` options and imports sub-modules
+- `firefox.nix`, `fennec.nix`, `chrome.nix`: Each activates when its enable flag is true
+- Allows multiple related features in one namespace with shared options
+
+## Configuration Flow
+1. All enable flags declared in `flake.nix` under `myConfig`
+2. Modules imported from `./modules/*`
+3. Each module activates via `lib.mkIf config.myConfig.*.enable`
+4. Dotfiles symlinked via `mkOutOfStoreSymlink` for live editing
+
+## Flake Inputs
+- In nixpkgs → use `pkgs.package`
+- Not in nixpkgs → add as flake input (walker, elephant)
+- Community packages → use NUR (Firefox addons)
+
+## Package Sources
+
+**Stable vs Unstable**:
+- This config uses `nixpkgs` (25.05 stable) as the base
+- `nixpkgs-unstable` overlay provides `pkgs.unstable.*` for bleeding edge packages
+
+**When to use unstable**:
+- Rapidly evolving tools (editors, dev tools, CLI apps)
+- Need latest features or bug fixes
+- Package doesn't exist in stable yet
+- Examples: `unstable.claude-code`, `unstable.zed-editor`
+
+**When to use stable**:
+- System-critical packages (kernel, systemd, core utils)
+- Desktop environment components (prefer consistency)
+- Anything you don't want breaking between updates
+
+**Overlay setup** in `flake.nix`:
+```nix
+nixpkgs.overlays = [
+  (final: prev: {
+    unstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
+  })
+];
+```
+
+Update all packages (stable and unstable): `nix flake update`
+
 # niri setting if using minecraft
 _JAVA_AWT_WM_NONREPARENTING=1
 
