@@ -2,13 +2,25 @@
 
 
 (setq doom-theme 'doom-tokyo-night)
+;; Disable all syntax highlighting except comments
+(setq doom-themes-enable-bold nil
+      doom-themes-enable-italic nil)
+;; Disable line numbers
+(setq display-line-numbers-type nil)
+;; remove default syntax highlighting
+(global-font-lock-mode -1)
+;; enable syntax highlighting for comments
+(add-hook 'prog-mode-hook
+        (lambda ()
+        (font-lock-mode 1)
+        (setq font-lock-keywords
+                `(("\\s<.*$" 0 (:foreground ,(doom-color
+'base6)))))))
 
 ;; Font configuration
 (setq doom-font (font-spec :family "CommitMono Nerd Font" :size 32)
       doom-big-font (font-spec :family "CommitMono Nerd Font" :size 40)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 32))
-;; no syntax highlighting
-(global-font-lock-mode -1)
 
 ;; Org-roam configuration
 (setq org-roam-directory "~/org-roam")
