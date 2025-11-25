@@ -1,5 +1,8 @@
 ;;; config.el -*- lexical-binding: t; -*-
 
+
+(setq doom-theme 'doom-plain-dark)
+
 ;; Font configuration
 (setq doom-font (font-spec :family "CommitMono Nerd Font" :size 32)
       doom-big-font (font-spec :family "CommitMono Nerd Font" :size 40)

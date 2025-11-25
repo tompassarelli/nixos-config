@@ -86,7 +86,7 @@
             fastfetch.enable = true;
             btop.enable = true;
 
-            # Desktop environment
+            # Desktop Environment
             niri.enable = true;
             power.enable = true;
             security.enable = true;
@@ -94,15 +94,18 @@
             walker.enable = true;
             waybar.enable = true;
             mako.enable = true;
-            # - theme support
+            # Desktop Environment - Themes
             gtk.enable = true;
             styling.enable = true;
             theming.enable = true;
             theme-switcher.enable = true;
 
-            # idk my bff jill
+            # Development 
             git.enable = true;
-            rust.enable = true;
+            rust = {
+              enable = true;
+              bevy = true;
+            };
             development.enable = true;
             claude.enable = true;
 
