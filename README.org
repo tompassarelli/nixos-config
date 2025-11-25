@@ -1,0 +1,104 @@
+see todo.org for things that need doing
+
+* Project Organization
+
+** Structure
+#+begin_src
+├── flake.nix              # Main entry: inputs, system builder, enable flags
+├── modules/               # Feature modules
+│   ├── simple-module/     # Single feature: just default.nix
+│   └── web-browser/       # Multi-variant: default.nix + sub-modules
+└── dotfiles/              # App configs (symlinked for live editing)
+#+end_src
+
+** Module Patterns
+
+*Simple modules* (e.g., ~git/~, ~btop/~): Single ~default.nix~ with one feature
+*Complex modules* (e.g., ~web-browser/~): ~default.nix~ defines options/imports, sub-modules implement variants
+
+*** web-browser/ - Best Practice Example
+- ~default.nix~: Declares ~myConfig.web-browser.*~ options and imports sub-modules
+- ~firefox.nix~, ~fennec.nix~, ~chrome.nix~: Each activates when its enable flag is true
+- Allows multiple related features in one namespace with shared options
+
+** Configuration Flow
+1. All enable flags declared in ~flake.nix~ under ~myConfig~
+2. Modules imported from ~./modules/*~
+3. Each module activates via ~lib.mkIf config.myConfig.*.enable~
+4. Dotfiles symlinked via ~mkOutOfStoreSymlink~ for live editing
+
+** Flake Inputs
+- In nixpkgs → use ~pkgs.package~
+- Not in nixpkgs → add as flake input (walker, elephant)
+- Community packages → use NUR (Firefox addons)
+
+** Package Sources
+
+*Stable vs Unstable*:
+- This config uses ~nixpkgs~ (25.05 stable) as the base
+- ~nixpkgs-unstable~ overlay provides ~pkgs.unstable.*~ for bleeding edge packages
+
+*When to use unstable*:
+- Rapidly evolving tools (editors, dev tools, CLI apps)
+- Need latest features or bug fixes
+- Package doesn't exist in stable yet
+- Examples: ~unstable.claude-code~, ~unstable.zed-editor~
+
+*When to use stable*:
+- System-critical packages (kernel, systemd, core utils)
+- Desktop environment components (prefer consistency)
+- Anything you don't want breaking between updates
+
+*Overlay setup* in ~flake.nix~:
+#+begin_src nix
+nixpkgs.overlays = [
+  (final: prev: {
+    unstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
+  })
+];
+#+end_src
+
+Update all packages (stable and unstable): ~nix flake update~
+
+* niri setting if using minecraft
+_JAVA_AWT_WM_NONREPARENTING=1
+
+from: https://www.reddit.com/r/unixporn/comments/1lyni3b/niri_noctalia_quiet_by_design_nixos_quickshell/
+
+
+* Walker Application Launcher
+
+** Why Walker over Anyrun
+- Actively developed (v2.9.0 Nov 2025) vs Anyrun (maintenance mode)
+- More features: AI integration, clipboard history, bookmarks
+- Works great on niri (most features are generic Wayland, only one optional Hyprland module)
+- Already in nixpkgs
+- Anyrun has flickering issue (no input debouncing, re-sorts on every keystroke)
+
+** Activation Mode Feature
+Walker's "activation_mode" allows quick item selection via modifier key + letter:
+- Hold Right Alt (ralt) + press letter keys (j/k/l/;/a/s/d/f)
+- Letters appear on the right side of each result
+- Instantly activates the corresponding item
+
+*** Configuration
+#+begin_src toml
+[keys]
+trigger_labels = "ralt"  # Use Right Alt as trigger modifier
+
+[activation_mode]
+labels = "jkl;asdf"  # Letters used for quick selection
+#+end_src
+
+Config location: ~dotfiles/walker/config.toml~ (managed via mkOutOfStoreSymlink)
+
+** References
+
+Inspiration and reference configurations from the NixOS community:
+
+- [[https://github.com/fufexan/dotfiles][fufexan/dotfiles]]
+- [[https://github.com/redyf/nixdots][redyf/nixdots]]
+- [[https://github.com/eduardofuncao/nixferatu][eduardofuncao/nixferatu]]

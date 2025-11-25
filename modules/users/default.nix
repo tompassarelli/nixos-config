@@ -26,6 +26,8 @@ in
     systemd.tmpfiles.rules = [
       "d /home/${username}/Documents 0755 ${username} users -"
       "d /home/${username}/Pictures/Screenshots 0755 ${username} users -"
+      "d /home/${username}/code 0755 ${username} users -"
+      "d /home/${username}/src 0755 ${username} users -"
     ];
   };
 }
