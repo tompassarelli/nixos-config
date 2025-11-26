@@ -20,7 +20,7 @@
 
     # Doom Emacs
     nix-doom-emacs-unstraightened = {
-      url = "path:/home/tom/code/nix-doom-emacs-unstraightened";
+      url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
     };
   };
@@ -71,6 +71,7 @@
             networking.enable = true;
             timezone.enable = true;
             ssh.enable = true;
+            auto-upgrade.enable = true;
 
             # Terminal
             terminal.enable = true;
@@ -141,6 +142,7 @@
             ./modules/timezone
             ./modules/nix-settings
             ./modules/ssh
+            ./modules/auto-upgrade
             ./modules/audio
             ./modules/bluetooth
             ./modules/niri

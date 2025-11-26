@@ -52,14 +52,14 @@ in
           tab  q    w    e    r    t    [    y    u    i    o    p    \
           ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    ]    h    j    k    l    ;    '    ret
           lsft @slashshift z x    c    v    b    /    n    m    ,    .    rsft
-          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      @spacenum     @enteralt ralt cmp  @topyceia
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      spc           @enteralt ralt cmp  @topyceia
         ''
         else ''
           grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
           tab  q    w    e    r    t    y    u    i    o    p    [    ]
           ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    h    j    k    l    ;    '    \    ret
           lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
-          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      @spacenum     rmet ralt cmp  @topyceia
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      spc           rmet ralt cmp  @topyceia
         '';
 
         # Pyciea layer keys
@@ -68,7 +68,7 @@ in
           tab  b    l    d    w    j    [    '    f    o    u    q    ;
           ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} n    r    t    s    g    ]    y    h    a    e    i    @commactrl    ret
           lsft @zshift    x    m    c    v    -    \    k    p    .    /    rsft
-          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      @spacenum     rmet ralt cmp  @tobase
+          lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      spc           rmet ralt cmp  @tobase
         '';
       in ''
         ;; Define aliases
@@ -79,7 +79,6 @@ in
         (defalias enteralt (tap-hold-press 200 200 ret ralt))
         (defalias commactrl (tap-hold-press 200 200 , lctl))
         (defalias apostrophenum (tap-hold-press 200 200 ' (layer-while-held numbers)))
-        (defalias spacenum (tap-hold-release 200 200 spc (layer-while-held numbers)))
         (defalias topyceia (tap-dance 300 (rctl (layer-switch pyciea))))
         (defalias tobase (tap-dance 300 (rctl (layer-switch base))))
 

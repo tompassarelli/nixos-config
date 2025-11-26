@@ -19,7 +19,7 @@ def main():
             if event.get("OverviewOpenedOrClosed"):
                 # Toggle waybar visibility using SIGUSR1
                 run(["pkill", "-SIGUSR1", "waybar"], check=False)
-                
+
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

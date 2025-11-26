@@ -29,7 +29,8 @@ in
           vim = "nvim"; # keep vi as fallback
           v = "nvim";
           # emacs client (connect to daemon for fast startup)
-          e = "emacsclient -n -c -a emacs";  # -n = no-wait, -c = new frame, -a emacs = fallback to emacs if daemon not running
+          e = "emacsclient -t -a emacs";  # terminal emacs
+          eg = "emacsclient -n -c -a emacs";  # GUI emacs (-n = no-wait, -c = new frame)
           # shorthands
           gits = "git status";
           gitd = "git diff";
