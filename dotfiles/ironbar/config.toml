@@ -1,0 +1,42 @@
+# Ironbar configuration
+name = "main"
+position = "top"
+height = 26
+start_hidden = true
+
+# Left modules
+[[start]]
+type = "clock"
+format = "%A %I:%M %p"
+
+# Center modules
+[[center]]
+type = "workspaces"
+all_monitors = true
+
+# Right modules
+[[end]]
+type = "tray"
+icon_size = 16
+
+[[end]]
+type = "network_manager"
+icon_size = 16
+
+[[end]]
+type = "volume"
+format = "{icon}"
+max_volume = 100
+icons.volume_high = "󰕾"
+icons.volume_medium = "󰖀"
+icons.volume_low = "󰕿"
+icons.muted = "󰝟"
+
+[[end]]
+type = "battery"
+format = "{icon}"
+icon_size = 16
+
+[end.thresholds]
+warning = 20
+critical = 10

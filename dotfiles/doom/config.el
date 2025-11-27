@@ -8,14 +8,14 @@
 ;; Disable line numbers
 (setq display-line-numbers-type nil)
 ;; remove default syntax highlighting
-(global-font-lock-mode -1)
+;; (global-font-lock-mode -1)
 ;; enable syntax highlighting for comments
-(add-hook 'prog-mode-hook
-        (lambda ()
-        (font-lock-mode 1)
-        (setq font-lock-keywords
-                `(("\\s<.*$" 0 (:foreground ,(doom-color
-'base6)))))))
+;; (add-hook 'prog-mode-hook
+;;         (lambda ()
+;;         (font-lock-mode 1)
+;;         (setq font-lock-keywords
+;;                 `(("\\s<.*$" 0 (:foreground ,(doom-color
+;; 'base6)))))))
 
 ;; Font configuration
 (setq doom-font (font-spec :family "CommitMono Nerd Font" :size 32)

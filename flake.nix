@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:nixos/nixpkgs/master";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,9 +24,10 @@
       url = "github:marienz/nix-doom-emacs-unstraightened";
       inputs.nixpkgs.follows = "";
     };
+
   };
-  
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, stylix, nur, elephant, walker, nix-doom-emacs-unstraightened }: {
+
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-master, home-manager, stylix, nur, elephant, walker, nix-doom-emacs-unstraightened }: {
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
@@ -93,7 +95,8 @@
             security.enable = true;
             rofi-wayland.enable = false;
             walker.enable = true;
-            waybar.enable = true;
+            waybar.enable = false;
+            ironbar.enable = true;
             mako.enable = true;
             # Desktop Environment - Themes
             gtk.enable = true;
@@ -171,6 +174,7 @@
             ./modules/rofi
             ./modules/walker
             ./modules/waybar
+            ./modules/ironbar
             ./modules/framework
             ./modules/claude
             ./modules/theme-switcher
@@ -192,11 +196,15 @@
           };
         }
         
-        # unstable overlay
+        # unstable & master overlays
         {
           nixpkgs.overlays = [
             (final: prev: {
               unstable = import nixpkgs-unstable {
+                inherit system;
+                config.allowUnfree = true;
+              };
+              master = import nixpkgs-master {
                 inherit system;
                 config.allowUnfree = true;
               };
@@ -212,7 +220,7 @@
         hostname = "whiterabbit";
         username = "tom";
         # run switch-theme to change themes
-        chosenTheme = "tokyo-night-dark"; 
+        chosenTheme = "everforest-dark-hard";
         # system = "aarch64-linux";  # Uncomment for ARM systems
         # many default modules will not work on ARM, vaporware!
       };

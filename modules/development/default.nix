@@ -13,7 +13,7 @@ in
     # Editor / Search
     vim                  # default general purpose text editor
     #unstable.zed-editor # open source editor
-    unstable.claude-code # anthropic claude cli
+    master.claude-code   # bleeding edge from master branch
     ripgrep              # search
     fd                   # find files
     unzip                # relax and decompress
