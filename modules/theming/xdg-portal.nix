@@ -8,6 +8,6 @@
       pkgs.xdg-desktop-portal-gnome  # for Niri (Smithay-based, needs GNOME portal for screenshots/color picker)
       pkgs.kdePackages.xdg-desktop-portal-kde  # for Qt apps (KDE apps, VLC, Qt Creator, etc.)
     ];
-    xdg.portal.config.common.default = [ "gnome" "gtk" ];
+    xdg.portal.config.common.default = [ "gtk" ];
   };
 }

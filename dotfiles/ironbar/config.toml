@@ -17,7 +17,7 @@ all_monitors = true
 # Right modules
 [[end]]
 type = "sys_info"
-format = [" {cpu_percent}%", "󰍛 {memory_percent}%"]
+format = ["󰻠 {cpu_percent}%", "󰍛 {memory_percent}%"]
 interval.cpu = 5
 interval.memory = 30
 

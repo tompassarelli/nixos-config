@@ -95,8 +95,8 @@
             security.enable = true;
             rofi-wayland.enable = false;
             walker.enable = true;
-            waybar.enable = false;
-            ironbar.enable = true;
+            waybar.enable = true;
+            ironbar.enable = false;
             mako.enable = true;
             # Desktop Environment - Themes
             gtk.enable = true;
