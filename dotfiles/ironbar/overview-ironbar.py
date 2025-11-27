@@ -16,7 +16,7 @@ BAR_NAME = "main"
 def set_bar_visible(visible: bool) -> None:
     """Explicitly set ironbar visibility state."""
     run(
-        ["ironbar", "bar", "set-visible", BAR_NAME, str(visible).lower()],
+        ["ironbar", "bar", BAR_NAME, "set-visible", str(visible).lower()],
         check=False
     )
 
@@ -33,9 +33,9 @@ def main():
             event = loads(line)
             overview_state = event.get("OverviewOpenedOrClosed")
             if overview_state is not None:
-                # overview_state is True when overview opens, False when it closes
+                # overview_state is {"is_open": true/false}
                 # Show bar when overview is open, hide when closed
-                set_bar_visible(overview_state)
+                set_bar_visible(overview_state["is_open"])
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

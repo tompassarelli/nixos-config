@@ -31,9 +31,9 @@
   border-bottom: 3px solid @base05;
 }
 
-.battery,
-.network_manager,
+.sys_info,
 .volume,
+.script,
 .tray,
 .clock {
   background-color: transparent;
@@ -41,13 +41,6 @@
   margin-right: 13px;
 }
 
-.battery.warning {
-  color: @base09;
-}
-
-.battery.critical {
-  color: @base08;
-}
 
 tooltip {
   padding: 2px;

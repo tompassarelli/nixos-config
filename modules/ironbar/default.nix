@@ -64,6 +64,10 @@ in
       xdg.configFile."ironbar/overview-ironbar.py".source =
         config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/ironbar/overview-ironbar.py";
 
+      # Dotfiles: Battery script
+      xdg.configFile."ironbar/battery.sh".source =
+        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/code/nixos-config/dotfiles/ironbar/battery.sh";
+
       # Systemd service: Main ironbar daemon
       systemd.user.services.ironbar = {
         Unit = {

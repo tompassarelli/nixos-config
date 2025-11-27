@@ -1,18 +1,6 @@
-*
-* [X] get number keys working on a layer
-:LOGBOOK:
-CLOCK: [2025-11-24 Mon 22:54]--[2025-11-24 Mon 23:15] =>  0:21
-:END:
+* [ ] figure out how to see what packages stylix supports
 
-because i have shifted over my righthand in kanata qwerty, and
-just for general optimizations reasons, i want to be able to activate
-a layer -> qwertyuiop -> 123456890
-
-
-* [X] test pomodoro org mod
-
-* [ ] turn readme.md -> readme.org
-  * [ ] put todos at the top of the file probably
+* [ ] figure out if theres a faster way i can change themes without a 1 minute rebuild process
 
 * [ ] go through the boot pipeline of flake.nix and document every section with comments
 
@@ -23,3 +11,19 @@ a layer -> qwertyuiop -> 123456890
 * [ ] create a question and answer appendeix in readme.org that answers frequent things i forgot about
 
 * [ ] instead of super+ctrl make it super+ralt for moving 2 at a time window focus
+
+* [ ] turn readme.md -> readme.org
+  * [ ] put todos at the top of the file probably
+
+* Archive
+** [X] get number keys working on a layer
+:LOGBOOK:
+CLOCK: [2025-11-24 Mon 22:54]--[2025-11-24 Mon 23:15] =>  0:21
+:END:
+
+because i have shifted over my righthand in kanata qwerty, and
+just for general optimizations reasons, i want to be able to activate
+a layer -> qwertyuiop -> 123456890
+
+
+** [X] test pomodoro org mod

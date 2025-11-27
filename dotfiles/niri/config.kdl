@@ -257,10 +257,10 @@ layout {
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-// waybar now managed by systemd user service
+// ironbar now managed by systemd user service
 spawn-at-startup "gnome-keyring-daemon --start --components=secrets"
 
-// waybar overview script now managed by systemd user service
+// ironbar overview script now managed by systemd user service
 
 // Wallpaper
 // swaybg now managed by systemd user service

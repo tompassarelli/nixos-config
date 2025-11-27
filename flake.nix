@@ -220,7 +220,8 @@
         hostname = "whiterabbit";
         username = "tom";
         # run switch-theme to change themes
-        chosenTheme = "everforest-dark-hard";
+        # chosenTheme = "everforest-dark-hard";
+        chosenTheme = "tokyo-night-dark";
         # system = "aarch64-linux";  # Uncomment for ARM systems
         # many default modules will not work on ARM, vaporware!
       };
