@@ -25,6 +25,12 @@ in
       # Let Stylix handle base GTK config
       gtk.enable = true;
 
+      # Add GTK packages and gsettings schemas to fix GLib-GIO warnings
+      home.packages = with pkgs; [
+        gsettings-desktop-schemas
+        gtk3
+      ];
+
       # Override the settings.ini files to add dark mode preference
       # We read Stylix's values and add our dark mode setting
       xdg.configFile."gtk-3.0/settings.ini".text = lib.mkForce ''

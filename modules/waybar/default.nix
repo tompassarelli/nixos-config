@@ -92,7 +92,7 @@ in
         Unit = {
           Description = "Highly customizable Wayland bar";
           PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" "xdg-desktop-portal.service" ];
           Requisite = [ "graphical-session.target" ];
         };
         Service = {

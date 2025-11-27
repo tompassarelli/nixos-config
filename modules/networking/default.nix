@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 
 let
   cfg = config.myConfig.networking;
@@ -6,6 +6,7 @@ in
 {
   options.myConfig.networking = {
     enable = lib.mkEnableOption "network configuration";
+    remmina.autostart = lib.mkEnableOption "Remmina applet autostart";
   };
 
   config = lib.mkIf cfg.enable {
@@ -18,5 +19,14 @@ in
       protonvpn-gui        # Proton VPN GUI client
       protonvpn-cli        # Proton VPN CLI client
     ];
+
+    # HOME-MANAGER: Remmina autostart configuration
+    home-manager.users.${username} = { config, ... }: {
+      # Disable Remmina autostart when not enabled
+      xdg.configFile."autostart/remmina-applet.desktop" = lib.mkIf (!cfg.remmina.autostart) {
+        source = config.lib.file.mkOutOfStoreSymlink
+          "${config.home.homeDirectory}/code/nixos-config/dotfiles/autostart/remmina-applet.desktop";
+      };
+    };
   };
 }

@@ -1,7 +1,3 @@
-* [ ] figure out how to see what packages stylix supports
-
-* [ ] figure out if theres a faster way i can change themes without a 1 minute rebuild process
-
 * [ ] go through the boot pipeline of flake.nix and document every section with comments
 
 * [ ] get layerpad working again
@@ -14,6 +10,7 @@
 
 * [ ] turn readme.md -> readme.org
   * [ ] put todos at the top of the file probably
+
 
 * Archive
 ** [X] get number keys working on a layer
