@@ -1,191 +1,159 @@
-See [[file:todo.org][todo.org]] for prospective development and maintenance
+#+TITLE: Tom's NixOS Configuration
+#+AUTHOR: Tom
+#+DATE: 2025-11-27
 
-* Project Organization
+* Overview
 
-** Structure
+This is a Level 4 NixOS configuration featuring:
+- **Flakes** for reproducible builds
+- **Multi-host** management (whiterabbit + thinkpad-x1e)
+- **Custom module system** with ~myConfig.*~ namespace
+- **Out-of-store symlinks** for live config editing
+- **home-manager** integration
+
+* Active Development
+
+See [[file:todo.org][todo.org]] for current tasks and planned improvements.
+
+* Quick Start
+
+** Rebuild System
+#+begin_src bash
+rebuild              # Auto-detects hostname
+rebuild whiterabbit  # Explicit host
+#+end_src
+
+** Update Dependencies
+#+begin_src bash
+nix flake update     # Update flake.lock
+rebuild              # Apply updates
+#+end_src
+
+** Add a New Module
+1. Create ~modules/my-app/default.nix~
+2. Add option in ~default.nix~
+3. Implement in ~my-app.nix~
+4. Enable in ~hosts/whiterabbit/configuration.nix~
+
+* Project Structure
+
 #+begin_src
-├── flake.nix              # Main entry: inputs, system builder, enable flags
-├── modules/               # Feature modules
-│   ├── simple-module/     # Single feature: just default.nix
-│   └── web-browser/       # Multi-variant: default.nix + sub-modules
-└── dotfiles/              # App configs (symlinked for live editing)
+.
+├── flake.nix                    # Flake inputs, outputs, mkSystem builder
+├── hosts/                       # Per-host configurations
+│   ├── whiterabbit/             # Framework 13 laptop
+│   └── thinkpad-x1e/            # Desktop
+├── modules/                     # Feature modules (myConfig.*)
+│   ├── niri/                    # Window manager
+│   ├── shell/                   # Fish shell
+│   ├── neovim/                  # Editor
+│   └── ...                      # 40+ modules
+├── dotfiles/                    # Out-of-store configs (live editing)
+│   ├── niri/config.kdl
+│   ├── doom/
+│   └── ...
+└── manual/                      # Deep-dive documentation
+    ├── nix-basics.org           # /nix/store, levels, git+generations
+    ├── module-system.org        # Fixpoint eval, types, options
+    └── applications.org         # App-specific tips (niri, walker)
 #+end_src
 
-** Module Patterns
+* Documentation
 
+** For Understanding NixOS
+→ [[file:manual/nix-basics.org][manual/nix-basics.org]]
+- How /nix/store works
+- Why you can't edit /etc
+- mkOutOfStoreSymlink explained
+- Configuration complexity levels (0-5)
+- Where you are vs where you started
+
+** For Understanding the Module System
+→ [[file:manual/module-system.org][manual/module-system.org]]
+- Fixpoint evaluation
+- Type system and merge semantics
+- specialArgs vs module options
+- Why module options are superior
+
+** For Application-Specific Notes
+→ [[file:manual/applications.org][manual/applications.org]]
+- Niri (window manager tips, Minecraft compatibility)
+- Walker (activation mode, why walker over anyrun)
+
+** For Architecture Details
+
+*** Module Patterns
 *Simple modules* (e.g., ~git/~, ~btop/~): Single ~default.nix~ with one feature
-*Complex modules* (e.g., ~web-browser/~): ~default.nix~ defines options/imports, sub-modules implement variants
 
-*** web-browser/ - Best Practice Example
-- ~default.nix~: Declares ~myConfig.web-browser.*~ options and imports sub-modules
-- ~firefox.nix~, ~fennec.nix~, ~chrome.nix~: Each activates when its enable flag is true
-- Allows multiple related features in one namespace with shared options
+*Complex modules* (e.g., ~web-browser/~):
+- ~default.nix~: Declares options, imports sub-modules
+- ~firefox.nix~, ~fennec.nix~, ~chrome.nix~: Implement variants
+- Allows multiple related features in one namespace
 
-** Configuration Flow
-1. All enable flags declared in ~flake.nix~ under ~myConfig~
-2. Modules imported from ~./modules/*~
-3. Each module activates via ~lib.mkIf config.myConfig.*.enable~
-4. Dotfiles symlinked via ~mkOutOfStoreSymlink~ for live editing
+*** Configuration Flow
+1. Host config sets enable flags (~myConfig.*.enable = true~)
+2. Modules activate via ~lib.mkIf cfg.enable~
+3. Generated configs → ~/nix/store~ (immutable)
+4. Hand-written configs → ~dotfiles/~ (live via mkOutOfStoreSymlink)
 
-** Flake Inputs
-- In nixpkgs → use ~pkgs.package~
-- Not in nixpkgs → add as flake input (walker, elephant)
-- Community packages → use NUR (Firefox addons)
+*** Package Sources
+- **Stable** (~pkgs.*~): nixpkgs 25.05
+- **Unstable** (~pkgs.unstable.*~): nixpkgs-unstable overlay
+- **Flake inputs**: walker, elephant (not in nixpkgs)
+- **NUR**: Firefox addons, community packages
 
-** Package Sources
+Update: ~nix flake update~
 
-*Stable vs Unstable*:
-- This config uses ~nixpkgs~ (25.05 stable) as the base
-- ~nixpkgs-unstable~ overlay provides ~pkgs.unstable.*~ for bleeding edge packages
+* Common Tasks
 
-*When to use unstable*:
-- Rapidly evolving tools (editors, dev tools, CLI apps)
-- Need latest features or bug fixes
-- Package doesn't exist in stable yet
-- Examples: ~unstable.claude-code~, ~unstable.zed-editor~
-
-*When to use stable*:
-- System-critical packages (kernel, systemd, core utils)
-- Desktop environment components (prefer consistency)
-- Anything you don't want breaking between updates
-
-*Overlay setup* in ~flake.nix~:
+** Enable a new feature
 #+begin_src nix
-nixpkgs.overlays = [
-  (final: prev: {
-    unstable = import nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
-    };
-  })
-];
+# hosts/whiterabbit/configuration.nix
+{
+  myConfig.steam.enable = true;  # Add this line
+}
 #+end_src
 
-Update all packages (stable and unstable): ~nix flake update~
-
-
-* Q&A
-
-** How does nix state (i.e rebuild) relate to git and btrfs
-
-Your flake.nix is tracked in git, which provides version control for your configuration. Here's how it works:
-
-***  What gets used when you rebuild
-When you run ~sudo nixos-rebuild switch~, NixOS reads from your *working directory* (not just committed changes). This means:
-- Uncommitted changes in flake.nix will be applied
-- However, flake inputs are locked via ~flake.lock~ (only updates with ~nix flake update~)
-- Local dotfiles are symlinked, so changes are live without rebuilds
-
-*** Git as a safety net
-Git provides *configuration rollback*:
 #+begin_src bash
-# Oops, bad config change - rollback in git
-git log                    # find last good commit
-git checkout abc123        # rollback to that commit
-sudo nixos-rebuild switch  # rebuild from old config
+rebuild
 #+end_src
 
-*** Best practices
-- *Commit after every successful rebuild* - This ensures each generation has a corresponding git commit
-- Workflow: ~rebuild~ → if successful → ~gita && gitc && gitp~
-- Never commit broken configs - only commit after confirming the rebuild works
-- Test changes before committing
-- Use branches for experimental changes
-- Git history lets you see "what changed when it broke"
-
-Without this discipline, you can boot into old working generations but lose the source config that built them.
-
-** How does flake.nix relate to btrfs
-
-NixOS + btrfs gives you *system-level rollback* independent of git. Here's the relationship:
-
-*** NixOS generations (not btrfs-specific)
-Every ~nixos-rebuild switch~ creates a new *generation* - a bootable snapshot of your system:
-- Stored in ~/nix/var/nix/profiles/system-*-link~
-- Accessible from the bootloader menu at boot
-- Can rollback with: ~sudo nixos-rebuild switch --rollback~
-
-*Important:* Booting into an old generation does NOT change your git state!
-- If you boot generation #45 (built from git commit ABC), your repo still shows current HEAD
-- Your ~~/code/nixos-config~ files remain unchanged
-- If you run ~rebuild~ from old generation, it rebuilds from *current git state*, not the old one
-- This can be confusing: you're running old config, but looking at new source code
-
-To truly match a generation with its source:
+** Edit live configs (no rebuild needed)
 #+begin_src bash
-# 1. Boot into old generation (from bootloader)
-# 2. Find what commit it was built from
-git log --oneline
-# 3. Checkout that commit if you want to see/edit the original config
-git checkout <commit-hash>
+vim ~/code/nixos-config/dotfiles/niri/config.kdl
+# Changes take effect immediately (out-of-store symlink)
 #+end_src
 
-*** Btrfs snapshots (optional enhancement)
-If your system uses btrfs, you may have automatic snapshots configured:
-- Snapshots happen *before* each rebuild (via tools like snapper or custom scripts)
-- Provides filesystem-level rollback (includes /home, non-Nix state)
-- Independent of NixOS generations
-
-*** Three layers of safety
-1. *Git history* - config source control, manual rollback
-2. *NixOS generations* - automatic system snapshots, boot menu selection
-3. *Btrfs snapshots* - automatic filesystem snapshots (if configured)
-
-*** Which to use when
-- Config broke? → Git checkout + rebuild
-- System won't boot? → Boot menu → select old generation
-- Need to recover deleted files or /home state? → Btrfs snapshot restore
-
-*** The key difference: Source vs Built System
-*Git checkout old code + reboot*: Changes your source files, but system keeps running current generation until you rebuild
-*Boot old generation*: System immediately runs old built config, but source files unchanged
-
-Think of it like:
-- Git = recipe book
-- Generation = pre-cooked frozen meal
-- Booting old generation = eating old frozen meal (fast, but can't edit the recipe)
-- Git checkout + rebuild = cooking from old recipe (slow, but can modify before cooking)
-
-The key insight: *Git tracks your intent (config), NixOS generations track built systems, btrfs tracks filesystem state*. They're complementary layers.
-
-* Appendix
-** Niri config guide if using minecraft
-_JAVA_AWT_WM_NONREPARENTING=1
-
-from: https://www.reddit.com/r/unixporn/comments/1lyni3b/niri_noctalia_quiet_by_design_nixos_quickshell/
-
-
-** Walker Application Launcher
-
-*** Why Walker over Anyrun
-- Actively developed (v2.9.0 Nov 2025) vs Anyrun (maintenance mode)
-- More features: AI integration, clipboard history, bookmarks
-- Works great on niri (most features are generic Wayland, only one optional Hyprland module)
-- Already in nixpkgs
-- Anyrun has flickering issue (no input debouncing, re-sorts on every keystroke)
-
-*** Activation Mode Feature
-Walker's "activation_mode" allows quick item selection via modifier key + letter:
-- Hold Right Alt (ralt) + press letter keys (j/k/l/;/a/s/d/f)
-- Letters appear on the right side of each result
-- Instantly activates the corresponding item
-
-**** Configuration
-#+begin_src toml
-[keys]
-trigger_labels = "ralt"  # Use Right Alt as trigger modifier
-
-[activation_mode]
-labels = "jkl;asdf"  # Letters used for quick selection
+** Rollback
+#+begin_src bash
+# Boot menu: select old generation
+# OR
+sudo nixos-rebuild switch --rollback
 #+end_src
 
-Config location: ~dotfiles/walker/config.toml~ (managed via mkOutOfStoreSymlink)
+* Git + NixOS Workflow
 
+** Best Practice
+1. Make changes to config
+2. ~rebuild~ (test it works)
+3. If successful: ~gita && gitc && gitp~ (commit and push)
+4. Never commit broken configs
 
-* References
+** Why This Matters
+- Git = your config source (recipes)
+- NixOS generations = built systems (frozen meals)
+- Booting old generation ≠ old git state
+- Always commit after successful rebuild to keep them in sync
 
-Inspiration and reference configurations from the NixOS community:
+See [[file:manual/nix-basics.org::*Git + NixOS Workflow][manual/nix-basics.org]] for full explanation of git, generations, and btrfs.
 
+* Inspirations
+
+This config draws inspiration from:
 - [[https://github.com/fufexan/dotfiles][fufexan/dotfiles]]
 - [[https://github.com/redyf/nixdots][redyf/nixdots]]
 - [[https://github.com/eduardofuncao/nixferatu][eduardofuncao/nixferatu]]
+
+* License
+
+MIT

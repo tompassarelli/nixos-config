@@ -743,3 +743,136 @@ You're at Level 4. To go deeper:
 
 But honestly? *You're already doing advanced NixOS.* Most people never get past Level 1.
 
+* Git + NixOS Workflow
+
+** The Three Layers of Safety
+
+NixOS gives you multiple independent rollback mechanisms:
+
+1. *Git history* - Config source control (manual)
+2. *NixOS generations* - Automatic system snapshots
+3. *Btrfs snapshots* - Filesystem-level snapshots (optional)
+
+** How Git Relates to nixos-rebuild
+
+When you run ~sudo nixos-rebuild switch~, NixOS reads from your *working directory* (not just committed changes):
+
+- ✓ Uncommitted changes in ~flake.nix~ *will* be applied
+- ✓ Uncommitted changes in modules *will* be applied
+- ✗ Flake inputs are locked via ~flake.lock~ (only updates with ~nix flake update~)
+- ✓ Dotfiles are symlinked, so changes are always live (no rebuild needed)
+
+** Best Practice: Commit After Every Successful Rebuild
+
+#+begin_example
+Workflow:
+1. Make changes to config
+2. rebuild (test it works)
+3. If successful: gita && gitc && gitp
+4. NEVER commit broken configs
+#+end_example
+
+*Why this matters:*
+- Each NixOS generation should have a corresponding git commit
+- Git history lets you see "what changed when it broke"
+- Without this discipline, you can boot into old generations but lose the source config that built them
+
+** Git as a Safety Net
+
+#+begin_src bash
+# Oops, bad config change - rollback in git
+git log                    # Find last good commit
+git checkout abc123        # Rollback to that commit
+sudo nixos-rebuild switch  # Rebuild from old config
+#+end_src
+
+** NixOS Generations (Not Btrfs-Specific)
+
+Every ~nixos-rebuild switch~ creates a new *generation* - a bootable snapshot of your system:
+
+- Stored in ~/nix/var/nix/profiles/system-*-link~
+- Accessible from the bootloader menu at boot
+- Rollback: ~sudo nixos-rebuild switch --rollback~
+- List: ~sudo nix-env --list-generations --profile /nix/var/nix/profiles/system~
+
+** The Key Gotcha: Generations ≠ Git State
+
+*IMPORTANT:* Booting into an old generation does NOT change your git state!
+
+Example scenario:
+1. You're at generation #50, git commit ABC
+2. You make changes, rebuild → generation #51, git commit XYZ
+3. Boot menu: select generation #50
+4. Your system is running generation #50 (old config)
+5. But ~~/code/nixos-config~ still shows commit XYZ (new source)
+6. If you run ~rebuild~, it builds from *current git state* (XYZ), not the old one
+
+*** To Truly Match a Generation With Its Source
+
+#+begin_src bash
+# 1. Boot into old generation (from bootloader)
+
+# 2. Find what commit it was built from
+git log --oneline
+
+# 3. Checkout that commit to see/edit the original config
+git checkout <commit-hash>
+
+# 4. Rebuild if you want to modify and test
+rebuild
+
+# 5. Return to current state
+git checkout main
+#+end_src
+
+** Btrfs Snapshots (Optional Enhancement)
+
+If your system uses btrfs with automatic snapshots:
+
+- Snapshots happen *before* each rebuild (via snapper, timeshift, or custom scripts)
+- Provides *filesystem-level* rollback (includes ~/home~, non-Nix state)
+- Independent of NixOS generations
+- Can recover deleted files, restore ~/home~ state
+
+** Which to Use When
+
+| Problem | Solution |
+|---------|----------|
+| Config broke | Git checkout + rebuild |
+| System won't boot | Boot menu → select old generation |
+| Deleted important files | Btrfs snapshot restore |
+| Want to test old config | Git checkout → rebuild |
+| Emergency recovery | Bootloader → old generation |
+
+** The Key Difference: Source vs Built System
+
+*Git checkout old code + rebuild:*
+- Changes your source files
+- System keeps running current generation until you rebuild
+- Slow (must rebuild)
+- Can modify before rebuilding
+
+*Boot old generation:*
+- System immediately runs old built config
+- Source files unchanged
+- Fast (no rebuild)
+- Cannot modify (it's a frozen snapshot)
+
+*** Mental Model
+
+Think of it like:
+- *Git* = recipe book
+- *Generation* = pre-cooked frozen meal
+- Booting old generation = eating old frozen meal (fast, but can't edit the recipe)
+- Git checkout + rebuild = cooking from old recipe (slow, but can modify before cooking)
+
+** The Key Insight
+
+*Git tracks your intent (config source)*
+*NixOS generations track built systems*
+*Btrfs tracks filesystem state*
+
+They're *complementary layers* - not the same thing!
+
+This is why you should commit after every successful rebuild: to keep git history synchronized with generations.
+
