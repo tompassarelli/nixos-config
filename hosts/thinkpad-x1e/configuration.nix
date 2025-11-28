@@ -51,6 +51,7 @@
   myConfig.gtk.enable = true;
   myConfig.styling.enable = true;
   myConfig.theming.enable = true;
+  myConfig.theming.chosenTheme = "tokyo-night-dark";
   myConfig.theme-switcher.enable = true;
 
   # Development

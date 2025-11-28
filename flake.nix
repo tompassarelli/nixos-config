@@ -24,13 +24,11 @@
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
-      chosenTheme,
       hostConfig,  # New: path to host-specific configuration
       system ? "x86_64-linux"  # For ARM: use "aarch64-linux"
     }: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit chosenTheme;
         inputs = { inherit nur walker elephant; };
       };
       modules = [
@@ -104,7 +102,6 @@
           # Home-manager configuration
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
-            inherit chosenTheme;
             inputs = { inherit nur walker elephant; };
           };
           home-manager.users.${config.myConfig.users.username} = {
@@ -136,15 +133,11 @@
       whiterabbit = self.lib.mkSystem {
         hostname = "whiterabbit";
         hostConfig = ./hosts/whiterabbit/configuration.nix;
-        # run switch-theme to change themes
-        # chosenTheme = "everforest-dark-hard";
-        chosenTheme = "tokyo-night-dark";
       };
 
       thinkpad-x1e = self.lib.mkSystem {
         hostname = "thinkpad-x1e";
         hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
-        chosenTheme = "tokyo-night-dark";
       };
     };
   };

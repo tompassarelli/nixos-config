@@ -1,43 +1,41 @@
-#+TITLE: Tom's NixOS Configuration
-#+AUTHOR: Tom
-#+DATE: 2025-11-27
+# Tom's NixOS Configuration
 
-* Overview
+## Overview
 
 This is a Level 4 NixOS configuration featuring:
 - **Flakes** for reproducible builds
 - **Multi-host** management (whiterabbit + thinkpad-x1e)
-- **Custom module system** with ~myConfig.*~ namespace
+- **Custom module system** with `myConfig.*` namespace
 - **Out-of-store symlinks** for live config editing
 - **home-manager** integration
 
-* Active Development
+## Active Development
 
-See [[file:todo.org][todo.org]] for current tasks and planned improvements.
+See [todo.org](todo.org) for current tasks and planned improvements.
 
-* Quick Start
+## Quick Start
 
-** Rebuild System
-#+begin_src bash
+### Rebuild System
+```bash
 rebuild              # Auto-detects hostname
 rebuild whiterabbit  # Explicit host
-#+end_src
+```
 
-** Update Dependencies
-#+begin_src bash
+### Update Dependencies
+```bash
 nix flake update     # Update flake.lock
 rebuild              # Apply updates
-#+end_src
+```
 
-** Add a New Module
-1. Create ~modules/my-app/default.nix~
-2. Add option in ~default.nix~
-3. Implement in ~my-app.nix~
-4. Enable in ~hosts/whiterabbit/configuration.nix~
+### Add a New Module
+1. Create `modules/my-app/default.nix`
+2. Add option in `default.nix`
+3. Implement in `my-app.nix`
+4. Enable in `hosts/whiterabbit/configuration.nix`
 
-* Project Structure
+## Project Structure
 
-#+begin_src
+```
 .
 ├── flake.nix                    # Flake inputs, outputs, mkSystem builder
 ├── hosts/                       # Per-host configurations
@@ -56,104 +54,104 @@ rebuild              # Apply updates
     ├── nix-basics.org           # /nix/store, levels, git+generations
     ├── module-system.org        # Fixpoint eval, types, options
     └── applications.org         # App-specific tips (niri, walker)
-#+end_src
+```
 
-* Documentation
+## Documentation
 
-** For Understanding NixOS
-→ [[file:manual/nix-basics.org][manual/nix-basics.org]]
+### For Understanding NixOS
+→ [manual/nix-basics.org](manual/nix-basics.org)
 - How /nix/store works
 - Why you can't edit /etc
 - mkOutOfStoreSymlink explained
 - Configuration complexity levels (0-5)
 - Where you are vs where you started
 
-** For Understanding the Module System
-→ [[file:manual/module-system.org][manual/module-system.org]]
+### For Understanding the Module System
+→ [manual/module-system.org](manual/module-system.org)
 - Fixpoint evaluation
 - Type system and merge semantics
 - specialArgs vs module options
 - Why module options are superior
 
-** For Application-Specific Notes
-→ [[file:manual/applications.org][manual/applications.org]]
+### For Application-Specific Notes
+→ [manual/applications.org](manual/applications.org)
 - Niri (window manager tips, Minecraft compatibility)
 - Walker (activation mode, why walker over anyrun)
 
-** For Architecture Details
+### For Architecture Details
 
-*** Module Patterns
-*Simple modules* (e.g., ~git/~, ~btop/~): Single ~default.nix~ with one feature
+#### Module Patterns
+**Simple modules** (e.g., `git/`, `btop/`): Single `default.nix` with one feature
 
-*Complex modules* (e.g., ~web-browser/~):
-- ~default.nix~: Declares options, imports sub-modules
-- ~firefox.nix~, ~fennec.nix~, ~chrome.nix~: Implement variants
+**Complex modules** (e.g., `web-browser/`):
+- `default.nix`: Declares options, imports sub-modules
+- `firefox.nix`, `fennec.nix`, `chrome.nix`: Implement variants
 - Allows multiple related features in one namespace
 
-*** Configuration Flow
-1. Host config sets enable flags (~myConfig.*.enable = true~)
-2. Modules activate via ~lib.mkIf cfg.enable~
-3. Generated configs → ~/nix/store~ (immutable)
-4. Hand-written configs → ~dotfiles/~ (live via mkOutOfStoreSymlink)
+#### Configuration Flow
+1. Host config sets enable flags (`myConfig.*.enable = true`)
+2. Modules activate via `lib.mkIf cfg.enable`
+3. Generated configs → `/nix/store` (immutable)
+4. Hand-written configs → `dotfiles/` (live via mkOutOfStoreSymlink)
 
-*** Package Sources
-- **Stable** (~pkgs.*~): nixpkgs 25.05
-- **Unstable** (~pkgs.unstable.*~): nixpkgs-unstable overlay
+#### Package Sources
+- **Stable** (`pkgs.*`): nixpkgs 25.05
+- **Unstable** (`pkgs.unstable.*`): nixpkgs-unstable overlay
 - **Flake inputs**: walker, elephant (not in nixpkgs)
 - **NUR**: Firefox addons, community packages
 
-Update: ~nix flake update~
+Update: `nix flake update`
 
-* Common Tasks
+## Common Tasks
 
-** Enable a new feature
-#+begin_src nix
+### Enable a new feature
+```nix
 # hosts/whiterabbit/configuration.nix
 {
   myConfig.steam.enable = true;  # Add this line
 }
-#+end_src
+```
 
-#+begin_src bash
+```bash
 rebuild
-#+end_src
+```
 
-** Edit live configs (no rebuild needed)
-#+begin_src bash
+### Edit live configs (no rebuild needed)
+```bash
 vim ~/code/nixos-config/dotfiles/niri/config.kdl
 # Changes take effect immediately (out-of-store symlink)
-#+end_src
+```
 
-** Rollback
-#+begin_src bash
+### Rollback
+```bash
 # Boot menu: select old generation
 # OR
 sudo nixos-rebuild switch --rollback
-#+end_src
+```
 
-* Git + NixOS Workflow
+## Git + NixOS Workflow
 
-** Best Practice
+### Best Practice
 1. Make changes to config
-2. ~rebuild~ (test it works)
-3. If successful: ~gita && gitc && gitp~ (commit and push)
+2. `rebuild` (test it works)
+3. If successful: `gita && gitc && gitp` (commit and push)
 4. Never commit broken configs
 
-** Why This Matters
+### Why This Matters
 - Git = your config source (recipes)
 - NixOS generations = built systems (frozen meals)
 - Booting old generation ≠ old git state
 - Always commit after successful rebuild to keep them in sync
 
-See [[file:manual/nix-basics.org::*Git + NixOS Workflow][manual/nix-basics.org]] for full explanation of git, generations, and btrfs.
+See [manual/nix-basics.org](manual/nix-basics.org#git--nixos-workflow) for full explanation of git, generations, and btrfs.
 
-* Inspirations
+## Inspirations
 
 This config draws inspiration from:
-- [[https://github.com/fufexan/dotfiles][fufexan/dotfiles]]
-- [[https://github.com/redyf/nixdots][redyf/nixdots]]
-- [[https://github.com/eduardofuncao/nixferatu][eduardofuncao/nixferatu]]
+- [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
+- [redyf/nixdots](https://github.com/redyf/nixdots)
+- [eduardofuncao/nixferatu](https://github.com/eduardofuncao/nixferatu)
 
-* License
+## License
 
 MIT

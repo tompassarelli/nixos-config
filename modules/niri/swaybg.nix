@@ -1,6 +1,7 @@
-{ config, lib, pkgs, chosenTheme, ... }:
+{ config, lib, pkgs, ... }:
 let
   username = config.myConfig.users.username;
+  chosenTheme = config.myConfig.theming.chosenTheme;
 in
 {
   config = lib.mkIf config.myConfig.niri.enable {

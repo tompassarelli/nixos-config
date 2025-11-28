@@ -23,6 +23,15 @@
       doom-big-font (font-spec :family "CommitMono Nerd Font" :size 40)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 32))
 
+;; Org mode configuration
+(after! org
+  (setq org-hide-emphasis-markers t))
+
+;; Markdown mode configuration
+(after! markdown-mode
+  (setq-default markdown-hide-markup t)
+  (setq markdown-list-item-bullets '("-")))
+
 ;; Org-roam configuration
 (setq org-roam-directory "~/org-roam")
 

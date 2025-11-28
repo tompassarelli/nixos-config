@@ -10,7 +10,8 @@ let
     set -e
 
     FLAKE_DIR="$HOME/code/nixos-config"
-    FLAKE_FILE="$FLAKE_DIR/flake.nix"
+    HOSTNAME=$(${pkgs.hostname}/bin/hostname)
+    HOST_CONFIG="$FLAKE_DIR/hosts/$HOSTNAME/configuration.nix"
 
     # List of common base16 themes
     # You can expand this list or dynamically generate it
@@ -31,8 +32,8 @@ let
         "rose-pine-dawn"
     )
 
-    # Get current theme (only uncommented lines)
-    CURRENT_THEME=$(${pkgs.gnugrep}/bin/grep -v '^\s*#' "$FLAKE_FILE" | ${pkgs.gnugrep}/bin/grep -Po '(?<=chosenTheme = ")[^"]+' | ${pkgs.coreutils}/bin/head -1)
+    # Get current theme from host configuration
+    CURRENT_THEME=$(${pkgs.gnugrep}/bin/grep -Po '(?<=myConfig\.theming\.chosenTheme = ")[^"]+' "$HOST_CONFIG" | ${pkgs.coreutils}/bin/head -1)
 
     # Show themes in walker dmenu
     SELECTED=$(printf '%s\n' "''${THEMES[@]}" | ${pkgs.walker}/bin/walker --dmenu -p "Select theme:")
@@ -51,24 +52,24 @@ let
 
     echo "Switching theme from '$CURRENT_THEME' to '$SELECTED'..."
 
-    # Backup flake.nix
-    ${pkgs.coreutils}/bin/cp "$FLAKE_FILE" "$FLAKE_FILE.bak"
+    # Backup host configuration
+    ${pkgs.coreutils}/bin/cp "$HOST_CONFIG" "$HOST_CONFIG.bak"
 
-    # Update the chosenTheme line in flake.nix
-    ${pkgs.gnused}/bin/sed -i "s/chosenTheme = \"$CURRENT_THEME\"/chosenTheme = \"$SELECTED\"/" "$FLAKE_FILE"
+    # Update the chosenTheme line in host configuration
+    ${pkgs.gnused}/bin/sed -i "s/myConfig\.theming\.chosenTheme = \"$CURRENT_THEME\"/myConfig.theming.chosenTheme = \"$SELECTED\"/" "$HOST_CONFIG"
 
     # Verify the change
-    if ! ${pkgs.gnugrep}/bin/grep -q "chosenTheme = \"$SELECTED\"" "$FLAKE_FILE"; then
-        echo "Error: Failed to update theme in flake.nix"
-        ${pkgs.coreutils}/bin/mv "$FLAKE_FILE.bak" "$FLAKE_FILE"
+    if ! ${pkgs.gnugrep}/bin/grep -q "myConfig\.theming\.chosenTheme = \"$SELECTED\"" "$HOST_CONFIG"; then
+        echo "Error: Failed to update theme in host configuration"
+        ${pkgs.coreutils}/bin/mv "$HOST_CONFIG.bak" "$HOST_CONFIG"
         exit 1
     fi
 
-    echo "Updated flake.nix with theme '$SELECTED'"
+    echo "Updated $HOST_CONFIG with theme '$SELECTED'"
 
     # Rebuild NixOS configuration
     echo "Rebuilding NixOS configuration..."
-    if sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake "$FLAKE_DIR#whiterabbit"; then
+    if sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake "$FLAKE_DIR#$HOSTNAME"; then
         echo "System rebuilt successfully!"
 
         # Restart services that need the new theme
@@ -79,10 +80,10 @@ let
         # ${pkgs.systemd}/bin/systemctl --user restart waybar.service 2>/dev/null || true
 
         echo "Theme switched to '$SELECTED' successfully!"
-        ${pkgs.coreutils}/bin/rm "$FLAKE_FILE.bak"
+        ${pkgs.coreutils}/bin/rm "$HOST_CONFIG.bak"
     else
         echo "Error: nixos-rebuild failed, restoring backup"
-        ${pkgs.coreutils}/bin/mv "$FLAKE_FILE.bak" "$FLAKE_FILE"
+        ${pkgs.coreutils}/bin/mv "$HOST_CONFIG.bak" "$HOST_CONFIG"
         exit 1
     fi
   '';
