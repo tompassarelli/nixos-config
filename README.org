@@ -66,8 +66,58 @@ Update all packages (stable and unstable): ~nix flake update~
 
 * Q&A
 
-** How does flake.nix relate to btrfs
 ** How does flake.nix relate to git state
+
+Your flake.nix is tracked in git, which provides version control for your configuration. Here's how it works:
+
+***  What gets used when you rebuild
+When you run ~sudo nixos-rebuild switch~, NixOS reads from your *working directory* (not just committed changes). This means:
+- Uncommitted changes in flake.nix will be applied
+- However, flake inputs are locked via ~flake.lock~ (only updates with ~nix flake update~)
+- Local dotfiles are symlinked, so changes are live without rebuilds
+
+*** Git as a safety net
+Git provides *configuration rollback*:
+#+begin_src bash
+# Oops, bad config change - rollback in git
+git log                    # find last good commit
+git checkout abc123        # rollback to that commit
+sudo nixos-rebuild switch  # rebuild from old config
+#+end_src
+
+*** Best practices
+- Commit working configs regularly (~gita && gitc && gitp~)
+- Test changes before committing
+- Use branches for experimental changes
+- Git history lets you see "what changed when it broke"
+
+** How does flake.nix relate to btrfs
+
+NixOS + btrfs gives you *system-level rollback* independent of git. Here's the relationship:
+
+*** NixOS generations (not btrfs-specific)
+Every ~nixos-rebuild switch~ creates a new *generation* - a bootable snapshot of your system:
+- Stored in ~/nix/var/nix/profiles/system-*-link~
+- Accessible from the bootloader menu at boot
+- Can rollback with: ~sudo nixos-rebuild switch --rollback~
+
+*** Btrfs snapshots (optional enhancement)
+If your system uses btrfs, you may have automatic snapshots configured:
+- Snapshots happen *before* each rebuild (via tools like snapper or custom scripts)
+- Provides filesystem-level rollback (includes /home, non-Nix state)
+- Independent of NixOS generations
+
+*** Three layers of safety
+1. *Git history* - config source control, manual rollback
+2. *NixOS generations* - automatic system snapshots, boot menu selection
+3. *Btrfs snapshots* - automatic filesystem snapshots (if configured)
+
+*** Which to use when
+- Config broke? → Git checkout + rebuild
+- System won't boot? → Boot menu → select old generation
+- Need to recover deleted files or /home state? → Btrfs snapshot restore
+
+The key insight: *Git tracks your intent (config), NixOS generations track built systems, btrfs tracks filesystem state*. They're complementary layers.
 
 * Appendix
 ** Niri config guide if using minecraft
