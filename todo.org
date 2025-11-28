@@ -1,10 +1,9 @@
-* [ ] go through the boot pipeline of flake.nix and document every section with comments
+* [ ] riff on [[file:README.org::*how does flake.nix relate to git state][how does flake.nix relate to git state]] (5m)
+* [ ] riff on [[file:README.org::*gow does flake.nix relate to btrfs][how does flake.nix relate to btrfs]] (5m)
 
 * [ ] get layerpad working again
 
-* [ ] fix the black cursor issue in my emacs theme
-
-* [ ] create a question and answer appendeix in readme.org that answers frequent things i forgot about
+* [ ] create a question and answer appendix in readme.org that answers frequent things i forgot about
 
 * [ ] instead of super+ctrl make it super+ralt for moving 2 at a time window focus
 

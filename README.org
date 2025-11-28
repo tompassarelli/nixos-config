@@ -64,6 +64,11 @@ nixpkgs.overlays = [
 Update all packages (stable and unstable): ~nix flake update~
 
 
+* Q&A
+
+** How does flake.nix relate to btrfs
+** How does flake.nix relate to git state
+
 * Appendix
 ** Niri config guide if using minecraft
 _JAVA_AWT_WM_NONREPARENTING=1
