@@ -420,7 +420,7 @@ Use NixOS's built-in options to control features:
 - No custom abstraction layer
 - Mixing NixOS options with your preferences
 
-** Level 3: Custom Module System with Enable Flags (Advanced) � *You Are Here*
+** Level 3: Custom Module System with Enable Flags (Advanced)
 
 Create your own option namespace with ~myConfig.*~:
 
@@ -493,7 +493,7 @@ in
 - Steeper learning curve
 - Need to understand module system
 
-** Level 4: Flakes + Multi-Host (Expert)
+** Level 4: Flakes + Multi-Host (Expert) ← *You Are Here*
 
 Add flakes for reproducibility and easy multi-host management:
 
@@ -515,8 +515,8 @@ Add flakes for reproducibility and easy multi-host management:
 
       # Desktop
       desktop = self.lib.mkSystem {
-        hostname = "tom-desktop";
-        hostConfig = ./hosts/tom-desktop/configuration.nix;
+        hostname = "thinkpad-x1e";
+        hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
       };
 
       # Server
@@ -633,18 +633,25 @@ Add flakes for reproducibility and easy multi-host management:
 - Don't mind some duplication
 - Comfortable with NixOS options
 
-** Level 3: If you... � *You chose this*
+** Level 3: If you...
 - Have 2+ machines
 - Want clean host configs
 - Like custom abstractions
 - Willing to learn module system
 - Want to share configs publicly
 
-** Level 4+: If you...
-- Manage many machines
-- Need reproducibility guarantees
+** Level 4: If you... ← *You chose this*
+- Have 2+ machines (you have whiterabbit + thinkpad-x1e)
+- Want reproducible builds (flake.lock pins dependencies)
+- Manage configs in one repo (flakes)
+- Need rollbacks and versioning
+- Like declarative everything
+
+** Level 5+: If you...
+- Manage many machines (10+)
 - Contribute to nixpkgs
 - Work on a team
+- Build shared NixOS infrastructure
 - Want cutting-edge features
 
 * Your Evolution
@@ -662,9 +669,21 @@ Add flakes for reproducibility and easy multi-host management:
 }
 #+end_src
 
-** Where You Are Now (Level 3-4)
+** Where You Are Now (Level 4)
 #+begin_src nix
-# hosts/whiterabbit/configuration.nix
+# flake.nix - Multi-host management with locked dependencies
+nixosConfigurations = {
+  whiterabbit = self.lib.mkSystem {
+    hostname = "whiterabbit";
+    hostConfig = ./hosts/whiterabbit/configuration.nix;
+  };
+  thinkpad-x1e = self.lib.mkSystem {
+    hostname = "thinkpad-x1e";
+    hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
+  };
+};
+
+# hosts/whiterabbit/configuration.nix - Clean, modular enables
 {
   myConfig.shell.enable = true;      # Fish enabled via module
   myConfig.neovim.enable = true;     # Neovim enabled via module
@@ -689,16 +708,18 @@ Add flakes for reproducibility and easy multi-host management:
 
 ** "Why is my config so complex?"
 
-Most example configs are Level 0-1. Yours is Level 3-4. That's intentional complexity for:
-- Multi-host management
-- Modularity
-- Shareability
-- Learning the module system
+Most example configs are Level 0-1. Yours is Level 4. That's intentional complexity for:
+- Multi-host management (whiterabbit + thinkpad-x1e)
+- Flakes (reproducible builds with locked dependencies)
+- Custom module system (myConfig.* namespace)
+- Modularity and shareability
+- Learning advanced patterns
 
 ** "Can I mix levels?"
 
 Yes! Common pattern:
-- Level 3-4 for your custom stuff (~myConfig.*~)
+- Level 4 for infrastructure (flakes, multi-host)
+- Level 3 for your custom stuff (~myConfig.*~)
 - Level 2 for NixOS built-ins (~services.nginx.enable~)
 - Level 1 for quick hacks (comment out import)
 
@@ -711,11 +732,14 @@ No! Refactor when you feel pain:
 
 * Next Steps
 
-You're at Level 3-4. To go deeper:
+You're at Level 4. To go deeper:
 
-1. *Learn the module system* (you're doing this now)
-2. *Create shared profiles* (workstation.nix, server.nix)
+1. *Master the module system* (you're doing this now)
+2. *Create shared profiles* (workstation.nix, server.nix, gamer.nix)
 3. *Add assertions* (validate your config at build time)
-4. *Use lib functions* (reduce duplication)
-5. *Contribute modules* (share your patterns)
+4. *Use lib functions* (reduce duplication with helpers)
+5. *Optimize flake evaluation* (lazy module imports, caching)
+6. *Contribute back* (share your patterns, help others)
+
+But honestly? *You're already doing advanced NixOS.* Most people never get past Level 1.
 
