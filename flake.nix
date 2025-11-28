@@ -1,5 +1,5 @@
 {
-  description = "NixOS Configuration - Modular and Shareable";
+  description = "Firn - A modular, shareable NixOS configuration framework";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -20,97 +20,117 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-master, home-manager, stylix, nur, elephant, walker }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-master, home-manager, stylix, nur, elephant, walker }:
+    let
+      # All available modules - can be imported by external configs
+      firnModules = ./modules;
+    in {
+    # ============================================================
+    # PUBLIC API: Use these from your own flake
+    # ============================================================
+
     # Reusable system builder function
+    #
+    # Usage from external flake:
+    #   nixos-config.lib.mkSystem {
+    #     hostname = "my-machine";
+    #     hostConfig = ./hosts/my-machine/configuration.nix;
+    #     hardwareConfig = ./hosts/my-machine/hardware-configuration.nix;
+    #   }
+    #
     lib.mkSystem = {
       hostname,
-      hostConfig,  # New: path to host-specific configuration
-      system ? "x86_64-linux"  # For ARM: use "aarch64-linux"
+      hostConfig,
+      hardwareConfig,
+      system ? "x86_64-linux",
+      extraModules ? [],
+      extraOverlays ? [],
+      extraSpecialArgs ? {},
+      stateVersion ? "25.05",
     }: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
         inputs = { inherit nur walker elephant; };
-      };
+      } // extraSpecialArgs;
       modules = [
-        ./hardware-configuration.nix
+        hardwareConfig
 
         stylix.nixosModules.stylix
         home-manager.nixosModules.home-manager
 
-        # ============ HOST CONFIGURATION ============
-        hostConfig  # Import host-specific module enables
+        # Host-specific configuration (module enables, username, etc.)
+        hostConfig
 
-        # ============ COMMON INFRASTRUCTURE ============
+        # ============ FIRN MODULES ============
         ({ config, ... }: {
           networking.hostName = hostname;
 
-          # Import all modules
           imports = [
-            ./modules/boot
-            ./modules/terminal
-            ./modules/shell
-            ./modules/git
-            ./modules/yazi
-            ./modules/mako
-            ./modules/gtk
-            ./modules/kanata
-            ./modules/users
-            ./modules/networking
-            ./modules/styling
-            ./modules/timezone
-            ./modules/nix-settings
-            ./modules/ssh
-            ./modules/auto-upgrade
-            ./modules/audio
-            ./modules/bluetooth
-            ./modules/niri
-            ./modules/input
-            ./modules/power
-            ./modules/security
-            ./modules/theming
-            ./modules/tree
-            ./modules/dust
-            ./modules/eza
-            ./modules/procs
-            ./modules/tealdeer
-            ./modules/fastfetch
-            ./modules/btop
-            ./modules/rust
-            ./modules/development
-            ./modules/web-browser
-            ./modules/steam
-            ./modules/neovim
-            ./modules/doom-emacs
-            ./modules/productivity
-            ./modules/creative
-            ./modules/media
-            ./modules/password
-            ./modules/mail
-            ./modules/rofi
-            ./modules/walker
-            ./modules/waybar
-            ./modules/ironbar
-            ./modules/framework
-            ./modules/claude
-            ./modules/theme-switcher
-            ./modules/via
+            "${firnModules}/boot"
+            "${firnModules}/terminal"
+            "${firnModules}/shell"
+            "${firnModules}/git"
+            "${firnModules}/yazi"
+            "${firnModules}/mako"
+            "${firnModules}/gtk"
+            "${firnModules}/kanata"
+            "${firnModules}/users"
+            "${firnModules}/networking"
+            "${firnModules}/styling"
+            "${firnModules}/timezone"
+            "${firnModules}/nix-settings"
+            "${firnModules}/ssh"
+            "${firnModules}/auto-upgrade"
+            "${firnModules}/audio"
+            "${firnModules}/bluetooth"
+            "${firnModules}/niri"
+            "${firnModules}/input"
+            "${firnModules}/power"
+            "${firnModules}/security"
+            "${firnModules}/theming"
+            "${firnModules}/tree"
+            "${firnModules}/dust"
+            "${firnModules}/eza"
+            "${firnModules}/procs"
+            "${firnModules}/tealdeer"
+            "${firnModules}/fastfetch"
+            "${firnModules}/btop"
+            "${firnModules}/rust"
+            "${firnModules}/development"
+            "${firnModules}/web-browser"
+            "${firnModules}/steam"
+            "${firnModules}/neovim"
+            "${firnModules}/doom-emacs"
+            "${firnModules}/productivity"
+            "${firnModules}/creative"
+            "${firnModules}/media"
+            "${firnModules}/password"
+            "${firnModules}/mail"
+            "${firnModules}/rofi"
+            "${firnModules}/walker"
+            "${firnModules}/waybar"
+            "${firnModules}/ironbar"
+            "${firnModules}/framework"
+            "${firnModules}/claude"
+            "${firnModules}/theme-switcher"
+            "${firnModules}/via"
           ];
 
           # System state version
-          system.stateVersion = "25.05";
+          system.stateVersion = stateVersion;
 
           # Home-manager configuration
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
             inputs = { inherit nur walker elephant; };
-          };
+          } // extraSpecialArgs;
           home-manager.users.${config.myConfig.users.username} = {
-            home.stateVersion = "25.05";
+            home.stateVersion = stateVersion;
             nixpkgs.config.allowUnfree = true;
           };
         })
 
-        # unstable & master overlays
+        # Overlays: unstable, master, and user-provided
         {
           nixpkgs.overlays = [
             (final: prev: {
@@ -123,21 +143,30 @@
                 config.allowUnfree = true;
               };
             })
-          ];
+          ] ++ extraOverlays;
         }
-      ];
+      ] ++ extraModules;
     };
 
-    # System configurations
+    # Expose modules path for users who want to import individual modules
+    modules = firnModules;
+
+    # ============================================================
+    # TOM'S PERSONAL CONFIGURATIONS
+    # (Example usage - users create their own in their firn repo)
+    # ============================================================
+
     nixosConfigurations = {
       whiterabbit = self.lib.mkSystem {
         hostname = "whiterabbit";
         hostConfig = ./hosts/whiterabbit/configuration.nix;
+        hardwareConfig = ./hardware-configuration.nix;
       };
 
       thinkpad-x1e = self.lib.mkSystem {
         hostname = "thinkpad-x1e";
         hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
+        hardwareConfig = ./hardware-configuration.nix;
       };
     };
   };
