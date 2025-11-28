@@ -129,6 +129,8 @@ sudo nixos-rebuild switch --rollback
 
 ## Inspired by
 
+- [doomemacs/doomemacs](https://github.com/doomemacs/doomemacs)
+- [basecamp/omarchy](https://github.com/basecamp/omarchy)
 - [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
 - [redyf/nixdots](https://github.com/redyf/nixdots)
 - [eduardofuncao/nixferatu](https://github.com/eduardofuncao/nixferatu)
