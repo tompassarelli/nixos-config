@@ -1,4 +1,7 @@
-{ config, lib, pkgs, username, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.web-browser.fennec.enable {
     programs.firefox.enable = true;

@@ -1,4 +1,7 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.doom-emacs.enable {
     # Install emacs and doom dependencies

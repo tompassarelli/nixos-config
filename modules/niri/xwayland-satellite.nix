@@ -1,4 +1,4 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
 {
   config = lib.mkIf config.myConfig.niri.enable {
     # Install xwayland-satellite for niri to use

@@ -1,15 +1,25 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.myConfig.users;
 in
 {
+  options.myConfig.users = {
+    enable = lib.mkEnableOption "Enable user configuration";
+
+    username = lib.mkOption {
+      type = lib.types.str;
+      default = "tom";
+      description = "Primary system username";
+    };
+  };
+
   config = lib.mkIf cfg.enable {
     # Define user account
-    users.users.${username} = {
+    users.users.${cfg.username} = {
       shell = pkgs.fish;
       isNormalUser = true;
-      home = "/home/${username}";
+      home = "/home/${cfg.username}";
       extraGroups = [ "wheel" "networkmanager" "plugdev" ]; # Enable 'sudo' for the user
     };
 
@@ -20,10 +30,10 @@ in
 
     # Create user directories on boot
     systemd.tmpfiles.rules = [
-      "d /home/${username}/Documents 0755 ${username} users -"
-      "d /home/${username}/Pictures/Screenshots 0755 ${username} users -"
-      "d /home/${username}/code 0755 ${username} users -"
-      "d /home/${username}/src 0755 ${username} users -"
+      "d /home/${cfg.username}/Documents 0755 ${cfg.username} users -"
+      "d /home/${cfg.username}/Pictures/Screenshots 0755 ${cfg.username} users -"
+      "d /home/${cfg.username}/code 0755 ${cfg.username} users -"
+      "d /home/${cfg.username}/src 0755 ${cfg.username} users -"
     ];
   };
 }

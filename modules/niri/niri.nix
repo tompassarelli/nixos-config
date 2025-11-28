@@ -1,4 +1,7 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.niri.enable {
     # Enable niri compositor at system level

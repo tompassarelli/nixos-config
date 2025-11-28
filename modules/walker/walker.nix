@@ -1,7 +1,8 @@
-{ config, lib, pkgs, username, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   cfg = config.myConfig.walker;
+  username = config.myConfig.users.username;
 in
 {
   config = lib.mkIf cfg.enable {

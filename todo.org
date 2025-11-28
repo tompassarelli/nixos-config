@@ -1,6 +1,4 @@
-* [ ] riff on [[file:README.org::*how does flake.nix relate to git state][how does flake.nix relate to git state]] (5m)
-* [ ] riff on [[file:README.org::*gow does flake.nix relate to btrfs][how does flake.nix relate to btrfs]] (5m)
-
+* [ ] enable a private module pattern to improve ease of forking project
 * [ ] get layerpad working again
 
 * [ ] create a question and answer appendix in readme.org that answers frequent things i forgot about
@@ -23,3 +21,5 @@ a layer -> qwertyuiop -> 123456890
 
 
 ** [X] test pomodoro org mod
+** [X] riff on [[file:README.org::*how does flake.nix relate to git state][how does flake.nix relate to git state]] (5m)
+** [X] riff on [[file:README.org::*gow does flake.nix relate to btrfs][how does flake.nix relate to btrfs]] (5m)

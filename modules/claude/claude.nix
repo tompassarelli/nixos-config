@@ -1,4 +1,7 @@
-{ config, lib, username, ... }:
+{ config, lib, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.claude.enable {
     # ============ HOME-MANAGER CONFIGURATION ============

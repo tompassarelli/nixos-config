@@ -1,7 +1,8 @@
-{ config, lib, pkgs, chosenTheme, username, ... }:
+{ config, lib, pkgs, chosenTheme, ... }:
 
 let
   cfg = config.myConfig.styling;
+  username = config.myConfig.users.username;
 
   # Read the base16 scheme YAML to get the variant (dark/light)
   schemeFile = "${pkgs.base16-schemes}/share/themes/${chosenTheme}.yaml";

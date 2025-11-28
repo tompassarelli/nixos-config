@@ -1,4 +1,7 @@
-{ config, lib, pkgs, username, chosenTheme, ... }:
+{ config, lib, pkgs, chosenTheme, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.niri.enable {
     home-manager.users.${username} = { config, ... }: {

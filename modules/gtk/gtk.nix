@@ -1,7 +1,8 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.myConfig.gtk;
+  username = config.myConfig.users.username;
   # Get polarity from system-level stylix config
   isDark = config.stylix.polarity == "dark";
 in

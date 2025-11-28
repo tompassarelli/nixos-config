@@ -1,7 +1,8 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.myConfig.mako;
+  username = config.myConfig.users.username;
 in
 {
   config = lib.mkIf cfg.enable {

@@ -24,13 +24,13 @@
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
-      username,
       chosenTheme,
+      hostConfig,  # New: path to host-specific configuration
       system ? "x86_64-linux"  # For ARM: use "aarch64-linux"
     }: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit username chosenTheme;
+        inherit chosenTheme;
         inputs = { inherit nur walker elephant; };
       };
       modules = [
@@ -39,87 +39,12 @@
         stylix.nixosModules.stylix
         home-manager.nixosModules.home-manager
 
-        # ============ CONFIGURATION ============
-        {
+        # ============ HOST CONFIGURATION ============
+        hostConfig  # Import host-specific module enables
+
+        # ============ COMMON INFRASTRUCTURE ============
+        ({ config, ... }: {
           networking.hostName = hostname;
-          # Module enable flags - single source of truth
-          myConfig = {
-            # Hardware
-            framework.enable = true; # for framework computers
-            via.enable = false; # custom keyboard firmware
-            audio.enable = true;
-            bluetooth.enable = true;
-
-            input.enable = true; # needed for kanata
-            kanata = {
-              enable = true;
-              capsLockEscCtrl = true;
-              leftAltAsSuper = true;
-              wideMod = true; # shifts QWERTY right hand 1 key right
-              #spacebarAsMeh = false; # needs work
-            };
-
-            # System
-            nix-settings.enable = true;
-            boot.enable = true;
-            users.enable = true;
-            networking.enable = true;
-            timezone.enable = true;
-            ssh.enable = true;
-            auto-upgrade.enable = true;
-
-            # Terminal
-            terminal.enable = true;
-            shell.enable = true;
-
-            # Utils
-            yazi.enable = true;
-            tree.enable = true;
-            dust.enable = true;
-            eza.enable = true;
-            procs.enable = true;
-            tealdeer.enable = true;
-            fastfetch.enable = true;
-            btop.enable = true;
-
-            # Desktop Environment
-            niri.enable = true;
-            power.enable = true;
-            security.enable = true;
-            rofi-wayland.enable = false;
-            walker.enable = true;
-            waybar.enable = true;
-            mako.enable = true;
-            # Desktop Environment - Themes
-            gtk.enable = true;
-            styling.enable = true;
-            theming.enable = true;
-            theme-switcher.enable = true;
-
-            # Development 
-            git.enable = true;
-            rust = {
-              enable = true;
-              bevy = true;
-            };
-            development.enable = true;
-            claude.enable = true;
-
-            # GUI applications
-            web-browser = {
-              enable = true;
-              fennec.enable = true;
-              chrome.enable = true;
-            };
-            steam.enable = true;
-            neovim.enable = true;
-            doom-emacs.enable = true;
-            productivity.enable = true;
-            creative.enable = true;
-            media.enable = true;
-            password.enable = true;
-            mail.enable = true;
-          };
 
           # Import all modules
           imports = [
@@ -179,15 +104,15 @@
           # Home-manager configuration
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
-            inherit username chosenTheme;
+            inherit chosenTheme;
             inputs = { inherit nur walker elephant; };
           };
-          home-manager.users.${username} = {
+          home-manager.users.${config.myConfig.users.username} = {
             home.stateVersion = "25.05";
             nixpkgs.config.allowUnfree = true;
           };
-        }
-        
+        })
+
         # unstable & master overlays
         {
           nixpkgs.overlays = [
@@ -206,16 +131,20 @@
       ];
     };
 
-    # Example system configurations
+    # System configurations
     nixosConfigurations = {
       whiterabbit = self.lib.mkSystem {
         hostname = "whiterabbit";
-        username = "tom";
+        hostConfig = ./hosts/whiterabbit/configuration.nix;
         # run switch-theme to change themes
         # chosenTheme = "everforest-dark-hard";
         chosenTheme = "tokyo-night-dark";
-        # system = "aarch64-linux";  # Uncomment for ARM systems
-        # many default modules will not work on ARM, vaporware!
+      };
+
+      tom-desktop = self.lib.mkSystem {
+        hostname = "thinkpad-x1e";
+        hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
+        chosenTheme = "tokyo-night-dark";
       };
     };
   };

@@ -1,4 +1,7 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
+let
+  username = config.myConfig.users.username;
+in
 {
   config = lib.mkIf config.myConfig.shell.enable {
     # ============ SYSTEM-LEVEL CONFIGURATION ============
@@ -29,7 +32,6 @@
           gitdc = "git diff --cached";
           gita = "git add -v . && git status";
           gitp = "git push";
-          rebuild = "sudo nixos-rebuild switch --flake ~/code/nixos-config/";
         };
         interactiveShellInit = ''
           # Change to default directory
@@ -40,6 +42,15 @@
 
           # Initialize atuin
           atuin init fish | source
+
+          # NixOS rebuild with optional config argument
+          function rebuild
+            if test (count $argv) -eq 0
+              sudo nixos-rebuild switch --flake ~/code/nixos-config/
+            else
+              sudo nixos-rebuild switch --flake ~/code/nixos-config/#$argv[1]
+            end
+          end
 
           # Git commit with neovim in insert mode
           function gitc
