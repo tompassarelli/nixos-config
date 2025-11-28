@@ -141,7 +141,7 @@
         chosenTheme = "tokyo-night-dark";
       };
 
-      tom-desktop = self.lib.mkSystem {
+      thinkpad-x1e = self.lib.mkSystem {
         hostname = "thinkpad-x1e";
         hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
         chosenTheme = "tokyo-night-dark";

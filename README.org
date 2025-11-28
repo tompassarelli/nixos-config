@@ -42,7 +42,7 @@ rebuild              # Apply updates
 ├── flake.nix                    # Flake inputs, outputs, mkSystem builder
 ├── hosts/                       # Per-host configurations
 │   ├── whiterabbit/             # Framework 13 laptop
-│   └── thinkpad-x1e/            # Desktop
+│   └── thinkpad-x1e/            # Old laptop
 ├── modules/                     # Feature modules (myConfig.*)
 │   ├── niri/                    # Window manager
 │   ├── shell/                   # Fish shell

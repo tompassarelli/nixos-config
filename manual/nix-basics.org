@@ -513,8 +513,8 @@ Add flakes for reproducibility and easy multi-host management:
         hostConfig = ./hosts/whiterabbit/configuration.nix;
       };
 
-      # Desktop
-      desktop = self.lib.mkSystem {
+      # Old laptop
+      thinkpad-x1e = self.lib.mkSystem {
         hostname = "thinkpad-x1e";
         hostConfig = ./hosts/thinkpad-x1e/configuration.nix;
       };

@@ -87,7 +87,7 @@ sudo nixos-rebuild switch --flake .#thinkpad-x1e
 - No gaming packages
 - Power management optimized
 
-### Desktop Workstation (tom-desktop)
+### Old Laptop (thinkpad-x1e)
 - Custom keyboard (VIA enabled)
 - Steam and game development tools
 - Manual updates (no auto-upgrade)
