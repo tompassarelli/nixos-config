@@ -16,6 +16,7 @@
   };
 
   # System
+  myConfig.system.stateVersion = "25.05";
   myConfig.nix-settings.enable = true;
   myConfig.boot.enable = true;
   myConfig.users.enable = true;

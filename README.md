@@ -1,156 +1,131 @@
-# Tom's NixOS Configuration
+# Firn
 
-## Overview
+A modular, shareable NixOS configuration framework.
 
-This is a Level 4 NixOS configuration featuring:
-- **Flakes** for reproducible builds
-- **Multi-host** management (whiterabbit + thinkpad-x1e)
-- **Custom module system** with `myConfig.*` namespace
-- **Out-of-store symlinks** for live config editing
-- **home-manager** integration
+## What is Firn?
 
-## Active Development
+Firn is a NixOS configuration that you can use as a foundation for your own system. Instead of forking and dealing with merge conflicts, you import Firn as a flake input and build on top of it.
 
-See [todo.org](todo.org) for current tasks and planned improvements.
+**Features:**
+- 40+ modules covering desktop, development, theming, and applications
+- `myConfig.*` namespace for clean, declarative configuration
+- Niri window manager with Wayland support
+- Stylix theming integration
+- home-manager integration
 
-## Quick Start
+## Using Firn
 
-### Rebuild System
-```bash
-rebuild              # Auto-detects hostname
-rebuild whiterabbit  # Explicit host
+### Option 1: Create Your Own Config (Recommended)
+
+Create your own repo that imports Firn:
+
+```nix
+# ~/code/my-config/flake.nix
+{
+  inputs.firn.url = "github:tompassarelli/firn";
+
+  outputs = { firn, ... }: {
+    nixosConfigurations.my-machine = firn.lib.mkSystem {
+      hostname = "my-machine";
+      hostConfig = ./hosts/my-machine/configuration.nix;
+      hardwareConfig = ./hosts/my-machine/hardware-configuration.nix;
+    };
+  };
+}
 ```
 
-### Update Dependencies
-```bash
-nix flake update     # Update flake.lock
-rebuild              # Apply updates
+```nix
+# ~/code/my-config/hosts/my-machine/configuration.nix
+{
+  myConfig.system.stateVersion = "25.05";
+  myConfig.users.username = "yourname";
+
+  myConfig.niri.enable = true;
+  myConfig.terminal.enable = true;
+  myConfig.shell.enable = true;
+  myConfig.neovim.enable = true;
+  # ... enable what you need
+}
 ```
 
-### Add a New Module
-1. Create `modules/my-app/default.nix`
-2. Add option in `default.nix`
-3. Implement in `my-app.nix`
-4. Enable in `hosts/whiterabbit/configuration.nix`
+See [`template/`](template/) for a complete starting point.
+
+**To update Firn:**
+```bash
+nix flake update firn
+rebuild
+```
+
+### Option 2: Fork Directly
+
+If you want full control, fork this repo and modify it directly. You'll manage merge conflicts yourself when pulling upstream changes.
+
+## lib.mkSystem Options
+
+```nix
+firn.lib.mkSystem {
+  hostname = "my-machine";           # Required: your hostname
+  hostConfig = ./configuration.nix;  # Required: your host config
+  hardwareConfig = ./hardware.nix;   # Required: hardware-configuration.nix
+  system = "x86_64-linux";           # Optional: default x86_64-linux
+  extraModules = [ ./my-module ];    # Optional: additional modules
+  extraOverlays = [ myOverlay ];     # Optional: additional overlays
+  extraSpecialArgs = { foo = 1; };   # Optional: extra args for modules
+}
+```
 
 ## Project Structure
 
 ```
 .
-├── flake.nix                    # Flake inputs, outputs, mkSystem builder
-├── hosts/                       # Per-host configurations
-│   ├── whiterabbit/             # Framework 13 laptop
-│   └── thinkpad-x1e/            # Old laptop
-├── modules/                     # Feature modules (myConfig.*)
-│   ├── niri/                    # Window manager
-│   ├── shell/                   # Fish shell
-│   ├── neovim/                  # Editor
-│   └── ...                      # 40+ modules
-├── dotfiles/                    # Out-of-store configs (live editing)
-│   ├── niri/config.kdl
-│   ├── doom/
-│   └── ...
-└── manual/                      # Deep-dive documentation
-    ├── nix-basics.org           # /nix/store, levels, git+generations
-    ├── module-system.org        # Fixpoint eval, types, options
-    └── applications.org         # App-specific tips (niri, walker)
+├── flake.nix           # Exposes lib.mkSystem for external use
+├── modules/            # All available modules (myConfig.*)
+├── hosts/              # Example host configurations
+├── template/           # Starting point for your own config
+├── dotfiles/           # Out-of-store configs (live editing)
+└── manual/             # Documentation
 ```
+
+## Available Modules
+
+Enable modules in your host config with `myConfig.<module>.enable = true`:
+
+| Category | Modules |
+|----------|---------|
+| System | `boot`, `users`, `networking`, `timezone`, `ssh`, `nix-settings`, `auto-upgrade`, `system` |
+| Desktop | `niri`, `waybar`, `ironbar`, `rofi`, `walker`, `mako` |
+| Hardware | `audio`, `bluetooth`, `input`, `kanata`, `power`, `framework`, `via` |
+| Theming | `styling`, `theming`, `gtk`, `theme-switcher` |
+| Terminal | `terminal`, `shell` |
+| Editors | `neovim`, `doom-emacs` |
+| CLI Tools | `git`, `yazi`, `btop`, `eza`, `dust`, `tree`, `procs`, `tealdeer`, `fastfetch` |
+| Development | `development`, `rust`, `claude` |
+| Applications | `web-browser`, `steam`, `productivity`, `creative`, `media`, `password`, `mail` |
+| Security | `security` |
 
 ## Documentation
 
-### For Understanding NixOS
-→ [manual/nix-basics.org](manual/nix-basics.org)
-- How /nix/store works
-- Why you can't edit /etc
-- mkOutOfStoreSymlink explained
-- Configuration complexity levels (0-5)
-- Where you are vs where you started
+- [manual/nix-basics.md](manual/nix-basics.md) - How NixOS works, /nix/store, symlinks
+- [manual/module-system.md](manual/module-system.md) - Module system deep dive
+- [manual/applications.md](manual/applications.md) - Application-specific notes
 
-### For Understanding the Module System
-→ [manual/module-system.org](manual/module-system.org)
-- Fixpoint evaluation
-- Type system and merge semantics
-- specialArgs vs module options
-- Why module options are superior
+## Quick Reference
 
-### For Application-Specific Notes
-→ [manual/applications.org](manual/applications.org)
-- Niri (window manager tips, Minecraft compatibility)
-- Walker (activation mode, why walker over anyrun)
-
-### For Architecture Details
-
-#### Module Patterns
-**Simple modules** (e.g., `git/`, `btop/`): Single `default.nix` with one feature
-
-**Complex modules** (e.g., `web-browser/`):
-- `default.nix`: Declares options, imports sub-modules
-- `firefox.nix`, `fennec.nix`, `chrome.nix`: Implement variants
-- Allows multiple related features in one namespace
-
-#### Configuration Flow
-1. Host config sets enable flags (`myConfig.*.enable = true`)
-2. Modules activate via `lib.mkIf cfg.enable`
-3. Generated configs → `/nix/store` (immutable)
-4. Hand-written configs → `dotfiles/` (live via mkOutOfStoreSymlink)
-
-#### Package Sources
-- **Stable** (`pkgs.*`): nixpkgs 25.05
-- **Unstable** (`pkgs.unstable.*`): nixpkgs-unstable overlay
-- **Flake inputs**: walker, elephant (not in nixpkgs)
-- **NUR**: Firefox addons, community packages
-
-Update: `nix flake update`
-
-## Common Tasks
-
-### Enable a new feature
-```nix
-# hosts/whiterabbit/configuration.nix
-{
-  myConfig.steam.enable = true;  # Add this line
-}
+**Rebuild:**
+```bash
+sudo nixos-rebuild switch --flake .#hostname
 ```
 
+**Update dependencies:**
 ```bash
-rebuild
+nix flake update
 ```
 
-### Edit live configs (no rebuild needed)
+**Rollback:**
 ```bash
-vim ~/code/nixos-config/dotfiles/niri/config.kdl
-# Changes take effect immediately (out-of-store symlink)
-```
-
-### Rollback
-```bash
-# Boot menu: select old generation
-# OR
 sudo nixos-rebuild switch --rollback
+# Or select old generation from boot menu
 ```
-
-## Git + NixOS Workflow
-
-### Best Practice
-1. Make changes to config
-2. `rebuild` (test it works)
-3. If successful: `gita && gitc && gitp` (commit and push)
-4. Never commit broken configs
-
-### Why This Matters
-- Git = your config source (recipes)
-- NixOS generations = built systems (frozen meals)
-- Booting old generation ≠ old git state
-- Always commit after successful rebuild to keep them in sync
-
-See [manual/nix-basics.org](manual/nix-basics.org#git--nixos-workflow) for full explanation of git, generations, and btrfs.
-
-## Inspirations
-
-This config draws inspiration from:
-- [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
-- [redyf/nixdots](https://github.com/redyf/nixdots)
-- [eduardofuncao/nixferatu](https://github.com/eduardofuncao/nixferatu)
 
 ## License
 

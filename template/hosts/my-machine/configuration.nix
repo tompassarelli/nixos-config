@@ -3,7 +3,8 @@
 { lib, ... }:
 {
   # ============ REQUIRED ============
-  myConfig.users.username = "yourname";  # Change this!
+  myConfig.system.stateVersion = "25.05";  # Set to your NixOS install version
+  myConfig.users.username = "yourname";   # Change this!
 
   # ============ SYSTEM ============
   myConfig.nix-settings.enable = true;

@@ -46,7 +46,6 @@
       extraModules ? [],
       extraOverlays ? [],
       extraSpecialArgs ? {},
-      stateVersion ? "25.05",
     }: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -114,10 +113,8 @@
             "${firnModules}/claude"
             "${firnModules}/theme-switcher"
             "${firnModules}/via"
+            "${firnModules}/system"
           ];
-
-          # System state version
-          system.stateVersion = stateVersion;
 
           # Home-manager configuration
           home-manager.backupFileExtension = "backup";
@@ -125,7 +122,7 @@
             inputs = { inherit nur walker elephant; };
           } // extraSpecialArgs;
           home-manager.users.${config.myConfig.users.username} = {
-            home.stateVersion = stateVersion;
+            home.stateVersion = config.myConfig.system.stateVersion;
             nixpkgs.config.allowUnfree = true;
           };
         })
