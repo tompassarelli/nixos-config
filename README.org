@@ -66,7 +66,7 @@ Update all packages (stable and unstable): ~nix flake update~
 
 * Q&A
 
-** How does flake.nix relate to git state
+** How does nix state (i.e rebuild) relate to git and btrfs
 
 Your flake.nix is tracked in git, which provides version control for your configuration. Here's how it works:
 
@@ -86,10 +86,14 @@ sudo nixos-rebuild switch  # rebuild from old config
 #+end_src
 
 *** Best practices
-- Commit working configs regularly (~gita && gitc && gitp~)
+- *Commit after every successful rebuild* - This ensures each generation has a corresponding git commit
+- Workflow: ~rebuild~ → if successful → ~gita && gitc && gitp~
+- Never commit broken configs - only commit after confirming the rebuild works
 - Test changes before committing
 - Use branches for experimental changes
 - Git history lets you see "what changed when it broke"
+
+Without this discipline, you can boot into old working generations but lose the source config that built them.
 
 ** How does flake.nix relate to btrfs
 
@@ -100,6 +104,21 @@ Every ~nixos-rebuild switch~ creates a new *generation* - a bootable snapshot of
 - Stored in ~/nix/var/nix/profiles/system-*-link~
 - Accessible from the bootloader menu at boot
 - Can rollback with: ~sudo nixos-rebuild switch --rollback~
+
+*Important:* Booting into an old generation does NOT change your git state!
+- If you boot generation #45 (built from git commit ABC), your repo still shows current HEAD
+- Your ~~/code/nixos-config~ files remain unchanged
+- If you run ~rebuild~ from old generation, it rebuilds from *current git state*, not the old one
+- This can be confusing: you're running old config, but looking at new source code
+
+To truly match a generation with its source:
+#+begin_src bash
+# 1. Boot into old generation (from bootloader)
+# 2. Find what commit it was built from
+git log --oneline
+# 3. Checkout that commit if you want to see/edit the original config
+git checkout <commit-hash>
+#+end_src
 
 *** Btrfs snapshots (optional enhancement)
 If your system uses btrfs, you may have automatic snapshots configured:
@@ -116,6 +135,16 @@ If your system uses btrfs, you may have automatic snapshots configured:
 - Config broke? → Git checkout + rebuild
 - System won't boot? → Boot menu → select old generation
 - Need to recover deleted files or /home state? → Btrfs snapshot restore
+
+*** The key difference: Source vs Built System
+*Git checkout old code + reboot*: Changes your source files, but system keeps running current generation until you rebuild
+*Boot old generation*: System immediately runs old built config, but source files unchanged
+
+Think of it like:
+- Git = recipe book
+- Generation = pre-cooked frozen meal
+- Booting old generation = eating old frozen meal (fast, but can't edit the recipe)
+- Git checkout + rebuild = cooking from old recipe (slow, but can modify before cooking)
 
 The key insight: *Git tracks your intent (config), NixOS generations track built systems, btrfs tracks filesystem state*. They're complementary layers.
 

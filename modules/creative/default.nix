@@ -1,23 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.myConfig.creative;
-in
+{ lib, ... }:
 {
   options.myConfig.creative = {
     enable = lib.mkEnableOption "creative tools and content creation";
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      godot_4              # game engine and visual editor
-      blender              # release your inner sculpter
-      gimp                 # image editing for slaves
-      obs-studio           # screen recording/streaming
-      wf-recorder          # wayland screen recorder
-      slurp                # wayland region selector
-      ffmpeg               # video processing
-      eyedropper           # modern wayland color picker
-    ];
-  };
+  imports = [
+    ./creative.nix
+  ];
 }

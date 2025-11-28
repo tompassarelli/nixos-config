@@ -1,10 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 {
   options.myConfig.btop = {
     enable = lib.mkEnableOption "Enable btop system monitor";
   };
 
-  config = lib.mkIf config.myConfig.btop.enable {
-    environment.systemPackages = with pkgs; [ btop ];
-  };
+  imports = [
+    ./btop.nix
+  ];
 }
