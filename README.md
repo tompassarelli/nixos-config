@@ -127,7 +127,7 @@ sudo nixos-rebuild switch --rollback
 # Or select old generation from boot menu
 ```
 
-## Inspirations
+## Inspired by
 
 - [fufexan/dotfiles](https://github.com/fufexan/dotfiles)
 - [redyf/nixdots](https://github.com/redyf/nixdots)
