@@ -7,6 +7,7 @@
       doom-themes-enable-italic nil)
 ;; Disable line numbers
 (setq display-line-numbers-type nil)
+
 ;; remove default syntax highlighting
 ;; (global-font-lock-mode -1)
 ;; enable syntax highlighting for comments

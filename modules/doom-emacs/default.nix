@@ -1,43 +1,57 @@
-{ config, lib, pkgs, username, inputs, ... }:
+{ config, lib, pkgs, username, ... }:
 
 let
   cfg = config.myConfig.doom-emacs;
 in
 {
   options.myConfig.doom-emacs = {
-    enable = lib.mkEnableOption "Doom Emacs via nix-doom-emacs-unstraightened";
+    enable = lib.mkEnableOption "Emacs with Doom Emacs (manual install)";
   };
 
   config = lib.mkIf cfg.enable {
-    # Import the nix-doom-emacs-unstraightened home-manager module
-    home-manager.sharedModules = [
-      inputs.nix-doom-emacs-unstraightened.homeModule
+    # Install emacs and doom dependencies
+    environment.systemPackages = with pkgs; [
+      emacs           # Emacs 30.2
+      git             # Required by Doom
+      ripgrep         # Required by Doom
+      fd              # Required by Doom
+      coreutils       # Basic GNU utilities
+      clang           # For vterm and some packages
     ];
 
-    # Configure doom-emacs via home-manager
+    # HOME-MANAGER: Doom config and environment
     home-manager.users.${username} = { config, ... }: {
-      programs.doom-emacs = {
-        enable = true;
-        doomDir = ../../dotfiles/doom;
-        # Optional: add tree-sitter grammars
-        extraPackages = epkgs: [ epkgs.treesit-grammars.with-all-grammars ];
+      # Symlink doom config directory (out of store for live editing)
+      home.file.".config/doom".source = config.lib.file.mkOutOfStoreSymlink
+        "${config.home.homeDirectory}/code/nixos-config/dotfiles/doom";
+
+      # Set DOOMDIR environment variable
+      home.sessionVariables = {
+        DOOMDIR = "${config.home.homeDirectory}/.config/doom";
       };
+
+      # Add doom bin to PATH (fish-specific)
+      programs.fish.interactiveShellInit = ''
+        fish_add_path ~/.config/emacs/bin
+      '';
+
+      # Clone Doom Emacs framework on activation
+      home.activation.cloneDoomEmacs = config.lib.dag.entryAfter ["writeBoundary"] ''
+        DOOM_DIR="${config.home.homeDirectory}/.config/emacs"
+
+        # Clone Doom if not present
+        if [ ! -d "$DOOM_DIR" ]; then
+          $DRY_RUN_CMD ${pkgs.git}/bin/git clone --depth 1 https://github.com/doomemacs/doomemacs "$DOOM_DIR"
+          echo "Doom Emacs cloned to ~/.config/emacs"
+          echo "Run: ~/.config/emacs/bin/doom install"
+        fi
+      '';
 
       # Enable Emacs daemon for instant startup with emacsclient
       services.emacs = {
         enable = true;
-        # package is automatically set to Doom Emacs by programs.doom-emacs
+        package = pkgs.emacs;
       };
-
-      # Point DOOMDIR to source location so "open private config" works
-      home.sessionVariables = {
-        DOOMDIR = "${config.home.homeDirectory}/code/nixos-config/dotfiles/doom";
-      };
-
-      # Enable git, ripgrep, fd for Doom (if not already enabled)
-      programs.git.enable = true;
-      programs.ripgrep.enable = true;
-      programs.fd.enable = true;
     };
   };
 }

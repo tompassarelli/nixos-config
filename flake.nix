@@ -18,16 +18,9 @@
       url = "github:abenz1267/walker";
       inputs.elephant.follows = "elephant";
     };
-
-    # Doom Emacs
-    nix-doom-emacs-unstraightened = {
-      url = "github:marienz/nix-doom-emacs-unstraightened";
-      inputs.nixpkgs.follows = "";
-    };
-
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-master, home-manager, stylix, nur, elephant, walker, nix-doom-emacs-unstraightened }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixpkgs-master, home-manager, stylix, nur, elephant, walker }: {
     # Reusable system builder function
     lib.mkSystem = {
       hostname,
@@ -38,7 +31,7 @@
       inherit system;
       specialArgs = {
         inherit username chosenTheme;
-        inputs = { inherit nur walker elephant nix-doom-emacs-unstraightened; };
+        inputs = { inherit nur walker elephant; };
       };
       modules = [
         ./hardware-configuration.nix
@@ -187,7 +180,7 @@
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
             inherit username chosenTheme;
-            inputs = { inherit nur walker elephant nix-doom-emacs-unstraightened; };
+            inputs = { inherit nur walker elephant; };
           };
           home-manager.users.${username} = {
             home.stateVersion = "25.05";
