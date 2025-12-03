@@ -46,6 +46,7 @@ in
       services.emacs = {
         enable = true;
         package = pkgs.emacs;
+        startWithUserSession = "graphical";  # Wait for graphical session to get display vars
       };
     };
   };

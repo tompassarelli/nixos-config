@@ -44,6 +44,7 @@
       "w o" #'kill-other-window)
 
 ;; Org mode configuration
+(setq org-directory "~/org")
 (after! org
   (setq org-hide-emphasis-markers t))
 
