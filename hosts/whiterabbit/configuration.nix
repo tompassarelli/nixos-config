@@ -62,6 +62,7 @@
   myConfig.neovim.enable = true;
   myConfig.doom-emacs.enable = true;
   myConfig.development.enable = true;
+  myConfig.zed.enable = true;
   myConfig.rust = {
     enable = true;
     bevy = true;

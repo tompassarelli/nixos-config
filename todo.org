@@ -1,4 +1,5 @@
-* [ ] enable a private module pattern to improve ease of forking project
+* [ ] get a stable hardware config working - additionally modifications required such that the wifi cannot lock.
+
 * [ ] get layerpad working again
 
 * [ ] create a question and answer appendix in readme.org that answers frequent things i forgot about
@@ -19,7 +20,8 @@ because i have shifted over my righthand in kanata qwerty, and
 just for general optimizations reasons, i want to be able to activate
 a layer -> qwertyuiop -> 123456890
 
-
 ** [X] test pomodoro org mod
 ** [X] riff on [[file:README.org::*how does flake.nix relate to git state][how does flake.nix relate to git state]] (5m)
 ** [X] riff on [[file:README.org::*gow does flake.nix relate to btrfs][how does flake.nix relate to btrfs]] (5m)
+** [X] enable a private module pattern to improve ease of forking project
+** [X] figure out a recourse for the situation in which naming a workspace forces it to stay even if no windows exist on it - I think I want a way to like have a 'hidden' state perhaps?

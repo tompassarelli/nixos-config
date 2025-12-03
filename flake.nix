@@ -114,6 +114,7 @@
             "${firnModules}/theme-switcher"
             "${firnModules}/via"
             "${firnModules}/system"
+            "${firnModules}/zed"
           ];
 
           # Home-manager configuration

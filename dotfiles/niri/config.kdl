@@ -558,10 +558,10 @@ binds {
     Mod+BracketRight { consume-or-expel-window-right; }
 
     // Rename current workspace with walker dmenu mode
-    Mod+Shift+W { spawn "walker-rename-workspace"; }
+    Mod+F2 { spawn "walker-rename-workspace"; }
 
     // Clear workspace name (back to number)
-    Mod+Shift+Ctrl+W { unset-workspace-name; }
+    Mod+Shift+F2 { unset-workspace-name; }
 
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.

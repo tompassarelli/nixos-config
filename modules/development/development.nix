@@ -8,7 +8,6 @@ in
     environment.systemPackages = with pkgs; [
     # Editor / Search
     vim                  # default general purpose text editor
-    #unstable.zed-editor # open source editor
     master.claude-code   # bleeding edge from master branch
     ripgrep              # search
     fd                   # find files
