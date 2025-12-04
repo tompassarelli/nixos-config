@@ -7,7 +7,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.steam = {
       enable = true;
-      extraCompatPackages = [ pkgs.proton-ge-bin ];
+      package = pkgs.unstable.steam;
+      extraCompatPackages = [ pkgs.unstable.proton-ge-bin ];
     };
   };
 }
