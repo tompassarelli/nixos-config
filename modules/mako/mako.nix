@@ -22,6 +22,11 @@ in
           "app-name=kitty" = {
             default-timeout = 2000;
           };
+
+          # Suppress Spotify track change notifications
+          "app-name=Spotify" = {
+            invisible = 1;
+          };
         };
       };
     };

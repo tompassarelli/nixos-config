@@ -28,6 +28,10 @@ in
     # Python
     python3              # i'm a snake
 
+    # Database
+    sqlite               # lightweight SQL database
+    dbeaver-bin          # database GUI
+
     # Version Control
     gh                   # github cli
     delta                # beautiful git diffs

@@ -8,7 +8,6 @@ in
     programs.steam = {
       enable = true;
       package = pkgs.unstable.steam;
-      extraCompatPackages = [ pkgs.unstable.proton-ge-bin ];
     };
   };
 }

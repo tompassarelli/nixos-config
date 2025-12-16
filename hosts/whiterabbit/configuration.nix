@@ -7,6 +7,7 @@
   myConfig.via.enable = false;
   myConfig.audio.enable = true;
   myConfig.bluetooth.enable = true;
+  myConfig.printing.enable = true;
 
   myConfig.input.enable = true;
   myConfig.kanata = {

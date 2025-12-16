@@ -22,6 +22,12 @@ in
       # Import walker home-manager module
       imports = [ inputs.walker.homeManagerModules.default ];
 
+      # Elephant desktop applications config - ensure proper Wayland env vars
+      home.file.".config/elephant/desktopapplications.toml".text = ''
+        # Force proper Wayland env vars when launching apps (fixes Steam on niri)
+        launch_prefix = "env WAYLAND_DISPLAY=wayland-1 DISPLAY=:0"
+      '';
+
       # Enable walker and elephant with runAsService
       programs.walker = {
         enable = true;

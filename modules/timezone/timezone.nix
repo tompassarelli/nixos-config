@@ -5,6 +5,6 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    time.timeZone = "America/New_York";
+    time.timeZone = "Asia/Bangkok";
   };
 }

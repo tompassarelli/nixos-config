@@ -115,6 +115,7 @@
             "${firnModules}/via"
             "${firnModules}/system"
             "${firnModules}/zed"
+            "${firnModules}/printing"
           ];
 
           # Home-manager configuration

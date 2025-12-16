@@ -368,7 +368,7 @@ binds {
     Mod+T hotkey-overlay-title="Terminal" { spawn "kitty"; }
     Super+Space hotkey-overlay-title="App Launcher" { spawn "walker"; }
     Super+Alt+Ctrl+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-    
+
     // Dismiss all notifications
     Super+Alt+N hotkey-overlay-title="Dismiss Notifications" { spawn "makoctl" "dismiss" "--all"; }
 
@@ -558,10 +558,10 @@ binds {
     Mod+BracketRight { consume-or-expel-window-right; }
 
     // Rename current workspace with walker dmenu mode
-    Mod+F2 { spawn "walker-rename-workspace"; }
+    Mod+Shift+W { spawn "walker-rename-workspace"; }
 
     // Clear workspace name (back to number)
-    Mod+Shift+F2 { unset-workspace-name; }
+    Mod+Shift+Ctrl+W { unset-workspace-name; }
 
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
