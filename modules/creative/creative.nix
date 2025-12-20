@@ -6,7 +6,7 @@ in
 {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      godot_4              # game engine and visual editor
+      unstable.godot_4     # game engine and visual editor
       blender              # release your inner sculpter
       gimp                 # image editing for gimps
       obs-studio           # screen recording/streaming

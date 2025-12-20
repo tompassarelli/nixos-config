@@ -27,6 +27,7 @@ in
 
     # Python
     python3              # i'm a snake
+    uv                   # fast python package manager
 
     # Database
     sqlite               # lightweight SQL database

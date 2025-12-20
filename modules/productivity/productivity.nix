@@ -9,6 +9,7 @@ in
       obsidian             # link notes
       todoist-electron     # do things
       pomodoro-gtk         # pomodoro timer
+      rustdesk-flutter     # remote desktop
     ];
   };
 }

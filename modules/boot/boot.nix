@@ -11,5 +11,9 @@
 
     # Kernel modules for hardware support
     boot.kernelModules = [ "uinput" ];  # Load uinput module early for kanata
+
+    # Disable VPE (Video Processing Engine) to fix suspend/resume crashes on RDNA 3
+    # VPE queue reset fails during resume, corrupting driver state and causing later freezes
+    boot.kernelParams = [ "amdgpu.vpe_enable=0" ];
   };
 }

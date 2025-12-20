@@ -116,6 +116,7 @@
             "${firnModules}/system"
             "${firnModules}/zed"
             "${firnModules}/printing"
+            "${firnModules}/postgresql"
           ];
 
           # Home-manager configuration

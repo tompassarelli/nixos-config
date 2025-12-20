@@ -69,6 +69,7 @@
     bevy = true;
   };
   myConfig.claude.enable = true;
+  myConfig.postgresql.enable = true;
 
   # Applications
   myConfig.web-browser = {
