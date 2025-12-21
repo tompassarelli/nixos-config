@@ -2,13 +2,17 @@
 
 let
   cfg = config.myConfig.postgresql;
+  # PostgreSQL with extensions
+  postgresWithExtensions = pkgs.postgresql_16.withPackages (ps: [
+    ps.pg_uuidv7
+  ]);
 in
 {
   config = lib.mkIf cfg.enable {
     # PostgreSQL service
     services.postgresql = {
       enable = true;
-      package = pkgs.postgresql_16;
+      package = postgresWithExtensions;
 
       # Trust local connections (dev only - no password needed)
       authentication = pkgs.lib.mkOverride 10 ''
