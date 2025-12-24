@@ -3,7 +3,7 @@
 let
   cfg = config.myConfig.postgresql;
   # PostgreSQL with extensions
-  postgresWithExtensions = pkgs.postgresql_16.withPackages (ps: [
+  postgresWithExtensions = pkgs.postgresql_17.withPackages (ps: [
     ps.pg_uuidv7
   ]);
 in
@@ -36,7 +36,7 @@ in
 
     # Add psql client and other useful tools to system packages
     environment.systemPackages = with pkgs; [
-      postgresql_16      # includes psql client
+      postgresql_17      # includes psql client
     ];
   };
 }
