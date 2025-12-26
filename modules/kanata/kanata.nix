@@ -26,7 +26,10 @@ in
   services.kanata = {
     enable = true;
     keyboards.main = {
-      devices = [ "/dev/input/event0" ];  # AT Translated Set 2 keyboard
+      devices = [
+        "/dev/input/event0"  # AT Translated Set 2 keyboard
+        "/dev/input/by-id/usb-Kingsis_Peripherals_ZOWIE_Gaming_mouse-event-mouse"
+      ];
       extraDefCfg = "process-unmapped-keys yes"; # req for tap-hold-press, or need a set of explicit passthrough keys
       config = let
         # Always define full keyboard for layer switching (ISO layout)
@@ -36,6 +39,7 @@ in
           caps a    s    d    f    g    h    j    k    l    ;    '    \    ret
           lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
           lctl lalt lmet           spc            rmet ralt cmp  rctl
+          mbck mfwd
         '';
 
         # Base layer keys (QWERTY OR wideMod)
@@ -45,6 +49,7 @@ in
           ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    ]    h    j    k    l    ;    '    ret
           lsft @slashshift z x    c    v    b    /    n    m    ,    .    rsft
           lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      spc           @enteralt ralt cmp  rctl
+          lsft lctl
         ''
         else ''
           grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
@@ -52,6 +57,7 @@ in
           ${if cfg.capsLockEscCtrl then "@escctrl" else "caps"} a    s    d    f    g    h    j    k    l    ;    '    \    ret
           lsft 102d z    x    c    v    b    n    m    ,    .    /    rsft
           lctl ${if cfg.leftAltAsSuper then "lmet" else "lalt"} ${if cfg.leftAltAsSuper then "lalt" else "lmet"}      spc           rmet ralt cmp  rctl
+          lsft lctl
         '';
 
       in ''
@@ -75,6 +81,7 @@ in
           _    _    _    _    _    _    _    left down up   rght _    _    _
           _    _    _    _    _    _    _    _    home +    -    end  _
           _    _    _              _              _    _    _    _
+          _    _
         )
       '';
     };

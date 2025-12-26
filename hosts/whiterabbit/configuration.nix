@@ -78,7 +78,10 @@
     fennec.enable = true;
     chrome.enable = true;
   };
-  myConfig.steam.enable = true;
+  myConfig.steam = {
+    enable = true;
+    wowup.enable = true;
+  };
   myConfig.productivity.enable = true;
   myConfig.creative.enable = true;
   myConfig.media.enable = true;
